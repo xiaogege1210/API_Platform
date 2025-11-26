@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>自动化平台 - 场景配置</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; padding: 20px; background: #f5f7fa; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        h1 { border-bottom: 2px solid #3498db; padding-bottom: 10px; color: #2c3e50; }
+
+        /* 步骤条 */
+        .steps { margin-bottom: 20px; font-weight: bold; color: #7f8c8d; }
+        .step.active { color: #2980b9; }
+
+        /* 表格样式 */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #e1e4e8; padding: 12px; text-align: left; }
+        th { background: #f8f9fa; }
+
+        /* 场景配置区域 */
+        .config-row { background-color: #fcfcfc; }
+        .scenario-box { border: 1px dashed #bdc3c7; padding: 15px; margin: 10px 0; border-radius: 4px; background: white; }
+        .scenario-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        .input-group { margin-bottom: 8px; display: flex; align-items: center; }
+        .input-group label { width: 180px; font-size: 0.9em; color: #555; font-weight: bold; }
+        .input-group input { flex: 1; padding: 6px; border: 1px solid #ccc; border-radius: 4px; }
+        .param-desc { font-size: 0.8em; color: #999; margin-left: 10px; min-width: 50px;}
+
+        /* 按钮 */
+        .btn { padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; color: white; }
+        .btn-primary { background: #3498db; }
+        .btn-success { background: #2ecc71; }
+        .btn-add { background: #9b59b6; font-size: 0.8em; margin-left: 10px; }
+        .tag { padding: 3px 6px; border-radius: 3px; font-size: 0.8em; color: white; }
+        .GET { background: #2ecc71; } .POST { background: #f1c40f; color: black; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>自动化测试平台</h1>
+    <div class="steps">
+        <span class="step active">1. 上传文档</span> ->
+        <span class="step">2. 勾选接口 & 配置场景</span> ->
+        <span class="step">3. 生成代码</span>
+    </div>
+
+    <!-- 上传区 -->
+    <div id="uploadSection">
+        <input type="file" id="fileInput" accept=".json">
+        <button class="btn btn-primary" onclick="uploadFile()">解析文档</button>
+    </div>
+
+    <!-- 列表配置区 -->
+    <div id="configSection" style="display:none; margin-top: 20px;">
+        <h3>接口列表 (请勾选需要测试的接口)</h3>
+        <table id="apiTable">
+            <thead>
+            <tr>
+                <th width="50">选</th>
+                <th width="80">Method</th>
+                <th>URL</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody id="apiTableBody"></tbody>
+        </table>
+
+        <div style="margin-top: 20px; text-align: right;">
+            <button class="btn btn-success" onclick="generateCode()">生成测试代码 >></button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 全局变量存储解析后的原始数据
+    let allApiData = [];
+
+    // 1. 上传并解析
+    async function uploadFile() {
+        const fileInput = document.getElementById('fileInput');
+        if (!fileInput.files[0]) return alert("请选文件");
+        const formData = new FormData();
+        formData.append("file", fileInput.files[0]);
+
+        try {
+            const res = await fetch('/api/parse', { method: 'POST', body: formData });
+            if(!res.ok) throw new Error("Network response was not ok");
+            allApiData = await res.json();
+            renderTable();
+            document.getElementById('configSection').style.display = 'block';
+        } catch (e) {
+            console.error(e);
+            alert("解析失败，请检查控制台");
+        }
+    }
+
+    // 2. 渲染表格
+    function renderTable() {
+        const tbody = document.getElementById('apiTableBody');
+        tbody.innerHTML = '';
+
+        if(allApiData.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="4">未解析到接口</td></tr>';
+            return;
+        }
+
+        allApiData.forEach((api, index) => {
+            // 主行
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><input type="checkbox" class="api-checkbox" data-index="${index}" onchange="toggleConfig(${index})"></td>
+                <td><span class="tag ${api.method}">${api.method}</span></td>
+                <td>${api.path} <span style="color:#888;font-size:0.9em">${api.summary || ''}</span></td>
+                <td><button class="btn btn-add" onclick="addScenario(${index})">+ 加场景</button></td>
+            `;
+            tbody.appendChild(tr);
+
+            // 配置行 (默认隐藏)
+            const configTr = document.createElement('tr');
+            configTr.id = `config-row-${index}`;
+            configTr.className = 'config-row';
+            configTr.style.display = 'none';
+            configTr.innerHTML = `
+                <td colspan="4">
+                    <div id="scenarios-${index}">
+                        <!-- 这里动态插入场景表单 -->
+                    </div>
+                </td>
+            `;
+            tbody.appendChild(configTr);
+        });
+    }
+
+    // 3. 勾选时展开/收起配置区
+    function toggleConfig(index) {
+        const checkbox = document.querySelector(`.api-checkbox[data-index="${index}"]`);
+        const row = document.getElementById(`config-row-${index}`);
+
+        if (checkbox.checked) {
+            row.style.display = 'table-row';
+            // 如果还没有场景，默认加一个“正常场景”
+            const container = document.getElementById(`scenarios-${index}`);
+            if (container.children.length === 0) {
+                addScenario(index, '正常场景 (Happy Path)');
+            }
+        } else {
+            row.style.display = 'none';
+        }
+    }
+
+    // 4. 添加一个场景表单 (核心修改：允许不填值)
+    function addScenario(index, defaultName = '') {
+        const api = allApiData[index];
+        const container = document.getElementById(`scenarios-${index}`);
+
+        // 动态生成参数输入框
+        let paramsHtml = '';
+        if (api.parameters && api.parameters.length > 0) {
+            paramsHtml = api.parameters.map(p => {
+                const isBody = p.in === 'body';
+                const placeholder = isBody ? `JSON结构 (留空自动生成)` : `默认值 (${p.type})`;
+
+                return `
+                <div class="input-group">
+                    <label>${p.name} <span style="color:#aaa;font-weight:normal">(${p.type})</span></label>
+                    <input type="text" class="param-input"
+                           data-key="${p.name}"
+                           data-type="${p.type || 'string'}"
+                           placeholder="${placeholder}">
+                    <span class="param-desc">${p.required ? '<span style="color:red">*必填</span>' : '选填'}</span>
+                </div>
+            `}).join('');
+        } else {
+            paramsHtml = '<div style="color:#666; padding:10px;">该接口无参数，无需配置</div>';
+        }
+
+        const html = `
+            <div class="scenario-box">
+                <div class="scenario-header">
+                    <div>
+                        <input type="text" value="${defaultName || '新场景'}" class="scenario-name" style="border:none; border-bottom:1px solid #ccc; font-weight:bold; width:200px; margin-right:10px;">
+                        <span style="font-size:12px; color:#888;">💡 值留空则生成 TODO 代码</span>
+                    </div>
+                    <button onclick="this.closest('.scenario-box').remove()" style="color:red;border:none;background:none;cursor:pointer;">删除</button>
+                </div>
+                ${paramsHtml}
+                <div class="input-group">
+                    <label>预期状态码</label>
+                    <input type="text" class="expect-code" value="200" style="width:50px; flex:none;">
+                </div>
+            </div>
+        `;
+        container.insertAdjacentHTML('beforeend', html);
+    }
+
+    // 5. 收集数据并提交生成
+    async function generateCode() {
+        const tasks = [];
+
+        // 遍历所有被勾选的行
+        document.querySelectorAll('.api-checkbox:checked').forEach(cb => {
+            const index = cb.getAttribute('data-index');
+            const api = allApiData[index];
+            const scenarios = [];
+
+            // 遍历该接口下的所有场景框
+            const scenarioBoxes = document.querySelectorAll(`#scenarios-${index} .scenario-box`);
+            scenarioBoxes.forEach(box => {
+                const name = box.querySelector('.scenario-name').value;
+                const code = box.querySelector('.expect-code').value;
+
+                // 收集参数值
+                const params = {};
+                box.querySelectorAll('.param-input').forEach(input => {
+                    const key = input.getAttribute('data-key');
+                    const val = input.value.trim(); // 获取用户输入
+                    const type = input.getAttribute('data-type');
+
+                    // 即使 val 为空，也把结构传过去，方便后端判断类型生成占位符
+                    params[key] = {
+                        value: val,
+                        type: type
+                    };
+                });
+
+                scenarios.push({
+                    scenarioName: name,
+                    paramValues: params,
+                    expectedStatusCode: code
+                });
+            });
+
+            tasks.push({
+                apiPath: api.path,
+                method: api.method,
+                scenarios: scenarios
+            });
+        });
+
+        if (tasks.length === 0) return alert("请至少勾选一个接口！");
+
+        try {
+            const res = await fetch('/api/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tasks })
+            });
+
+            if(!res.ok) throw new Error("Generate failed");
+
+            const resultText = await res.text();
+            // 在页面上直接展示生成的代码，而不是弹窗
+            showCodeModal(resultText);
+        } catch (e) {
+            alert("生成失败，请检查后端日志");
+            console.error(e);
+        }
+    }
+
+    // 简单的展示结果用的模态框
+    function showCodeModal(code) {
+        // 创建一个遮罩层和显示框
+        let modal = document.createElement('div');
+        modal.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:999;";
+
+        let content = document.createElement('div');
+        content.style.cssText = "background:white;width:80%;height:80%;padding:20px;border-radius:8px;display:flex;flex-direction:column;";
+
+        content.innerHTML = `
+            <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+                <h3>生成的 Java 代码</h3>
+                <button onclick="this.closest('div').parentElement.parentElement.remove()" style="cursor:pointer;">关闭 [X]</button>
+            </div>
+            <textarea style="flex:1;width:100%;font-family:monospace;padding:10px;">${code}</textarea>
+        `;
+
+        modal.appendChild(content);
+        document.body.appendChild(modal);
+    }
+</script>
+
+</body>
+</html>
