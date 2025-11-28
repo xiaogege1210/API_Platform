@@ -27,12 +27,39 @@
         .param-desc { font-size: 0.8em; color: #999; margin-left: 10px; min-width: 50px;}
 
         /* 按钮 */
-        .btn { padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; color: white; }
+        .btn { padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; color: white; margin: 5px; }
         .btn-primary { background: #3498db; }
         .btn-success { background: #2ecc71; }
         .btn-add { background: #9b59b6; font-size: 0.8em; margin-left: 10px; }
+        .btn-warning { background: #f39c12; }
+        .btn-danger { background: #e74c3c; }
+        .btn-secondary { background: #95a5a6; }
         .tag { padding: 3px 6px; border-radius: 3px; font-size: 0.8em; color: white; }
         .GET { background: #2ecc71; } .POST { background: #f1c40f; color: black; }
+        
+        /* 代码展示区域 */
+        .code-container { display: flex; flex-direction: column; margin-top: 20px; }
+        .code-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .code-actions { display: flex; gap: 10px; }
+        .code-textarea { width: 100%; min-height: 300px; font-family: monospace; padding: 10px; border: 1px solid #ccc; border-radius: 4px; resize: vertical; }
+        
+        /* 分析结果区域 */
+        .analysis-container { margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 4px; }
+        .analysis-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 15px; }
+        .metric-card { background: white; padding: 15px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .metric-label { font-size: 0.9em; color: #666; margin-bottom: 5px; }
+        .metric-value { font-size: 1.5em; font-weight: bold; color: #3498db; }
+        .coverage-score { font-size: 2em; color: #2ecc71; }
+        .suggestions { background: white; padding: 15px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .suggestions h4 { margin-top: 0; color: #2c3e50; }
+        .suggestions ul { margin: 0; padding-left: 20px; }
+        .suggestions li { margin-bottom: 5px; }
+        
+        /* 执行结果区域 */
+        .result-container { margin-top: 20px; }
+        .result-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .result-content { background: #f8f9fa; padding: 15px; border-radius: 4px; font-family: monospace; white-space: pre-wrap; }
     </style>
 </head>
 <body>
@@ -42,7 +69,8 @@
     <div class="steps">
         <span class="step active">1. 上传文档</span> ->
         <span class="step">2. 勾选接口 & 配置场景</span> ->
-        <span class="step">3. 生成代码</span>
+        <span class="step">3. 生成代码</span> ->
+        <span class="step">4. 执行测试</span>
     </div>
 
     <!-- 上传区 -->
@@ -70,11 +98,87 @@
             <button class="btn btn-success" onclick="generateCode()">生成测试代码 >></button>
         </div>
     </div>
+    
+    <!-- 测试用例管理区 -->
+    <div id="testCaseSection" style="display:none; margin-top: 20px;">
+        <h3>测试用例管理</h3>
+        <div class="code-container">
+            <div class="code-header">
+                <h4>生成的测试代码</h4>
+                <div class="code-actions">
+                    <button class="btn btn-primary" onclick="saveTestCase()">保存测试用例</button>
+                    <button class="btn btn-warning" onclick="analyzeTestCase()">分析测试用例</button>
+                    <button class="btn btn-success" onclick="executeSingleTestCase()">执行测试</button>
+                </div>
+            </div>
+            <textarea id="generatedCode" class="code-textarea"></textarea>
+        </div>
+        
+        <!-- 分析结果区域 -->
+        <div id="analysisSection" class="analysis-container" style="display:none;">
+            <div class="analysis-header">
+                <h4>测试用例分析结果</h4>
+                <div class="coverage-score" id="coverageScore">0</div>
+            </div>
+            
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-label">总代码行数</div>
+                    <div class="metric-value" id="totalLines">0</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">测试方法数</div>
+                    <div class="metric-value" id="testMethodCount">0</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">断言数量</div>
+                    <div class="metric-value" id="assertionCount">0</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-label">覆盖度评分</div>
+                    <div class="metric-value coverage-score" id="coverageScoreDisplay">0</div>
+                </div>
+            </div>
+            
+            <div class="suggestions">
+                <h4>智能建议</h4>
+                <ul id="suggestionsList"></ul>
+            </div>
+        </div>
+        
+        <!-- 多种执行场景 -->
+        <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 4px;">
+            <h4>执行场景</h4>
+            <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="btn btn-success" onclick="executeSingleTestCase()">执行当前测试用例</button>
+                <button class="btn btn-primary" onclick="executeAllTestCases()">执行所有测试用例</button>
+                <button class="btn btn-warning" onclick="executeBatchTestCases()">批量执行测试用例</button>
+            </div>
+        </div>
+        
+        <!-- 执行结果区域 -->
+        <div id="executionResult" class="result-container" style="display:none;">
+            <div class="result-header">
+                <h4>测试执行结果</h4>
+                <button class="btn btn-secondary" onclick="hideExecutionResult()">隐藏结果</button>
+            </div>
+            <div class="result-content" id="resultContent"></div>
+        </div>
+    </div>
 </div>
 
 <script>
     // 全局变量存储解析后的原始数据
     let allApiData = [];
+    // 存储当前选中的任务配置，用于执行测试
+    let currentSelectedTasks = [];
+    // 当前测试用例ID
+    let currentTestCaseId = null;
+    
+    // 生成唯一ID
+    function generateId() {
+        return 'testcase_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+    }
 
     // 1. 上传并解析
     async function uploadFile() {
@@ -250,33 +354,212 @@
             if(!res.ok) throw new Error("Generate failed");
 
             const resultText = await res.text();
-            // 在页面上直接展示生成的代码，而不是弹窗
-            showCodeModal(resultText);
+            // 保存当前选中的任务配置，用于执行测试
+            currentSelectedTasks = tasks;
+            // 生成新的测试用例ID
+            currentTestCaseId = generateId();
+            
+            // 显示测试用例管理区域
+            document.getElementById('configSection').style.display = 'none';
+            document.getElementById('testCaseSection').style.display = 'block';
+            // 显示生成的代码
+            document.getElementById('generatedCode').value = resultText;
+            
+            // 保存测试用例到服务器
+            await saveTestCaseToServer(currentTestCaseId, resultText);
+            
         } catch (e) {
             alert("生成失败，请检查后端日志");
             console.error(e);
         }
     }
-
-    // 简单的展示结果用的模态框
-    function showCodeModal(code) {
-        // 创建一个遮罩层和显示框
-        let modal = document.createElement('div');
-        modal.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:999;";
-
-        let content = document.createElement('div');
-        content.style.cssText = "background:white;width:80%;height:80%;padding:20px;border-radius:8px;display:flex;flex-direction:column;";
-
-        content.innerHTML = `
-            <div style="display:flex;justify-content:space-between;margin-bottom:10px;">
-                <h3>生成的 Java 代码</h3>
-                <button onclick="this.closest('div').parentElement.parentElement.remove()" style="cursor:pointer;">关闭 [X]</button>
-            </div>
-            <textarea style="flex:1;width:100%;font-family:monospace;padding:10px;">${code}</textarea>
-        `;
-
-        modal.appendChild(content);
-        document.body.appendChild(modal);
+    
+    // 保存测试用例到服务器
+    async function saveTestCaseToServer(testCaseId, testCode) {
+        try {
+            const res = await fetch('/api/testcase/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ testCaseId, testCode })
+            });
+            
+            const result = await res.json();
+            if (!result.success) {
+                console.warn('保存测试用例失败:', result.message);
+            }
+        } catch (e) {
+            console.error('保存测试用例到服务器失败:', e);
+        }
+    }
+    
+    // 保存测试用例
+    async function saveTestCase() {
+        const testCode = document.getElementById('generatedCode').value;
+        if (!testCode) {
+            return alert("测试代码不能为空！");
+        }
+        
+        if (!currentTestCaseId) {
+            currentTestCaseId = generateId();
+        }
+        
+        try {
+            const res = await fetch('/api/testcase/update', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ testCaseId: currentTestCaseId, testCode })
+            });
+            
+            const result = await res.json();
+            if (result.success) {
+                alert("测试用例保存成功！");
+            } else {
+                alert("测试用例保存失败: " + result.message);
+            }
+        } catch (e) {
+            alert("保存测试用例失败: " + e.message);
+            console.error(e);
+        }
+    }
+    
+    // 分析测试用例
+    async function analyzeTestCase() {
+        const testCode = document.getElementById('generatedCode').value;
+        if (!testCode) {
+            return alert("测试代码不能为空！");
+        }
+        
+        try {
+            const res = await fetch('/api/testcase/analyze', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ testCode })
+            });
+            
+            const result = await res.json();
+            if (result.success) {
+                displayAnalysisResult(result.analysis);
+            } else {
+                alert("分析测试用例失败: " + result.message);
+            }
+        } catch (e) {
+            alert("分析测试用例失败: " + e.message);
+            console.error(e);
+        }
+    }
+    
+    // 显示分析结果
+    function displayAnalysisResult(analysis) {
+        const metrics = analysis.metrics;
+        const suggestions = analysis.suggestions;
+        
+        // 更新指标
+        document.getElementById('totalLines').textContent = metrics.totalLines;
+        document.getElementById('testMethodCount').textContent = metrics.testMethodCount;
+        document.getElementById('assertionCount').textContent = metrics.assertionCount;
+        document.getElementById('coverageScore').textContent = metrics.coverageScore;
+        document.getElementById('coverageScoreDisplay').textContent = metrics.coverageScore;
+        
+        // 更新建议
+        const suggestionsList = document.getElementById('suggestionsList');
+        suggestionsList.innerHTML = '';
+        
+        if (suggestions) {
+            const suggestionLines = suggestions.split('\n').filter(line => line.trim());
+            suggestionLines.forEach(line => {
+                const li = document.createElement('li');
+                li.textContent = line.replace('建议：', '');
+                suggestionsList.appendChild(li);
+            });
+        }
+        
+        // 显示分析结果区域
+        document.getElementById('analysisSection').style.display = 'block';
+    }
+    
+    // 执行当前测试用例
+    async function executeSingleTestCase() {
+        const testCode = document.getElementById('generatedCode').value;
+        if (!testCode) {
+            return alert("测试代码不能为空！");
+        }
+        
+        await executeTestCode(testCode);
+    }
+    
+    // 执行所有测试用例
+    async function executeAllTestCases() {
+        try {
+            const res = await fetch('/api/execute/all', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            });
+            
+            if (!res.ok) throw new Error("执行所有测试用例失败");
+            
+            const result = await res.text();
+            displayExecutionResult(result);
+        } catch (e) {
+            alert("执行所有测试用例失败: " + e.message);
+            console.error(e);
+        }
+    }
+    
+    // 批量执行测试用例
+    async function executeBatchTestCases() {
+        // 这里可以实现批量执行逻辑，例如让用户选择要执行的测试用例
+        alert("批量执行功能开发中...");
+    }
+    
+    // 执行测试代码
+    async function executeTestCode(testCode) {
+        try {
+            // 显示加载状态
+            const loadingModal = document.createElement('div');
+            loadingModal.id = 'loading-modal';
+            loadingModal.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:flex;justify-content:center;align-items:center;z-index:1000;color:white;font-size:18px;";
+            loadingModal.innerHTML = "正在执行测试...";
+            document.body.appendChild(loadingModal);
+            
+            const res = await fetch(`/api/execute-direct`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ testCode })
+            });
+            
+            // 移除加载状态
+            loadingModal.remove();
+            
+            if(!res.ok) throw new Error("执行测试失败");
+            
+            const result = await res.text();
+            // 显示执行结果
+            displayExecutionResult(result);
+        } catch (e) {
+            // 移除加载状态
+            const loadingModal = document.getElementById('loading-modal');
+            if (loadingModal) loadingModal.remove();
+            
+            alert("执行测试失败: " + e.message);
+            console.error(e);
+        }
+    }
+    
+    // 显示执行结果
+    function displayExecutionResult(result) {
+        document.getElementById('resultContent').textContent = result;
+        document.getElementById('executionResult').style.display = 'block';
+    }
+    
+    // 隐藏执行结果
+    function hideExecutionResult() {
+        document.getElementById('executionResult').style.display = 'none';
+    }
+    
+    // 返回配置页面
+    function backToConfig() {
+        document.getElementById('testCaseSection').style.display = 'none';
+        document.getElementById('configSection').style.display = 'block';
     }
 </script>
 

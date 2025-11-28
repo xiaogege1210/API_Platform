@@ -54,6 +54,21 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- JUnit 5 API：主代码需要用它判断 @Test 注解，改为 compile 范围 -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+			<version>5.9.2</version>
+			<scope>compile</scope> <!-- 主代码可访问 -->
+		</dependency>
+		<!-- JUnit 引擎：仅测试时用，保留 test 范围 -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+			<version>5.9.2</version>
+			<scope>test</scope>
+		</dependency>
+
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
