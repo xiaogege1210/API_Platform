@@ -7,6 +7,7 @@ import com.example.demo.service.ParserService;
 import com.example.demo.service.TestCaseAnalysisService;
 import com.example.demo.service.TestCaseManagementService;
 import com.example.demo.service.TestExecutionService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -183,21 +184,26 @@ public class ApiController {
     // ==================== 测试用例分析接口 ====================
     
     /**
-     * 生成测试用例的分析和建议
+     * 生成测试用例的分析和建议(多个脚本）
      */
     @PostMapping("/api/testcase/analyze")
     @ResponseBody
-    public Map<String, Object> analyzeTestCase(@RequestBody Map<String, String> request) {
+    public Map<String, Object> analyzeTestCase(@RequestBody Map<String, String> request) throws JsonProcessingException {
         Map<String, Object> result = new HashMap<>();
         String testCode = request.get("testCode");
+        String api=request.get("api");
+        String environment=request.get("environment");
+        String depedency=request.get("depedency");
+        String testCaseResult = request.get("testCaseId");
         
         if (testCode == null) {
             result.put("success", false);
             result.put("message", "测试代码不能为空");
             return result;
         }
+
         
-        Map<String, Object> analysis = testCaseAnalysisService.generateAnalysisAndSuggestions(testCode);
+        String analysis = testCaseAnalysisService.generateAnalysisAndSuggestions(api,environment,depedency,testCode,testCaseResult);
         result.put("success", true);
         result.put("analysis", analysis);
         return result;
