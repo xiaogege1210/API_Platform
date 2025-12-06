@@ -29,20 +29,20 @@ public interface TestCaseManagementService {
      * 删除单个脚本文件
      * @param filePath 脚本文件的完整路径（目录+文件名）
      */
-    void deleteTestCaseFile(String filePath);
+    Boolean deleteTestCaseFile(String filePath);
 
     /**
      * 删除某个场景目录下的所有脚本（保留目录本身）
      * @param sceneDir 场景目录路径
      */
-    void deleteAllTestCasesInDir(String sceneDir);
+    Boolean deleteAllTestCasesInDir(String sceneDir);
 
     /**
      * 更新单个脚本内容（覆盖原文件）
      * @param filePath 脚本所在目录路径
      * @param newContent 新的脚本内容
      */
-    void updateTestCaseContent(String filePath, String newContent);
+    Boolean updateTestCaseContent(String filePath, String newContent);
 
     /**
      * 新增测试用例脚本

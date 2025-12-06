@@ -161,7 +161,7 @@ public class TestCaseManagementServiceImpl implements TestCaseManagementService 
      * @param filePath 脚本文件的完整路径（目录+文件名）
      */
     @Override
-    public void deleteTestCaseFile(String filePath) {
+    public Boolean deleteTestCaseFile(String filePath) {
         Assert.hasText(filePath, "文件路径不能为空");
         Path fileFullPath = Paths.get(SCRIPT_BASE_PATH+File.separator +filePath);
         Assert.isTrue(Files.exists(fileFullPath) && Files.isRegularFile(fileFullPath),
@@ -180,7 +180,7 @@ public class TestCaseManagementServiceImpl implements TestCaseManagementService 
      */
 
     @Override
-    public void deleteAllTestCasesInDir(String sceneDir) {
+    public Boolean deleteAllTestCasesInDir(String sceneDir) {
         Assert.hasText(sceneDir, "场景目录不能为空");
         Path dirPath = Paths.get(SCRIPT_BASE_PATH+File.separator +sceneDir);
         Assert.isTrue(Files.isDirectory(dirPath), "指定路径不是有效目录：" + sceneDir);
@@ -208,7 +208,7 @@ public class TestCaseManagementServiceImpl implements TestCaseManagementService 
      * @param newContent 新的脚本内容
      */
     @Override
-    public void updateTestCaseContent(String filePath, String newContent) {
+    public Boolean updateTestCaseContent(String filePath, String newContent) {
         Assert.hasText(filePath, "目录路径不能为空");
         Assert.hasText(newContent, "文件内容不能为空");
 

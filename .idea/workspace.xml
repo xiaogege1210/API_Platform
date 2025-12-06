@@ -4,17 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a088f82-6ef3-428d-b391-344aaff2b65e" name="更改" comment="脚本执行（单次，批量）">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/dto/TreeNodeDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/TestCaseManagementService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestCaseManagementServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/scripts/scene1/1.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/example/demo/service/impl/TestCaseManagementServiceImplTest.java" afterDir="false" />
+    <list default="true" id="9a088f82-6ef3-428d-b391-344aaff2b65e" name="更改" comment="测试用例的管理（创建，删除，更新，查看">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/controller/ApiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/controller/ApiController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/ParserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/ParserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiParameter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiParameter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/ParserService.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/TestCaseManagementService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/TestCaseManagementService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestCaseManagementServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestCaseManagementServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,6 +61,9 @@
     "JUnit.TestCaseManagementServiceImplTest.testBasic2.executor": "Run",
     "JUnit.TestCaseManagementServiceImplTest.testBasic3.executor": "Run",
     "JUnit.TestCaseManagementServiceImplTest.testBasic4.executor": "Run",
+    "JUnit.TestCaseManagementServiceImplTest.testBasic5.executor": "Run",
+    "JUnit.TestCaseManagementServiceImplTest.testBasic6.executor": "Run",
+    "JUnit.TestCaseManagementServiceImplTest.testBasic7.executor": "Debug",
     "JUnit.TestExcutionServiceImplTest.executor": "Run",
     "JUnit.TestExcutionServiceImplTest.testExecuteTestsMethod.executor": "Run",
     "RequestMappingsPanelOrder0": "0",
@@ -234,7 +231,7 @@
       <workItem from="1764990806793" duration="442000" />
       <workItem from="1764991256709" duration="71000" />
       <workItem from="1764991335013" duration="250000" />
-      <workItem from="1764991600379" duration="7863000" />
+      <workItem from="1764991600379" duration="9247000" />
     </task>
     <task id="LOCAL-00001" summary="添加测试用例的补充报告">
       <option name="closed" value="true" />
@@ -292,7 +289,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764994081345</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="测试用例的管理（创建，删除，更新，查看">
+      <option name="closed" value="true" />
+      <created>1765010523450</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1765010523450</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -313,6 +318,31 @@
     <MESSAGE value="对代码进行分析" />
     <MESSAGE value="添加测试用例的补充报告" />
     <MESSAGE value="脚本执行（单次，批量）" />
-    <option name="LAST_COMMIT_MESSAGE" value="脚本执行（单次，批量）" />
+    <MESSAGE value="测试用例的管理（创建，删除，更新，查看" />
+    <option name="LAST_COMMIT_MESSAGE" value="测试用例的管理（创建，删除，更新，查看" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/test/java/com/example/demo/service/impl/TestCaseManagementServiceImplTest.java</url>
+          <line>35</line>
+          <properties class="com.example.demo.service.impl.TestCaseManagementServiceImplTest" method="testBasic4">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/src/test/java/com/example/demo/service/impl/TestCaseManagementServiceImplTest.java</url>
+          <line>44</line>
+          <properties class="com.example.demo.service.impl.TestCaseManagementServiceImplTest" method="testBasic6">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
