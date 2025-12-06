@@ -5,11 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a088f82-6ef3-428d-b391-344aaff2b65e" name="更改" comment="脚本执行（单次，批量）">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/controller/AutoTestController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/ApiSceneAnalyzerService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/DynamicCompilerService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/ReportGeneratorService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/TestExecutorService.java" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/dto/TreeNodeDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/TestCaseManagementService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestCaseManagementServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/scripts/scene1/1.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/example/demo/service/impl/TestCaseManagementServiceImplTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/controller/ApiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/controller/ApiController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/ParserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/ParserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiParameter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiParameter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/ParserService.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,51 +59,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;JUnit.DemoApplicationTests.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TestExcutionServiceImplTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TestExcutionServiceImplTest.testExecuteTestsMethod.executor&quot;: &quot;Run&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;Spring Boot.DemoApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/IDEA2024/project/API_Platform-main&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;项目&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
-    &quot;应用程序.DemoApplication.executor&quot;: &quot;Run&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "JUnit.DemoApplicationTests.executor": "Run",
+    "JUnit.TestCaseManagementServiceImplTest.executor": "Run",
+    "JUnit.TestCaseManagementServiceImplTest.testBasic2.executor": "Run",
+    "JUnit.TestCaseManagementServiceImplTest.testBasic3.executor": "Run",
+    "JUnit.TestCaseManagementServiceImplTest.testBasic4.executor": "Run",
+    "JUnit.TestExcutionServiceImplTest.executor": "Run",
+    "JUnit.TestExcutionServiceImplTest.testExecuteTestsMethod.executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.DemoApplication.executor": "Run",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/IDEA2024/project/API_Platform-main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "项目",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "vue.rearranger.settings.migration": "true",
+    "应用程序.DemoApplication.executor": "Run"
   }
-}</component>
-  <component name="RunManager" selected="JUnit.TestExcutionServiceImplTest.testExecuteTestsMethod">
-    <configuration name="DemoApplicationTests" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="demo" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.example.demo.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.example.demo" />
-      <option name="MAIN_CLASS_NAME" value="com.example.demo.DemoApplicationTests" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="TestExcutionServiceImplTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+}]]></component>
+  <component name="RunManager" selected="JUnit.TestCaseManagementServiceImplTest.testBasic7">
+    <configuration name="TestCaseManagementServiceImplTest.testBasic3" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="demo" />
       <extension name="coverage">
         <pattern>
@@ -107,13 +101,14 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.example.demo.service.impl" />
-      <option name="MAIN_CLASS_NAME" value="com.example.demo.service.impl.TestExcutionServiceImplTest" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="MAIN_CLASS_NAME" value="com.example.demo.service.impl.TestCaseManagementServiceImplTest" />
+      <option name="METHOD_NAME" value="testBasic3" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="TestExcutionServiceImplTest.testExecuteTestsMethod" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="TestCaseManagementServiceImplTest.testBasic4" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="demo" />
       <extension name="coverage">
         <pattern>
@@ -122,8 +117,56 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="com.example.demo.service.impl" />
-      <option name="MAIN_CLASS_NAME" value="com.example.demo.service.impl.TestExcutionServiceImplTest" />
-      <option name="METHOD_NAME" value="testExecuteTestsMethod" />
+      <option name="MAIN_CLASS_NAME" value="com.example.demo.service.impl.TestCaseManagementServiceImplTest" />
+      <option name="METHOD_NAME" value="testBasic4" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestCaseManagementServiceImplTest.testBasic5" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="demo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.demo.service.impl.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.demo.service.impl" />
+      <option name="MAIN_CLASS_NAME" value="com.example.demo.service.impl.TestCaseManagementServiceImplTest" />
+      <option name="METHOD_NAME" value="testBasic5" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestCaseManagementServiceImplTest.testBasic6" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="demo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.demo.service.impl.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.demo.service.impl" />
+      <option name="MAIN_CLASS_NAME" value="com.example.demo.service.impl.TestCaseManagementServiceImplTest" />
+      <option name="METHOD_NAME" value="testBasic6" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestCaseManagementServiceImplTest.testBasic7" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="demo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.demo.service.impl.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.demo.service.impl" />
+      <option name="MAIN_CLASS_NAME" value="com.example.demo.service.impl.TestCaseManagementServiceImplTest" />
+      <option name="METHOD_NAME" value="testBasic7" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -149,9 +192,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.TestExcutionServiceImplTest.testExecuteTestsMethod" />
-        <item itemvalue="JUnit.TestExcutionServiceImplTest" />
-        <item itemvalue="JUnit.DemoApplicationTests" />
+        <item itemvalue="JUnit.TestCaseManagementServiceImplTest.testBasic7" />
+        <item itemvalue="JUnit.TestCaseManagementServiceImplTest.testBasic6" />
+        <item itemvalue="JUnit.TestCaseManagementServiceImplTest.testBasic5" />
+        <item itemvalue="JUnit.TestCaseManagementServiceImplTest.testBasic4" />
+        <item itemvalue="JUnit.TestCaseManagementServiceImplTest.testBasic3" />
       </list>
     </recent_temporary>
   </component>
@@ -189,7 +234,7 @@
       <workItem from="1764990806793" duration="442000" />
       <workItem from="1764991256709" duration="71000" />
       <workItem from="1764991335013" duration="250000" />
-      <workItem from="1764991600379" duration="1970000" />
+      <workItem from="1764991600379" duration="7863000" />
     </task>
     <task id="LOCAL-00001" summary="添加测试用例的补充报告">
       <option name="closed" value="true" />
@@ -239,7 +284,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764993708545</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="脚本执行（单次，批量）">
+      <option name="closed" value="true" />
+      <created>1764994081345</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1764994081345</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
