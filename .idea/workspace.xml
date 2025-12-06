@@ -4,18 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a088f82-6ef3-428d-b391-344aaff2b65e" name="更改" comment="添加测试用例的补充报告">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/dto/TestCaseResultDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestExecutionServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/scripts/mocktest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/scripts/mocktest1.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/example/demo/service/impl/TestExcutionServiceImplTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/controller/ApiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/controller/ApiController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/TestExecutionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/TestExecutionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
-    </list>
+    <list default="true" id="9a088f82-6ef3-428d-b391-344aaff2b65e" name="更改" comment="脚本执行（单次，批量）" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -194,7 +183,7 @@
       <workItem from="1764990806793" duration="442000" />
       <workItem from="1764991256709" duration="71000" />
       <workItem from="1764991335013" duration="250000" />
-      <workItem from="1764991600379" duration="1012000" />
+      <workItem from="1764991600379" duration="1614000" />
     </task>
     <task id="LOCAL-00001" summary="添加测试用例的补充报告">
       <option name="closed" value="true" />
@@ -220,7 +209,15 @@
       <option name="project" value="LOCAL" />
       <updated>1764596644170</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="脚本执行（单次，批量）">
+      <option name="closed" value="true" />
+      <created>1764993436537</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1764993436537</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -240,6 +237,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="对代码进行分析" />
     <MESSAGE value="添加测试用例的补充报告" />
-    <option name="LAST_COMMIT_MESSAGE" value="添加测试用例的补充报告" />
+    <MESSAGE value="脚本执行（单次，批量）" />
+    <option name="LAST_COMMIT_MESSAGE" value="脚本执行（单次，批量）" />
   </component>
 </project>
