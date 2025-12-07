@@ -169,8 +169,10 @@ public class TestCaseManagementServiceImpl implements TestCaseManagementService 
 
         try {
             Files.delete(fileFullPath);
+            return true;
         } catch (IOException e) {
             throw new RuntimeException("删除文件失败：" + fileFullPath, e);
+
         }
     }
 
@@ -192,6 +194,7 @@ public class TestCaseManagementServiceImpl implements TestCaseManagementService 
                     .forEach(path -> {
                         try {
                             Files.delete(path);
+
                         } catch (IOException e) {
                             throw new RuntimeException("删除失败：" + path, e);
                         }
@@ -199,6 +202,7 @@ public class TestCaseManagementServiceImpl implements TestCaseManagementService 
         } catch (IOException e) {
             throw new RuntimeException("遍历目录失败：" + sceneDir, e);
         }
+        return true;
     }
 
     /**
@@ -221,6 +225,7 @@ public class TestCaseManagementServiceImpl implements TestCaseManagementService 
         } catch (IOException e) {
             throw new RuntimeException("更新文件失败：" + fileFullPath, e);
         }
+        return true;
     }
 
 

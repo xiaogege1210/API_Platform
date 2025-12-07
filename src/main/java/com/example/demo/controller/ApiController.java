@@ -2,9 +2,11 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.TestCaseResultDto;
 import com.example.demo.model.ApiEndpoint;
+import com.example.demo.model.CoverageReport;
 import com.example.demo.model.GenerateCodeRequest;
-import com.example.demo.service.ExternalTestCaseGeneratorService;
-import com.example.demo.service.ParserService;
+//import com.example.demo.service.ExternalTestCaseGeneratorService;
+//import com.example.demo.service.ParserService;
+import com.example.demo.service.CoverageAnalysisService;
 import com.example.demo.service.TestCaseAnalysisService;
 import com.example.demo.service.TestCaseManagementService;
 import com.example.demo.service.TestExecutionService;
@@ -18,19 +20,20 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import java.io.IOException;
 import java.util.*;
 
 @Controller
 public class ApiController {
 
-    @Autowired
-    private ParserService parserService;
+//    @Autowired
+//    private ParserService parserService;
 
     @Autowired
     private TestExecutionServiceImpl testExecutionService;
 
-    @Autowired
-    private ExternalTestCaseGeneratorService externalTestCaseGeneratorService;
+//    @Autowired
+//    private ExternalTestCaseGeneratorService externalTestCaseGeneratorService;
 
 //    @Autowired
 //    private TestCaseManagementService testCaseManagementService;
@@ -41,23 +44,27 @@ public class ApiController {
     private TestCaseAnalysisServiceImpl testCaseAnalysisServiceImpl;
     @Autowired
     private TestCaseManagementServiceImpl testCaseManagementServiceImpl;
+    @Autowired
+    private CoverageAnalysisService coverageAnalysisService;
 
     public String index() { return "index"; }
 
-    // 解析接口
-    @PostMapping("/api/parse")
-    @ResponseBody
-    public List<ApiEndpoint> parse(@RequestParam("file") MultipartFile file) throws Exception {
-        return parserService.parseSwaggerFile(file);
-    }
 
-    // 测试代码生成接口，调用外部服务生成测试代码
-    @PostMapping("/api/generate")
-    @ResponseBody
-    public String generateCode(@RequestBody GenerateCodeRequest request) {
-        // 调用外部服务生成测试用例
-        return externalTestCaseGeneratorService.generateTestCase(request);
-    }
+
+//    // 解析接口
+//    @PostMapping("/api/parse")
+//    @ResponseBody
+//    public List<ApiEndpoint> parse(@RequestParam("file") MultipartFile file) throws Exception {
+//        return parserService.parseSwaggerFile(file);
+//    }
+//
+//    // 测试代码生成接口，调用外部服务生成测试代码
+//    @PostMapping("/api/generate")
+//    @ResponseBody
+//    public String generateCode(@RequestBody GenerateCodeRequest request) {
+//        // 调用外部服务生成测试用例
+//        return externalTestCaseGeneratorService.generateTestCase(request);
+//    }
 
 //    // 执行测试用例接口 - 直接执行传入的测试代码
 //    @PostMapping("/api/execute-direct")
@@ -238,48 +245,77 @@ public class ApiController {
     /**
      * 生成测试用例的分析和建议(多个脚本）
      */
-    @PostMapping("/api/testcase/analyze")
-    @ResponseBody
-    public Map<String, Object> analyzeTestCase(@RequestBody Map<String, String> request) throws JsonProcessingException {
-        Map<String, Object> result = new HashMap<>();
-        String testCode = request.get("testCode");
-        String api=request.get("api");
-        String environment=request.get("environment");
-        String depedency=request.get("depedency");
-        String testCaseResult = request.get("testCaseId");
+//    @PostMapping("/api/testcase/analyze")
+//    @ResponseBody
+//    public Map<String, Object> analyzeTestCase(@RequestBody Map<String, String> request) throws JsonProcessingException {
+//        Map<String, Object> result = new HashMap<>();
+//        List<String> testCode = request.get("testCode");
+//        String api=request.get("api");
+//        String environment=request.get("environment");
+//        String depedency=request.get("depedency");
+//        String testCaseResult = request.get("testCaseId");
+//
+//        if (testCode == null) {
+//            result.put("success", false);
+//            result.put("message", "测试代码不能为空");
+//            return result;
+//        }
+//
+//
+//        String analysis = testCaseAnalysisService.generateAnalysisAndSuggestions(api,environment,depedency,testCode);
+//        result.put("success", true);
+//        result.put("analysis", analysis);
+//        return result;
+//    }
 
-        if (testCode == null) {
-            result.put("success", false);
-            result.put("message", "测试代码不能为空");
-            return result;
-        }
-
-
-        String analysis = testCaseAnalysisService.generateAnalysisAndSuggestions(api,environment,depedency,testCode,testCaseResult);
-        result.put("success", true);
-        result.put("analysis", analysis);
-        return result;
-    }
-
+//    /**
+//     * 计算测试用例的覆盖度评分
+//     * 文档和
+//     */
+//    @PostMapping("/api/testcase/calculate-coverage")
+//    @ResponseBody
+//    public CoverageReport calculateCoverage(@RequestBody String apiDoc, List<String> testCases) {
+//        //传入的是文件
+//        //然后转换成这个格式
+//        return coverageAnalysisService.generateCoverageReportWithFuzzyMatch(apiDoc,testCases);
+//    }
     /**
      * 计算测试用例的覆盖度评分
+     * @param Content 前端上传的 API 文档文件（如 .md/.txt/.json 等）
+     * @param testCasesname 测试用例列表（前端通过 FormData 或 URL 参数传递）
+     * @return 覆盖度报告
      */
-    @PostMapping("/api/testcase/calculate-coverage")
-    @ResponseBody
-    public Map<String, Object> calculateCoverage(@RequestBody Map<String, String> request) {
-        Map<String, Object> result = new HashMap<>();
-        String testCode = request.get("testCode");
 
-        if (testCode == null) {
-            result.put("success", false);
-            result.put("message", "测试代码不能为空");
-            return result;
+        @PostMapping("/api/testcase/calculate-coverage")
+
+        @ResponseBody
+    public CoverageReport calculateCoverage(
+            // 接收文件：name="apiDocFile" 对应前端 FormData 的 key，必须一致
+            @RequestParam("apiDoc") String Content,
+            // 接收测试用例列表：name="testCases" 对应前端 FormData 的 key，可多个值
+            @RequestParam("testCases") List<String> testCasesname
+    ) {
+        // 1. 校验文件是否为空
+        if (Content.isEmpty()) {
+            throw new IllegalArgumentException("API 文档文件不能为空");
+        }
+        System.out.println(Content);
+
+
+        List<String>testCases = new ArrayList<>();
+        //这是根据输出的名字读取文件，然后封装到脚本文件中
+        for (String testCaseName : testCasesname) {
+            System.out.println(testCaseName);
+            testCases.add(testCaseManagementServiceImpl.readTestCaseContent(testCaseName));
+
+        }
+        // 3. 校验测试用例列表
+        if (testCases == null || testCases.isEmpty()) {
+            throw new IllegalArgumentException("测试用例列表不能为空");
         }
 
-        int coverageScore = testCaseAnalysisService.calculateCoverageScore(testCode);
-        result.put("success", true);
-        result.put("coverageScore", coverageScore);
-        return result;
+        // 4. 调用服务生成报告（原逻辑不变，只是 apiDoc 从文件解析而来）
+        return coverageAnalysisService.generateCoverageReportWithFuzzyMatch(Content, testCases);
     }
 
     // ==================== 多种场景的执行接口 ====================

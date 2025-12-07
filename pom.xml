@@ -3,79 +3,71 @@
 		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.14</version> <!-- 或者 3.x 版本也可以 -->
+		<version>2.7.14</version>
 		<relativePath/>
 	</parent>
+
 	<groupId>com.example</groupId>
 	<artifactId>demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>demo</name>
-	<description>Automated Testing Platform Demo</description>
 
 	<properties>
-		<java.version>1.8</java.version> <!-- 根据你的JDK版本修改，如 17 -->
+		<java.version>11</java.version>
 	</properties>
 
 	<dependencies>
-		<!-- Web 模块 -->
+
+		<!-- Spring Boot Web -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 
-		<!-- Thymeleaf 模板引擎 (用于前端展示) -->
+		<!-- Thymeleaf -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 
-		<!-- Swagger 解析核心库 -->
+		<!-- Swagger -->
 		<dependency>
 			<groupId>io.swagger.parser.v3</groupId>
 			<artifactId>swagger-parser</artifactId>
 			<version>2.1.16</version>
 		</dependency>
 
-		<!-- Lombok (简化代码) -->
+		<!-- Lombok -->
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.30</version> <!-- 这里强制升级到支持 JDK 21 的版本 -->
+			<version>1.18.30</version>
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- 测试模块 -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
 
-		<!-- JUnit 5 API：主代码需要用它判断 @Test 注解，改为 compile 范围 -->
+		<!-- *** JUnit 5 API（主程序需要） *** -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 			<version>5.9.2</version>
-			<scope>compile</scope> <!-- 主代码可访问 -->
 		</dependency>
-		<!-- JUnit 引擎：仅测试时用，保留 test 范围 -->
+
+		<!-- *** JUnit 5 引擎（必须是运行时 scope!）*** -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 			<version>5.9.2</version>
-			<scope>test</scope>
 		</dependency>
 
-
-		<!-- JUnit 5 启动器（编程式执行测试类的核心依赖） -->
+		<!-- Programmatic Test Launcher -->
 		<dependency>
 			<groupId>org.junit.platform</groupId>
 			<artifactId>junit-platform-launcher</artifactId>
-			<version>1.8.2</version>
-			<scope>compile</scope>
+			<version>1.9.2</version>
 		</dependency>
 
 		<dependency>
@@ -83,6 +75,14 @@
 			<artifactId>gson</artifactId>
 			<version>2.10.1</version>
 		</dependency>
+
+		<!-- Spring 的测试依赖（仅单元测试用） -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 	</dependencies>
 
 	<build>
@@ -90,23 +90,17 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
+					<source>11</source>
+					<target>11</target>
 				</configuration>
 			</plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>11</source>
-                    <target>11</target>
-                </configuration>
-            </plugin>
-        </plugins>
+		</plugins>
 	</build>
+
 </project>

@@ -19,6 +19,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -194,11 +196,30 @@ public class TestExecutionServiceImpl implements TestExecutionService {
     /**
      * 从脚本文件名提取测试类名（如 "Test1.java" -> "Test1"）
      */
+    /**
+     * 从脚本路径中提取类名
+     * 例如：hh/test.java -> test
+     *      test.java -> test
+     *      a/b/c/MyTest.java -> MyTest
+     */
     private String extractClassName(String scriptName) {
         if (scriptName == null || !scriptName.endsWith(".java")) {
             return "";
         }
-        return scriptName.substring(0, scriptName.lastIndexOf("."));
+        // 去掉 .java 后缀
+        String nameWithoutExt = scriptName.substring(0, scriptName.lastIndexOf("."));
+        // 获取文件名（去掉路径部分）
+        String fileName = nameWithoutExt;
+        if (nameWithoutExt.contains(File.separator)) {
+            fileName = nameWithoutExt.substring(nameWithoutExt.lastIndexOf(File.separator) + 1);
+        } else if (nameWithoutExt.contains("/")) {
+            // 兼容 Linux 路径分隔符
+            fileName = nameWithoutExt.substring(nameWithoutExt.lastIndexOf("/") + 1);
+        } else if (nameWithoutExt.contains("\\")) {
+            // 兼容 Windows 路径分隔符
+            fileName = nameWithoutExt.substring(nameWithoutExt.lastIndexOf("\\") + 1);
+        }
+        return fileName;
     }
 
     // ==================== 辅助方法：文件读取与校验 ====================
@@ -332,9 +353,22 @@ public class TestExecutionServiceImpl implements TestExecutionService {
 
         List<TestCaseResultDto> results = new ArrayList<>();
 
+        URLClassLoader classLoader = null;
+        ClassLoader originalContextClassLoader = null;
         try {
-            // 1. 加载测试类（Java 1.8 类加载器）
-            Class<?> testClass = Class.forName(testClassName);
+            // 1. 创建自定义类加载器，将 outputDir 添加到 classpath
+            // 使用系统类加载器作为父类，确保能访问所有 JUnit 依赖
+            File outputDirFile = new File(outputDir);
+            URL[] urls = new URL[]{outputDirFile.toURI().toURL()};
+            classLoader = new URLClassLoader(urls, ClassLoader.getSystemClassLoader());
+
+            // 2. 保存原始上下文类加载器，并设置为自定义类加载器
+            // 这样 JUnit Platform 就能使用正确的类加载器来查找 TestEngine
+            originalContextClassLoader = Thread.currentThread().getContextClassLoader();
+            Thread.currentThread().setContextClassLoader(classLoader);
+
+            // 3. 使用自定义类加载器加载测试类
+            Class<?> testClass = classLoader.loadClass(testClassName);
             logger.info("✅ 成功加载测试类：{}（类加载器：{}）",
                     testClass.getName(), testClass.getClassLoader().getName());
 
@@ -435,6 +469,18 @@ public class TestExecutionServiceImpl implements TestExecutionService {
             errorResult.setFailureReason("执行异常：" + e.getMessage());
             results.add(errorResult);
         } finally {
+            // 恢复原始上下文类加载器
+            if (originalContextClassLoader != null) {
+                Thread.currentThread().setContextClassLoader(originalContextClassLoader);
+            }
+            // 关闭类加载器（释放资源）
+            if (classLoader != null) {
+                try {
+                    classLoader.close();
+                } catch (IOException e) {
+                    logger.warn("关闭类加载器失败", e);
+                }
+            }
             logger.info("==================================================\n");
         }
 

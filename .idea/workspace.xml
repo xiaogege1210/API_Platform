@@ -5,10 +5,56 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a088f82-6ef3-428d-b391-344aaff2b65e" name="更改" comment="测试用例的管理（创建，删除，更新，查看">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/ApiSceneAnalyzerService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/CoverageAnalysisService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/ApiSceneAnalyzerServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/CoverageAnalysisServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/utils/AIMatchConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/utils/AIScenarioMatchUtils.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/index1.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/com/example/demo/service/impl/coverageAnalysisServiceImpltest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/controller/ApiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/controller/ApiController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/TestCaseManagementService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/TestCaseManagementService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/TestCaseAnalysisService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/TestCaseAnalysisService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestCaseManagementServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestCaseManagementServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestExecutionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestExecutionServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/scripts/hh/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/scripts/hh/test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/DemoApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/DemoApplication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/config/RestTemplateConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/config/RestTemplateConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/dto/MessageDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/dto/MessageDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/dto/RequestBodyDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/dto/RequestBodyDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/dto/TestCaseResultDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/dto/TestCaseResultDto.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/dto/TreeNodeDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/dto/TreeNodeDto.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/llm/LLMService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/llm/LLMService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/llm/impl/SiliconFlowLLMService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/llm/impl/SiliconFlowLLMService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiDoc.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiDoc.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiEndpoint.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiEndpoint.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiInfo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiParameter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiParameter.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/CoverageReport.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/CoverageReport.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/ExpectedResult.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/ExpectedResult.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest$ApiTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest$ApiTask.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest$ParamValueInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest$ParamValueInfo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest$TestScenario.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest$TestScenario.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/RunReport.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/RunReport.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/TestCase.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/TestCase.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/TestRunResult.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/TestRunResult.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/TenantTokenService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/TenantTokenService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/TestCaseAnalysisService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/TestCaseAnalysisService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/TestCaseManagementService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/TestCaseManagementService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/TestExecutionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/TestExecutionService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestCaseManagementServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestCaseManagementServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestExecutionServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestExecutionServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/scripts/hh/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/scripts/hh/test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/example/demo/service/impl/TestCaseManagementServiceImplTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/example/demo/service/impl/TestCaseManagementServiceImplTest.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,106 +99,54 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "DefaultHtmlFileTemplate": "HTML File",
-    "JUnit.DemoApplicationTests.executor": "Run",
-    "JUnit.TestCaseManagementServiceImplTest.executor": "Run",
-    "JUnit.TestCaseManagementServiceImplTest.testBasic2.executor": "Run",
-    "JUnit.TestCaseManagementServiceImplTest.testBasic3.executor": "Run",
-    "JUnit.TestCaseManagementServiceImplTest.testBasic4.executor": "Run",
-    "JUnit.TestCaseManagementServiceImplTest.testBasic5.executor": "Run",
-    "JUnit.TestCaseManagementServiceImplTest.testBasic6.executor": "Run",
-    "JUnit.TestCaseManagementServiceImplTest.testBasic7.executor": "Debug",
-    "JUnit.TestExcutionServiceImplTest.executor": "Run",
-    "JUnit.TestExcutionServiceImplTest.testExecuteTestsMethod.executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "Spring Boot.DemoApplication.executor": "Run",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "D:/IDEA2024/project/API_Platform-main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "项目",
-    "project.structure.proportion": "0.0",
-    "project.structure.side.proportion": "0.0",
-    "vue.rearranger.settings.migration": "true",
-    "应用程序.DemoApplication.executor": "Run"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;JUnit.DemoApplicationTests.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TestCaseManagementServiceImplTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TestCaseManagementServiceImplTest.testBasic2.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TestCaseManagementServiceImplTest.testBasic3.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TestCaseManagementServiceImplTest.testBasic4.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TestCaseManagementServiceImplTest.testBasic5.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TestCaseManagementServiceImplTest.testBasic6.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TestCaseManagementServiceImplTest.testBasic7.executor&quot;: &quot;Debug&quot;,
+    &quot;JUnit.TestExcutionServiceImplTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TestExcutionServiceImplTest.testExecuteTestClass.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TestExcutionServiceImplTest.testExecuteTestsMethod.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.coverageAnalysisServiceImpltest.executor&quot;: &quot;Run&quot;,
+    &quot;JavaScript 调试.1.html.executor&quot;: &quot;Run&quot;,
+    &quot;JavaScript 调试.index.html.executor&quot;: &quot;Run&quot;,
+    &quot;JavaScript 调试.index1.html.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;Spring Boot.DemoApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/IDEA2024/project/API_Platform_2&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;项目&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
+    &quot;应用程序.DemoApplication.executor&quot;: &quot;Run&quot;
   }
-}]]></component>
-  <component name="RunManager" selected="JUnit.TestCaseManagementServiceImplTest.testBasic7">
-    <configuration name="TestCaseManagementServiceImplTest.testBasic3" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="demo" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.example.demo.service.impl.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.example.demo.service.impl" />
-      <option name="MAIN_CLASS_NAME" value="com.example.demo.service.impl.TestCaseManagementServiceImplTest" />
-      <option name="METHOD_NAME" value="testBasic3" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="TestCaseManagementServiceImplTest.testBasic4" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="demo" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.example.demo.service.impl.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.example.demo.service.impl" />
-      <option name="MAIN_CLASS_NAME" value="com.example.demo.service.impl.TestCaseManagementServiceImplTest" />
-      <option name="METHOD_NAME" value="testBasic4" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="TestCaseManagementServiceImplTest.testBasic5" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="demo" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.example.demo.service.impl.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.example.demo.service.impl" />
-      <option name="MAIN_CLASS_NAME" value="com.example.demo.service.impl.TestCaseManagementServiceImplTest" />
-      <option name="METHOD_NAME" value="testBasic5" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="TestCaseManagementServiceImplTest.testBasic6" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="demo" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="com.example.demo.service.impl.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="com.example.demo.service.impl" />
-      <option name="MAIN_CLASS_NAME" value="com.example.demo.service.impl.TestCaseManagementServiceImplTest" />
-      <option name="METHOD_NAME" value="testBasic6" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\IDEA2024\project\API_Platform\src\main\java\com\example\demo" />
+      <recent name="D:\IDEA2024\project\API_Platform\src\main\java\com\example\demo\service" />
+      <recent name="D:\IDEA2024\project\API_Platform\src\main\java\com\example\demo\service\impl" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JavaScript 调试.index.html">
     <configuration name="TestCaseManagementServiceImplTest.testBasic7" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="demo" />
       <extension name="coverage">
@@ -168,6 +162,56 @@
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
+    </configuration>
+    <configuration name="TestExcutionServiceImplTest.testExecuteTestClass" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="demo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.demo.service.impl.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.demo.service.impl" />
+      <option name="MAIN_CLASS_NAME" value="com.example.demo.service.impl.TestExcutionServiceImplTest" />
+      <option name="METHOD_NAME" value="testExecuteTestClass" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestExcutionServiceImplTest.testExecuteTestsMethod" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="demo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.demo.service.impl.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.demo.service.impl" />
+      <option name="MAIN_CLASS_NAME" value="com.example.demo.service.impl.TestExcutionServiceImplTest" />
+      <option name="METHOD_NAME" value="testExecuteTestsMethod" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="coverageAnalysisServiceImpltest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="demo" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.example.demo.service.impl.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.example.demo.service.impl" />
+      <option name="MAIN_CLASS_NAME" value="com.example.demo.service.impl.coverageAnalysisServiceImpltest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="index.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/API_Platform/demo/templates/index.html" useBuiltInWebServerPort="true">
+      <method v="2" />
     </configuration>
     <configuration default="true" type="JetRunConfigurationType">
       <module name="API_Platform" />
@@ -189,11 +233,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.coverageAnalysisServiceImpltest" />
+        <item itemvalue="JavaScript 调试.index.html" />
+        <item itemvalue="JUnit.TestExcutionServiceImplTest.testExecuteTestsMethod" />
+        <item itemvalue="JUnit.TestExcutionServiceImplTest.testExecuteTestClass" />
         <item itemvalue="JUnit.TestCaseManagementServiceImplTest.testBasic7" />
-        <item itemvalue="JUnit.TestCaseManagementServiceImplTest.testBasic6" />
-        <item itemvalue="JUnit.TestCaseManagementServiceImplTest.testBasic5" />
-        <item itemvalue="JUnit.TestCaseManagementServiceImplTest.testBasic4" />
-        <item itemvalue="JUnit.TestCaseManagementServiceImplTest.testBasic3" />
       </list>
     </recent_temporary>
   </component>
@@ -231,7 +275,14 @@
       <workItem from="1764990806793" duration="442000" />
       <workItem from="1764991256709" duration="71000" />
       <workItem from="1764991335013" duration="250000" />
-      <workItem from="1764991600379" duration="9247000" />
+      <workItem from="1764991600379" duration="25859000" />
+      <workItem from="1765076297321" duration="2891000" />
+      <workItem from="1765079289323" duration="48000" />
+      <workItem from="1765079346790" duration="21000" />
+      <workItem from="1765079394245" duration="35000" />
+      <workItem from="1765079438780" duration="60000" />
+      <workItem from="1765094319128" duration="34000" />
+      <workItem from="1765094446126" duration="38000" />
     </task>
     <task id="LOCAL-00001" summary="添加测试用例的补充报告">
       <option name="closed" value="true" />
@@ -297,7 +348,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765010523450</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="测试用例的管理（创建，删除，更新，查看">
+      <option name="closed" value="true" />
+      <created>1765011849486</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1765011849486</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -341,6 +400,11 @@
             <option name="WATCH_EXIT" value="false" />
           </properties>
           <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/com/example/demo/service/impl/coverageAnalysisServiceImpltest.java</url>
+          <line>13</line>
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

@@ -7,6 +7,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TestCaseAnalysisServiceImpl implements TestCaseAnalysisService {
     @Autowired
@@ -16,13 +18,17 @@ public class TestCaseAnalysisServiceImpl implements TestCaseAnalysisService {
      * 构建标准化、高性能的测试脚本建议生成 Prompt
      * 核心优化：精简冗余描述、强化JSON格式约束、控制长度、统一转义规则
      */
-    private String buildStandardPrompt(String api, String environment, String dependency, String test, String testResult) {
+    private String buildStandardPrompt(String api, String environment, String dependency, List<String> test) {
         // 1. 基础参数转义（避免破坏JSON结构，同时控制长度）
         String escapedApi = escapeAndTruncate(api, 5000);
         String escapedScenarios = escapeAndTruncate(environment, 1000);
         String escapedDep = escapeAndTruncate(dependency, 1000);
-        String escapedTest = escapeAndTruncate(test, 3000);
-        String escapedResult = escapeAndTruncate(testResult, 3000);
+        String testscrpits="";
+        for (String testname : test) {
+            testscrpits+=escapeAndTruncate(testname, 5000);
+        }
+//        String escapedTest = escapeAndTruncate(test, 3000);
+//        String escapedResult = escapeAndTruncate(testResult, 3000);
 
         // 2. 构建Prompt（结构化、无冗余、强约束）
         StringBuilder promptBuilder = new StringBuilder(8000); // 预设容量，减少扩容
@@ -37,9 +43,9 @@ public class TestCaseAnalysisServiceImpl implements TestCaseAnalysisService {
                 .append("3. 接口依赖：上下游接口调用顺序、参数传递规则、依赖数据生成逻辑\n")
                 .append("   内容：").append(escapedDep).append("\n")
                 .append("4. 测试脚本：待分析的自动化测试代码（含调用逻辑、参数、断言）\n")
-                .append("   内容：").append(escapedTest).append("\n")
-                .append("5. 执行结果：脚本执行日志、失败报错、返回值、执行状态\n")
-                .append("   内容：").append(escapedResult).append("\n\n")
+                .append("   内容：").append(testscrpits).append("\n")
+//                .append("5. 执行结果：脚本执行日志、失败报错、返回值、执行状态\n")
+//                .append("   内容：").append(escapedResult).append("\n\n")
 // 核心分析任务（移除环境相关，聚焦场景/脚本/失败）
                 .append("### 核心分析任务\n")
                 .append("1. 场景覆盖度分析（对照给定测试场景）：\n")
@@ -109,9 +115,9 @@ public class TestCaseAnalysisServiceImpl implements TestCaseAnalysisService {
         return escaped;
     }
     @Override
-    public String generateAnalysisAndSuggestions(String api, String environment, String dependency, String test, String testResult) throws JsonProcessingException {
+    public String generateAnalysisAndSuggestions(String api, String environment, String dependency, List<String> test) throws JsonProcessingException {
 
-        String response = llmService.getMessage(buildStandardPrompt(api,environment,dependency,test,testResult));
+        String response = llmService.getMessage(buildStandardPrompt(api,environment,dependency,test));
         return response;
 
     }
