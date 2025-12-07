@@ -4,25 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a088f82-6ef3-428d-b391-344aaff2b65e" name="更改" comment="测试用例的管理（创建，删除，更新，查看">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/ApiSceneAnalyzerService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/CoverageAnalysisService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/ApiSceneAnalyzerServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/CoverageAnalysisServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/utils/AIMatchConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/utils/AIScenarioMatchUtils.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/resources/templates/index1.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/com/example/demo/service/impl/coverageAnalysisServiceImpltest.java" afterDir="false" />
+    <list default="true" id="9a088f82-6ef3-428d-b391-344aaff2b65e" name="更改" comment="留档">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/model/AnalysisRequest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/model/ApiGroup.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/ExternalTestCaseGeneratorService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/ExternalTestCaseGeneratorServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/utils/LLMJsonValidator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/controller/ApiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/controller/ApiController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/model/ApiParameter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/model/ApiParameter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/model/GenerateCodeRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/model/GenerateCodeRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/ParserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/ParserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/TestCaseAnalysisService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/TestCaseAnalysisService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/TestCaseManagementService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/TestCaseManagementService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestCaseManagementServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestCaseManagementServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestExecutionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestExecutionServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/scripts/hh/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/scripts/hh/test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/scripts/scene1/1.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/index1.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/case.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/DemoApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/DemoApplication.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/config/RestTemplateConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/config/RestTemplateConfig.class" afterDir="false" />
@@ -38,9 +41,9 @@
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiParameter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiParameter.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/CoverageReport.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/CoverageReport.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/ExpectedResult.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/ExpectedResult.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest$ApiTask.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest$ApiTask.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest$ParamValueInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest$ParamValueInfo.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest$TestScenario.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest$TestScenario.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest$ApiTask.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest$ParamValueInfo.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest$TestScenario.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/RunReport.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/RunReport.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/TestCase.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/TestCase.class" afterDir="false" />
@@ -52,9 +55,13 @@
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestCaseManagementServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestCaseManagementServiceImpl.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestExecutionServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestExecutionServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/scripts/hh/test.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/scripts/hh/test.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/scripts/scene1/1.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/example/demo/DemoApplicationTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/example/demo/DemoApplicationTests.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/test-classes/com/example/demo/service/impl/TestCaseManagementServiceImplTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/example/demo/service/impl/TestCaseManagementServiceImplTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/com/example/demo/service/impl/TestExcutionServiceImplTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/example/demo/service/impl/TestExcutionServiceImplTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/mocktest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/mocktest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/mocktest1.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -115,6 +122,7 @@
     &quot;JUnit.TestExcutionServiceImplTest.testExecuteTestsMethod.executor&quot;: &quot;Run&quot;,
     &quot;JUnit.coverageAnalysisServiceImpltest.executor&quot;: &quot;Run&quot;,
     &quot;JavaScript 调试.1.html.executor&quot;: &quot;Run&quot;,
+    &quot;JavaScript 调试.case.html.executor&quot;: &quot;Run&quot;,
     &quot;JavaScript 调试.index.html.executor&quot;: &quot;Run&quot;,
     &quot;JavaScript 调试.index1.html.executor&quot;: &quot;Run&quot;,
     &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
@@ -133,7 +141,7 @@
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;project.structure.last.edited&quot;: &quot;项目&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
     &quot;应用程序.DemoApplication.executor&quot;: &quot;Run&quot;
@@ -145,8 +153,13 @@
       <recent name="D:\IDEA2024\project\API_Platform\src\main\java\com\example\demo\service" />
       <recent name="D:\IDEA2024\project\API_Platform\src\main\java\com\example\demo\service\impl" />
     </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.example.demo.model" />
+      <recent name="com.example.demo.service.impl" />
+      <recent name="com.example.demo.service" />
+    </key>
   </component>
-  <component name="RunManager" selected="JavaScript 调试.index.html">
+  <component name="RunManager" selected="Spring Boot.DemoApplication">
     <configuration name="TestCaseManagementServiceImplTest.testBasic7" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="demo" />
       <extension name="coverage">
@@ -283,6 +296,11 @@
       <workItem from="1765079438780" duration="60000" />
       <workItem from="1765094319128" duration="34000" />
       <workItem from="1765094446126" duration="38000" />
+      <workItem from="1765096251390" duration="93000" />
+      <workItem from="1765096380233" duration="1005000" />
+      <workItem from="1765097403128" duration="1342000" />
+      <workItem from="1765098765915" duration="81000" />
+      <workItem from="1765098855111" duration="17130000" />
     </task>
     <task id="LOCAL-00001" summary="添加测试用例的补充报告">
       <option name="closed" value="true" />
@@ -356,7 +374,15 @@
       <option name="project" value="LOCAL" />
       <updated>1765011849486</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="留档">
+      <option name="closed" value="true" />
+      <created>1765096284177</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1765096284177</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -378,7 +404,8 @@
     <MESSAGE value="添加测试用例的补充报告" />
     <MESSAGE value="脚本执行（单次，批量）" />
     <MESSAGE value="测试用例的管理（创建，删除，更新，查看" />
-    <option name="LAST_COMMIT_MESSAGE" value="测试用例的管理（创建，删除，更新，查看" />
+    <MESSAGE value="留档" />
+    <option name="LAST_COMMIT_MESSAGE" value="留档" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -405,6 +432,12 @@
           <url>file://$PROJECT_DIR$/src/test/java/com/example/demo/service/impl/coverageAnalysisServiceImpltest.java</url>
           <line>13</line>
           <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/src/main/resources/templates/index.html</url>
+          <line>1719</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

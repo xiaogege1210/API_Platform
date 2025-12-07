@@ -44,6 +44,8 @@ public interface TestCaseManagementService {
      */
     Boolean updateTestCaseContent(String filePath, String newContent);
 
+    Boolean updateTestCaseContent(List<String> filePaths, List<String> newContents);
+
     /**
      * 新增测试用例脚本
      * @param filePath 保存目录路径

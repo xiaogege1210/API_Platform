@@ -1,389 +1,438 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.TestCaseResultDto;
-import com.example.demo.model.ApiEndpoint;
-import com.example.demo.model.CoverageReport;
-import com.example.demo.model.GenerateCodeRequest;
-//import com.example.demo.service.ExternalTestCaseGeneratorService;
-//import com.example.demo.service.ParserService;
-import com.example.demo.service.CoverageAnalysisService;
-import com.example.demo.service.TestCaseAnalysisService;
-import com.example.demo.service.TestCaseManagementService;
-import com.example.demo.service.TestExecutionService;
-import com.example.demo.service.impl.TestCaseAnalysisServiceImpl;
-import com.example.demo.service.impl.TestCaseManagementServiceImpl;
-import com.example.demo.service.impl.TestExecutionServiceImpl;
+import com.example.demo.model.*;
+import com.example.demo.service.*;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
-import java.io.IOException;
 import java.util.*;
 
 @Controller
+@RequestMapping("/api")
 public class ApiController {
 
-//    @Autowired
-//    private ParserService parserService;
+    private static final Logger logger = LoggerFactory.getLogger(ApiController.class);
+
+    private final TestExecutionService testExecutionService;
+    private final TestCaseAnalysisService testCaseAnalysisService;
+    private final TestCaseManagementService testCaseManagementService;
+    private final CoverageAnalysisService coverageAnalysisService;
+    private final ParserService parserService;
+    private final ExternalTestCaseGeneratorService externalTestCaseGeneratorService;
 
     @Autowired
-    private TestExecutionServiceImpl testExecutionService;
-
-//    @Autowired
-//    private ExternalTestCaseGeneratorService externalTestCaseGeneratorService;
-
-//    @Autowired
-//    private TestCaseManagementService testCaseManagementService;
-
-    @Autowired
-    private TestCaseAnalysisService testCaseAnalysisService;
-    @Autowired
-    private TestCaseAnalysisServiceImpl testCaseAnalysisServiceImpl;
-    @Autowired
-    private TestCaseManagementServiceImpl testCaseManagementServiceImpl;
-    @Autowired
-    private CoverageAnalysisService coverageAnalysisService;
-
-    public String index() { return "index"; }
-
-
-
-//    // 解析接口
-//    @PostMapping("/api/parse")
-//    @ResponseBody
-//    public List<ApiEndpoint> parse(@RequestParam("file") MultipartFile file) throws Exception {
-//        return parserService.parseSwaggerFile(file);
-//    }
-//
-//    // 测试代码生成接口，调用外部服务生成测试代码
-//    @PostMapping("/api/generate")
-//    @ResponseBody
-//    public String generateCode(@RequestBody GenerateCodeRequest request) {
-//        // 调用外部服务生成测试用例
-//        return externalTestCaseGeneratorService.generateTestCase(request);
-//    }
-
-//    // 执行测试用例接口 - 直接执行传入的测试代码
-//    @PostMapping("/api/execute-direct")
-//    @ResponseBody
-//    public String executeTestsDirect(@RequestBody Map<String, String> request) {
-//        StringBuilder results = new StringBuilder();
-//
-//        try {
-//            // 1. 获取直接传入的测试代码
-//            String testCode = request.get("testCode");
-//            if (testCode == null || testCode.isEmpty()) {
-//                return "❌ 错误：未提供测试代码！\n";
-//            }
-//
-//            // 2. 输出生成的代码概览
-//            results.append("📋 测试代码概览：\n");
-//            int codeLines = testCode.split("\\n").length;
-//            int methodCount = 0;
-//            for (String line : testCode.split("\\n")) {
-//                if (line.trim().startsWith("@Test")) {
-//                    methodCount++;
-//                }
-//            }
-//            results.append("   - 总代码行数: " + codeLines + "\n");
-//            results.append("   - 测试方法数: " + methodCount + "\n\n");
-//
-//            // 3. 直接执行传入的测试代码
-//            results.append("🚀 开始执行测试代码...\n\n");
-//            String executionResult = testExecutionService.executeGeneratedTests(testCode);
-//            results.append(executionResult);
-//
-//        } catch (Exception e) {
-//            results.append("❌ 执行测试时发生错误: " + e.getMessage() + "\n");
-//            e.printStackTrace();
-//        }
-//
-//        return results.toString();
-//    }
-
-    // ==================== 测试用例管理接口 ====================
-
-    /**
-     * 保存测试用例
-     * todo:异常处理没做
-     */
-    @PostMapping("/api/testcase/save")
-    @ResponseBody
-    public Map<String, Object> saveTestCase(@RequestBody Map<String, String> request) {
-        //获取路径
-        //获取内容
-        //保存测试用例
-        //更新接口？？
-        //
-
-        Map<String, Object> result = new HashMap<>();
-        String filePath = request.get("filePath");
-        String content = request.get("content");
-        testCaseManagementServiceImpl.createTestCaseFile(filePath, content);
-
-        result.put("success", true);
-        result.put("message", "测试用例保存成功");
-        return result;
+    public ApiController(
+            TestExecutionService testExecutionService,
+            TestCaseAnalysisService testCaseAnalysisService,
+            TestCaseManagementService testCaseManagementService,
+            CoverageAnalysisService coverageAnalysisService,
+            ParserService parserService,
+            ExternalTestCaseGeneratorService externalTestCaseGeneratorService) {
+        this.testExecutionService = testExecutionService;
+        this.testCaseAnalysisService = testCaseAnalysisService;
+        this.testCaseManagementService = testCaseManagementService;
+        this.coverageAnalysisService = coverageAnalysisService;
+        this.parserService = parserService;
+        this.externalTestCaseGeneratorService = externalTestCaseGeneratorService;
     }
 
-    /**
-     * 根据测试用例相对路径获取单个测试用例
-     */
-    @GetMapping("/api/testcase/getfile")
+    // ==================== 解析API文档 ====================
+    @PostMapping("/parse")
     @ResponseBody
-    public Map<String, Object> getTestCase(@RequestParam("filepath") String filepath) {
-        Map<String, Object> result = new HashMap<>();
-        String testCode = testCaseManagementServiceImpl.readTestCaseContent(filepath);
-
-        if (testCode == null) {
-            result.put("success", false);
-            result.put("message", "测试用例不存在");
-            return result;
+    public ResponseEntity<?> parseSwaggerFile(@RequestParam("file") MultipartFile file) {
+        try {
+            List<ApiGroup> apiGroups = parserService.parseSwaggerFile(file);
+            return ResponseEntity.ok(apiGroups);
+        } catch (Exception e) {
+            logger.error("解析Swagger文件失败", e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(createErrorResponse("解析失败: " + e.getMessage()));
         }
-
-        result.put("success", true);
-        result.put("testCode", testCode);
-        return result;
-    }
-    /**
-     * 根据测试用例相对路径获取m目录下的所有的测试用例
-     */
-    @GetMapping("/api/testcase/getdir")
-    @ResponseBody
-    public List<String> getTestCasedir(@RequestParam("filepath") String filepath) {
-        Map<String, Object> result = new HashMap<>();
-        List<String>list = new ArrayList<>();
-        list = testCaseManagementServiceImpl.findTestCaseByDir(filepath);
-        return list;
     }
 
-    /**
-     * 获得全部的测试用例，树形文件
-     */
-    @GetMapping("/api/testcase/all")
+    // ==================== 生成测试代码 ====================
+    @PostMapping("/generate")
     @ResponseBody
-    public List<String> getTestCaseall() {
-        Map<String, Object> result = new HashMap<>();
-        List<String>list = new ArrayList<>();
-        list = testCaseManagementServiceImpl.findTestCaseAll();
-        return list;
-    }
-
-    /**
-     * 更新测试用例只要生成测试用例成功，就保存文件，之后保存文件都用更新测试用例的接口，也就是默认测试用例文件已经存在
-     */
-    @PostMapping("/api/testcase/update")
-    @ResponseBody
-    public Map<String, Object> updateTestCase(@RequestBody Map<String, String> request) {
-        //获取路径
-        //获取内容
-        //保存测试用例
-        //更新接口？？
-        //
-
-        Map<String, Object> result = new HashMap<>();
-        String filePath = request.get("filePath");
-        String content = request.get("content");
-
-
-
-        if (filePath == null) {
-            result.put("success", false);
-            result.put("message", "文件不存在");
-            return result;
+    public ResponseEntity<?> generateTestCode(@RequestBody List<GenerateCodeRequest> request) {
+        try {
+            logger.info("开始生成测试代码，请求数量: {}", request.size());
+            String generatedCode = externalTestCaseGeneratorService.generateTestCase(request);
+            return ResponseEntity.ok(generatedCode);
+        } catch (Exception e) {
+            logger.error("生成测试代码失败", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(createErrorResponse("生成失败: " + e.getMessage()));
         }
-
-        testCaseManagementServiceImpl.updateTestCaseContent(filePath, content);
-        result.put("success", true);
-        result.put("message", "测试用例保存成功");
-        return result;
     }
 
-    /**
-     * 删除单个测试用例
-     */
-    @DeleteMapping("/api/testcase/deletefile")
+    // ==================== 测试用例管理 ====================
+
+    @PostMapping("/testcase/save")
     @ResponseBody
-    public Map<String, Object> deleteTestCase(@RequestParam("filepath") String filepath) {
-        Map<String, Object> result = new HashMap<>();
-        boolean success = testCaseManagementServiceImpl.deleteTestCaseFile(filepath);
-        result.put("success", success);
-        result.put("message", success ? "测试用例删除成功" : "测试用例不存在");
-        return result;
+    public ResponseEntity<?> saveTestCase(@RequestBody SaveTestCaseRequest request) {
+        try {
+            testCaseManagementService.updateTestCaseContent(request.getFilePath(), request.getContent());
+            return ResponseEntity.ok(createSuccessResponse("测试用例保存成功"));
+        } catch (Exception e) {
+            logger.error("保存测试用例失败: {}", request.getFilePath(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(createErrorResponse("保存失败: " + e.getMessage()));
+        }
     }
-    /**
-     * 删除目录
-     */
-    @DeleteMapping("/api/testcase/deletedir")
+
+    @GetMapping("/testcase/getfile")
     @ResponseBody
-    public Map<String, Object> deleteTestCaseDir(@RequestParam("filepath") String filepath) {
-        Map<String, Object> result = new HashMap<>();
-        boolean success = testCaseManagementServiceImpl.deleteAllTestCasesInDir(filepath);
-        result.put("success", success);
-        result.put("message", success ? "测试目录删除成功" : "测试用例不存在");
-        return result;
+    public ResponseEntity<?> getTestCase(@RequestParam("filepath") String filePath) {
+        try {
+            String testCode = testCaseManagementService.readTestCaseContent(filePath);
+            if (testCode == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(createErrorResponse("测试用例不存在"));
+            }
+            Map<String, Object> result = new HashMap<>();
+            result.put("success", true);
+            result.put("testCode", testCode);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            logger.error("获取测试用例失败: {}", filePath, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(createErrorResponse("获取失败: " + e.getMessage()));
+        }
     }
 
-//    /**
-//     * 获取所有测试用例,直接读取脚本所在文件
-//     */
-//    @GetMapping("/api/testcase/all")
-//    @ResponseBody
-//    public Map<String, Object> getAllTestCases() {
-//        Map<String, Object> result = new HashMap<>();
-//        Map<String, String> testCases = testCaseManagementService.getAllTestCases();
-//        result.put("success", true);
-//        result.put("testCases", testCases);
-//        return result;
-//    }
-
-    // ==================== 测试用例分析接口 ====================
-
-    /**
-     * 生成测试用例的分析和建议(多个脚本）
-     */
-//    @PostMapping("/api/testcase/analyze")
-//    @ResponseBody
-//    public Map<String, Object> analyzeTestCase(@RequestBody Map<String, String> request) throws JsonProcessingException {
-//        Map<String, Object> result = new HashMap<>();
-//        List<String> testCode = request.get("testCode");
-//        String api=request.get("api");
-//        String environment=request.get("environment");
-//        String depedency=request.get("depedency");
-//        String testCaseResult = request.get("testCaseId");
-//
-//        if (testCode == null) {
-//            result.put("success", false);
-//            result.put("message", "测试代码不能为空");
-//            return result;
-//        }
-//
-//
-//        String analysis = testCaseAnalysisService.generateAnalysisAndSuggestions(api,environment,depedency,testCode);
-//        result.put("success", true);
-//        result.put("analysis", analysis);
-//        return result;
-//    }
-
-//    /**
-//     * 计算测试用例的覆盖度评分
-//     * 文档和
-//     */
-//    @PostMapping("/api/testcase/calculate-coverage")
-//    @ResponseBody
-//    public CoverageReport calculateCoverage(@RequestBody String apiDoc, List<String> testCases) {
-//        //传入的是文件
-//        //然后转换成这个格式
-//        return coverageAnalysisService.generateCoverageReportWithFuzzyMatch(apiDoc,testCases);
-//    }
-    /**
-     * 计算测试用例的覆盖度评分
-     * @param Content 前端上传的 API 文档文件（如 .md/.txt/.json 等）
-     * @param testCasesname 测试用例列表（前端通过 FormData 或 URL 参数传递）
-     * @return 覆盖度报告
-     */
-
-        @PostMapping("/api/testcase/calculate-coverage")
-
-        @ResponseBody
-    public CoverageReport calculateCoverage(
-            // 接收文件：name="apiDocFile" 对应前端 FormData 的 key，必须一致
-            @RequestParam("apiDoc") String Content,
-            // 接收测试用例列表：name="testCases" 对应前端 FormData 的 key，可多个值
-            @RequestParam("testCases") List<String> testCasesname
-    ) {
-        // 1. 校验文件是否为空
-        if (Content.isEmpty()) {
-            throw new IllegalArgumentException("API 文档文件不能为空");
-        }
-        System.out.println(Content);
-
-
-        List<String>testCases = new ArrayList<>();
-        //这是根据输出的名字读取文件，然后封装到脚本文件中
-        for (String testCaseName : testCasesname) {
-            System.out.println(testCaseName);
-            testCases.add(testCaseManagementServiceImpl.readTestCaseContent(testCaseName));
-
-        }
-        // 3. 校验测试用例列表
-        if (testCases == null || testCases.isEmpty()) {
-            throw new IllegalArgumentException("测试用例列表不能为空");
-        }
-
-        // 4. 调用服务生成报告（原逻辑不变，只是 apiDoc 从文件解析而来）
-        return coverageAnalysisService.generateCoverageReportWithFuzzyMatch(Content, testCases);
-    }
-
-    // ==================== 多种场景的执行接口 ====================
-
-    /**
-     * 执行单个测试用例,在补充建议里面需要用到测试结果评判执行情况
-     * 暂时没做异常处理
-     */
-    @PostMapping("/api/execute/single")
+    @GetMapping("/testcase/getdir")
     @ResponseBody
-    public TestCaseResultDto executeSingleTestCase(@RequestBody Map<String, String> request) {
-        StringBuilder results = new StringBuilder();
-        String testCaseFilename = request.get("testCaseFileName");
-        TestCaseResultDto testCaseResult =testExecutionService.testExecution(testCaseFilename);
-        return testCaseResult;
-        //获取名字
-        //然后执行
-        //以json格式存取
-        //返回什么的
-
-
-
-
-    }
-
-    /**
-     * 执行指定的所有测试用例
-     */
-    @PostMapping("/api/execute/batch")
-    @ResponseBody
-    public List<TestCaseResultDto> executeAllTestCases(@RequestBody List<Map<String, String>> request) {
-        List<TestCaseResultDto> result = new ArrayList<>();
-        List<String>testFilenames=new ArrayList<>();
-        for (Map<String, String> requestMap : request) {
-            testFilenames.add(requestMap.get("testCaseFileName"));
+    public ResponseEntity<List<String>> getTestCaseDirectory(@RequestParam("filepath") String directoryPath) {
+        try {
+            List<String> testCases = testCaseManagementService.findTestCaseByDir(directoryPath);
+            return ResponseEntity.ok(testCases);
+        } catch (Exception e) {
+            logger.error("获取目录测试用例失败: {}", directoryPath, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
         }
-        result=testExecutionService.testExecution(testFilenames);
-
-        return result;
-
     }
 
-//    /**
-//     * 执行指定的测试用例列表
-//     */
-//    @PostMapping("/api/execute/batch")
-//    @ResponseBody
-//    public String executeBatchTestCases(@RequestBody Map<String, List<String>> request) {
-//        StringBuilder results = new StringBuilder();
-//        List<String> testCaseIds = request.get("testCaseIds");
-//
-//        if (testCaseIds == null || testCaseIds.isEmpty()) {
-//            return "❌ 错误：测试用例ID列表不能为空！\n";
-//        }
-//
-//        results.append("📋 执行指定的测试用例列表，共 " + testCaseIds.size() + " 个\n\n");
-//
-//        for (String testCaseId : testCaseIds) {
-//            String testCode = testCaseManagementService.getTestCase(testCaseId);
-//            if (testCode != null) {
-//                results.append("🔹 执行测试用例：" + testCaseId + "\n");
-//                results.append(testExecutionService.executeGeneratedTests(testCode));
-//                results.append("\n");
-//            } else {
-//                results.append("❌ 测试用例 " + testCaseId + " 不存在！\n\n");
-//            }
-//        }
-//
-//        return results.toString();
-//    }
+    @GetMapping("/testcase/all")
+    @ResponseBody
+    public ResponseEntity<List<String>> getAllTestCases() {
+        try {
+            List<String> allTestCases = testCaseManagementService.findTestCaseAll();
+            return ResponseEntity.ok(allTestCases);
+        } catch (Exception e) {
+            logger.error("获取所有测试用例失败", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
+        }
+    }
+
+    @PostMapping("/testcase/update")
+    @ResponseBody
+    public ResponseEntity<?> updateTestCase(@RequestBody UpdateTestCaseRequest request) {
+        try {
+            testCaseManagementService.updateTestCaseContent(request.getFilePath(), request.getContent());
+            return ResponseEntity.ok(createSuccessResponse("测试用例更新成功"));
+        } catch (Exception e) {
+            logger.error("更新测试用例失败: {}", request.getFilePath(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(createErrorResponse("更新失败: " + e.getMessage()));
+        }
+    }
+
+    @PostMapping("/testcase/batch/update")
+    @ResponseBody
+    public ResponseEntity<?> batchUpdateTestCase(@RequestBody BatchUpdateRequest request) {
+        try {
+            boolean allSuccess = testCaseManagementService.updateTestCaseContent(
+                    request.getFilePaths(),
+                    request.getContents()
+            );
+
+            if (allSuccess) {
+                return ResponseEntity.ok(createSuccessResponse("所有测试用例批量保存成功"));
+            } else {
+                return ResponseEntity.status(HttpStatus.PARTIAL_CONTENT)
+                        .body(createErrorResponse("部分测试用例保存失败"));
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(createErrorResponse(e.getMessage()));
+        } catch (Exception e) {
+            logger.error("批量更新测试用例失败", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(createErrorResponse("批量更新失败: " + e.getMessage()));
+        }
+    }
+
+    @DeleteMapping("/testcase/deletefile")
+    @ResponseBody
+    public ResponseEntity<?> deleteTestCase(@RequestParam("filepath") String filePath) {
+        try {
+            boolean success = testCaseManagementService.deleteTestCaseFile(filePath);
+            if (success) {
+                return ResponseEntity.ok(createSuccessResponse("测试用例删除成功"));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(createErrorResponse("测试用例不存在"));
+            }
+        } catch (Exception e) {
+            logger.error("删除测试用例失败: {}", filePath, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(createErrorResponse("删除失败: " + e.getMessage()));
+        }
+    }
+
+    @DeleteMapping("/testcase/deletedir")
+    @ResponseBody
+    public ResponseEntity<?> deleteTestCaseDirectory(@RequestParam("filepath") String directoryPath) {
+        try {
+            boolean success = testCaseManagementService.deleteAllTestCasesInDir(directoryPath);
+            if (success) {
+                return ResponseEntity.ok(createSuccessResponse("测试目录删除成功"));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(createErrorResponse("目录不存在或为空"));
+            }
+        } catch (Exception e) {
+            logger.error("删除测试目录失败: {}", directoryPath, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(createErrorResponse("删除失败: " + e.getMessage()));
+        }
+    }
+
+    @DeleteMapping("/testcase/deletefiles")
+    @ResponseBody
+    public ResponseEntity<?> deleteTestCases(@RequestParam("filepath") List<String> filePaths) {
+        try {
+            if (filePaths == null || filePaths.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(createErrorResponse("文件路径列表不能为空"));
+            }
+
+            int successCount = 0;
+            int failCount = 0;
+            List<String> errorMessages = new ArrayList<>();
+
+            for (String filePath : filePaths) {
+                try {
+                    boolean success = testCaseManagementService.deleteTestCaseFile(filePath);
+                    if (success) {
+                        successCount++;
+                    } else {
+                        failCount++;
+                        errorMessages.add("文件不存在: " + filePath);
+                    }
+                } catch (Exception e) {
+                    failCount++;
+                    errorMessages.add("删除失败 " + filePath + ": " + e.getMessage());
+                    logger.error("删除测试用例失败: {}", filePath, e);
+                }
+            }
+
+            Map<String, Object> result = new HashMap<>();
+            if (failCount == 0) {
+                result.put("success", true);
+                result.put("message", "所有测试用例删除成功");
+            } else if (successCount > 0) {
+                result.put("success", true);
+                result.put("message", String.format("部分删除成功：成功 %d 个，失败 %d 个", successCount, failCount));
+                result.put("errors", errorMessages);
+            } else {
+                result.put("success", false);
+                result.put("message", "所有测试用例删除失败");
+                result.put("errors", errorMessages);
+            }
+            result.put("successCount", successCount);
+            result.put("failCount", failCount);
+
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            logger.error("批量删除测试用例失败", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(createErrorResponse("批量删除失败: " + e.getMessage()));
+        }
+    }
+
+    // ==================== 测试用例分析 ====================
+
+    @PostMapping("/testcase/analyze")
+    @ResponseBody
+    public ResponseEntity<?> analyzeTestCase(@RequestBody AnalysisRequest request) {
+        try {
+            if (request.getTestCode() == null || request.getTestCode().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(createErrorResponse("测试代码不能为空"));
+            }
+
+            String analysis = testCaseAnalysisService.generateAnalysisAndSuggestions(
+                    request.getApiDoc(),
+                    request.getEnvironment(),
+                    request.getDependency(),
+                    request.getTestCode(),
+                    request.getTestText()
+            );
+
+            Map<String, Object> result = new HashMap<>();
+            result.put("success", true);
+            result.put("analysis", analysis);
+            return ResponseEntity.ok(result);
+        } catch (JsonProcessingException e) {
+            logger.error("JSON处理失败", e);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(createErrorResponse("JSON格式错误: " + e.getMessage()));
+        } catch (Exception e) {
+            logger.error("分析测试用例失败", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(createErrorResponse("分析失败: " + e.getMessage()));
+        }
+    }
+
+    @PostMapping("/testcase/calculate-coverage")
+    @ResponseBody
+    public ResponseEntity<?> calculateCoverage(
+            @RequestParam("apiDoc") String apiDocContent,
+            @RequestParam("testCases") List<String> testCaseNames) {
+
+        try {
+            if (apiDocContent == null || apiDocContent.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(createErrorResponse("API文档内容不能为空"));
+            }
+
+            if (testCaseNames == null || testCaseNames.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(createErrorResponse("测试用例列表不能为空"));
+            }
+
+            // 读取测试用例内容
+            List<String> testCaseContents = new ArrayList<>();
+            for (String testCaseName : testCaseNames) {
+                String content = testCaseManagementService.readTestCaseContent(testCaseName);
+                if (content != null) {
+                    testCaseContents.add(content);
+                } else {
+                    logger.warn("测试用例不存在: {}", testCaseName);
+                }
+            }
+
+            if (testCaseContents.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(createErrorResponse("未找到有效的测试用例"));
+            }
+
+            CoverageReport report = coverageAnalysisService.generateCoverageReportWithFuzzyMatch(
+                    apiDocContent,
+                    testCaseContents
+            );
+
+            return ResponseEntity.ok(report);
+        } catch (Exception e) {
+            logger.error("计算覆盖度失败", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(createErrorResponse("计算失败: " + e.getMessage()));
+        }
+    }
+
+    // ==================== 测试执行 ====================
+
+    @PostMapping("/execute/single")
+    @ResponseBody
+    public ResponseEntity<?> executeSingleTestCase(@RequestBody ExecuteTestCaseRequest request) {
+        try {
+            TestCaseResultDto result = testExecutionService.testExecution(request.getTestCaseFileName());
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            logger.error("执行单个测试用例失败: {}", request.getTestCaseFileName(), e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(createErrorResponse("执行失败: " + e.getMessage()));
+        }
+    }
+
+    @PostMapping("/execute/batch")
+    @ResponseBody
+    public ResponseEntity<?> executeBatchTestCases(@RequestBody List<ExecuteTestCaseRequest> requests) {
+        try {
+            List<String> fileNames = new ArrayList<>();
+            for (ExecuteTestCaseRequest request : requests) {
+                fileNames.add(request.getTestCaseFileName());
+            }
+
+            List<TestCaseResultDto> results = testExecutionService.testExecution(fileNames);
+            return ResponseEntity.ok(results);
+        } catch (Exception e) {
+            logger.error("批量执行测试用例失败", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(createErrorResponse("批量执行失败: " + e.getMessage()));
+        }
+    }
+
+    // ==================== 辅助方法 ====================
+
+    private Map<String, Object> createSuccessResponse(String message) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        response.put("message", message);
+        response.put("timestamp", System.currentTimeMillis());
+        return response;
+    }
+
+    private Map<String, Object> createErrorResponse(String message) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", false);
+        response.put("message", message);
+        response.put("timestamp", System.currentTimeMillis());
+        return response;
+    }
+
+    // ==================== 内部请求类 ====================
+
+    // 内部静态类，用于封装请求参数
+    public static class SaveTestCaseRequest {
+        private String filePath;
+        private String content;
+
+        // getters and setters
+        public String getFilePath() { return filePath; }
+        public void setFilePath(String filePath) { this.filePath = filePath; }
+        public String getContent() { return content; }
+        public void setContent(String content) { this.content = content; }
+    }
+
+    public static class UpdateTestCaseRequest {
+        private String filePath;
+        private String content;
+
+        // getters and setters
+        public String getFilePath() { return filePath; }
+        public void setFilePath(String filePath) { this.filePath = filePath; }
+        public String getContent() { return content; }
+        public void setContent(String content) { this.content = content; }
+    }
+
+    public static class BatchUpdateRequest {
+        private List<String> filePaths;
+        private List<String> contents;
+
+        // getters and setters
+        public List<String> getFilePaths() { return filePaths; }
+        public void setFilePaths(List<String> filePaths) { this.filePaths = filePaths; }
+        public List<String> getContents() { return contents; }
+        public void setContents(List<String> contents) { this.contents = contents; }
+    }
+
+    public static class ExecuteTestCaseRequest {
+        private String testCaseFileName;
+
+        // getters and setters
+        public String getTestCaseFileName() { return testCaseFileName; }
+        public void setTestCaseFileName(String testCaseFileName) {
+            this.testCaseFileName = testCaseFileName;
+        }
+    }
 }

@@ -370,7 +370,7 @@ public class TestExecutionServiceImpl implements TestExecutionService {
             // 3. 使用自定义类加载器加载测试类
             Class<?> testClass = classLoader.loadClass(testClassName);
             logger.info("✅ 成功加载测试类：{}（类加载器：{}）",
-                    testClass.getName(), testClass.getClassLoader().getName());
+                    testClass.getName(), testClass.getClassLoader().toString());
 
             // 2. 筛选带 @Test 注解的测试方法（Java 1.8 数组转 List）
             List<Method> testMethods = new ArrayList<>(Arrays.asList(testClass.getDeclaredMethods()));

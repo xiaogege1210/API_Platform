@@ -33,11 +33,37 @@
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 
-		<!-- Swagger -->
+		<!-- Swagger parser -->
 		<dependency>
 			<groupId>io.swagger.parser.v3</groupId>
 			<artifactId>swagger-parser</artifactId>
 			<version>2.1.16</version>
+		</dependency>
+
+		<!-- RestAssured（⚠️必须是 runtime 范围） -->
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>5.4.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>json-path</artifactId>
+			<version>5.4.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>xml-path</artifactId>
+			<version>5.4.0</version>
+		</dependency>
+
+		<!-- RestAssured 的匹配器依赖 -->
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest</artifactId>
+			<version>2.2</version>
 		</dependency>
 
 		<!-- Lombok -->
@@ -48,15 +74,14 @@
 			<scope>provided</scope>
 		</dependency>
 
-
-		<!-- *** JUnit 5 API（主程序需要） *** -->
+		<!-- JUnit 5 API -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 			<version>5.9.2</version>
 		</dependency>
 
-		<!-- *** JUnit 5 引擎（必须是运行时 scope!）*** -->
+		<!-- JUnit 5 Engine（运行时必须存在） -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
@@ -70,13 +95,14 @@
 			<version>1.9.2</version>
 		</dependency>
 
+		<!-- Gson -->
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 			<version>2.10.1</version>
 		</dependency>
 
-		<!-- Spring 的测试依赖（仅单元测试用） -->
+		<!-- Spring Boot test（仍保持 test scope） -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -87,11 +113,14 @@
 
 	<build>
 		<plugins>
+
+			<!-- Spring Boot -->
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 
+			<!-- Java 编译器 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -100,6 +129,7 @@
 					<target>11</target>
 				</configuration>
 			</plugin>
+
 		</plugins>
 	</build>
 
