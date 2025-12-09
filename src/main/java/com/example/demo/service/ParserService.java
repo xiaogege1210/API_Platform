@@ -64,6 +64,15 @@ public class ParserService {
                         });
                     }
 
+                    // 6. 添加 user_Token 必填项
+                    ApiParameter userTokenParam = new ApiParameter();
+                    userTokenParam.setName("user_Token");
+                    userTokenParam.setIn("header");
+                    userTokenParam.setRequired(true);
+                    userTokenParam.setType("string");
+                    userTokenParam.setDescription("用户认证令牌");
+                    endpoint.getParameters().add(userTokenParam);
+
                     // 6. 提取 Request Body 参数
                     if (operation.getRequestBody() != null && operation.getRequestBody().getContent() != null) {
                         io.swagger.v3.oas.models.media.MediaType jsonContent = operation.getRequestBody().getContent().get("application/json");

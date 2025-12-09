@@ -5,62 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a088f82-6ef3-428d-b391-344aaff2b65e" name="更改" comment="留档">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/model/AnalysisRequest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/model/ApiGroup.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/ExternalTestCaseGeneratorService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/ExternalTestCaseGeneratorServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/utils/LLMJsonValidator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/static/case.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/controller/ApiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/controller/ApiController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/model/ApiParameter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/model/ApiParameter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/model/GenerateCodeRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/model/GenerateCodeRequest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/ParserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/ParserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/TestCaseAnalysisService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/TestCaseAnalysisService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/TestCaseManagementService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/TestCaseManagementService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestCaseManagementServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestCaseManagementServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestExecutionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestExecutionServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/scripts/scene1/1.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/case.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/index1.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/case.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/DemoApplication.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/DemoApplication.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/config/RestTemplateConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/config/RestTemplateConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/dto/MessageDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/dto/MessageDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/dto/RequestBodyDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/dto/RequestBodyDTO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/dto/TestCaseResultDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/dto/TestCaseResultDto.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/dto/TreeNodeDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/dto/TreeNodeDto.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/llm/LLMService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/llm/LLMService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/llm/impl/SiliconFlowLLMService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/llm/impl/SiliconFlowLLMService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiDoc.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiDoc.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiEndpoint.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiEndpoint.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiInfo.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiInfo.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiParameter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiParameter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/CoverageReport.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/CoverageReport.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/ExpectedResult.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/ExpectedResult.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest$ApiTask.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest$ParamValueInfo.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest$TestScenario.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/RunReport.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/RunReport.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/TestCase.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/TestCase.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/TestRunResult.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/TestRunResult.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/TenantTokenService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/TenantTokenService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/TestCaseAnalysisService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/TestCaseAnalysisService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/TestCaseManagementService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/TestCaseManagementService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/TestExecutionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/TestExecutionService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestCaseManagementServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestCaseManagementServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestExecutionServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestExecutionServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/scripts/scene1/1.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/test-classes/com/example/demo/DemoApplicationTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/example/demo/DemoApplicationTests.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/example/demo/service/impl/TestCaseManagementServiceImplTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/example/demo/service/impl/TestCaseManagementServiceImplTest.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/test-classes/com/example/demo/service/impl/TestExcutionServiceImplTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/example/demo/service/impl/TestExcutionServiceImplTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/mocktest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/mocktest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/mocktest.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/target/test-classes/mocktest1.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -152,6 +105,9 @@
       <recent name="D:\IDEA2024\project\API_Platform\src\main\java\com\example\demo" />
       <recent name="D:\IDEA2024\project\API_Platform\src\main\java\com\example\demo\service" />
       <recent name="D:\IDEA2024\project\API_Platform\src\main\java\com\example\demo\service\impl" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\12492\Desktop\API_Platform\src\main\resources\static" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.example.demo.model" />
@@ -247,7 +203,6 @@
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.coverageAnalysisServiceImpltest" />
-        <item itemvalue="JavaScript 调试.index.html" />
         <item itemvalue="JUnit.TestExcutionServiceImplTest.testExecuteTestsMethod" />
         <item itemvalue="JUnit.TestExcutionServiceImplTest.testExecuteTestClass" />
         <item itemvalue="JUnit.TestCaseManagementServiceImplTest.testBasic7" />
@@ -257,8 +212,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.59" />
-        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.59" />
+        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
       </set>
     </attachedChunks>
   </component>
@@ -301,6 +256,8 @@
       <workItem from="1765097403128" duration="1342000" />
       <workItem from="1765098765915" duration="81000" />
       <workItem from="1765098855111" duration="17130000" />
+      <workItem from="1765271839810" duration="15220000" />
+      <workItem from="1765291255130" duration="306000" />
     </task>
     <task id="LOCAL-00001" summary="添加测试用例的补充报告">
       <option name="closed" value="true" />
@@ -432,12 +389,6 @@
           <url>file://$PROJECT_DIR$/src/test/java/com/example/demo/service/impl/coverageAnalysisServiceImpltest.java</url>
           <line>13</line>
           <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/src/main/resources/templates/index.html</url>
-          <line>1719</line>
-          <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

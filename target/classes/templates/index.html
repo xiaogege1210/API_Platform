@@ -1,1919 +1,1007 @@
 <!DOCTYPE html>
-<html lang="zh">
+<html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>自动化平台 - 场景配置</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自动化测试平台 - 场景配置</title>
+  <!-- 引入 Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 引入 Font Awesome 图标 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    body { font-family: 'Segoe UI', sans-serif; padding: 20px; background: #f5f7fa; }
-    .container { max-width: 1400px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    h1 { border-bottom: 2px solid #3498db; padding-bottom: 10px; color: #2c3e50; margin-bottom: 30px; }
+    body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+    .code-font { font-family: 'Menlo', 'Monaco', 'Courier New', monospace; }
+    /* 美化滚动条 */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #f1f5f9; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
-    /* 表格样式 */
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th, td { border: 1px solid #e1e4e8; padding: 12px; text-align: left; }
-    th { background: #f8f9fa; }
-
-    /* 场景配置区域 */
-    .config-row { background-color: #fcfcfc; }
-    .scenario-box { border: 1px dashed #bdc3c7; padding: 15px; margin: 10px 0; border-radius: 4px; background: white; }
-    .scenario-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-    .input-group { margin-bottom: 8px; display: flex; align-items: center; }
-    .input-group label { width: 180px; font-size: 0.9em; color: #555; font-weight: bold; }
-    .input-group input { flex: 1; padding: 6px; border: 1px solid #ccc; border-radius: 4px; }
-    .param-desc { font-size: 0.8em; color: #999; margin-left: 10px; min-width: 50px;}
-
-    /* 按钮 */
-    .btn { padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; color: white; margin: 5px; }
-    .btn-primary { background: #3498db; }
-    .btn-success { background: #2ecc71; }
-    .btn-add { background: #9b59b6; font-size: 0.8em; margin-left: 10px; }
-    .btn-warning { background: #f39c12; }
-    .btn-danger { background: #e74c3c; }
-    .btn-secondary { background: #95a5a6; }
-    .btn-edit { background: #3498db; padding: 6px 12px; font-size: 12px; width: 70px; margin: 2px; }
-    .btn-save { background: #2ecc71; padding: 6px 12px; font-size: 12px; width: 70px; margin: 2px; }
-    .btn-cancel { background: #95a5a6; padding: 6px 12px; font-size: 12px; width: 70px; margin: 2px; }
-    .btn-copy { background: #9b59b6; padding: 6px 12px; font-size: 12px; width: 70px; margin: 2px; }
-    .btn-delete { background: #e74c3c; padding: 6px 12px; font-size: 12px; width: 70px; margin: 2px; }
-    .btn-info { background: #17a2b8; }
-    .tag { padding: 3px 6px; border-radius: 3px; font-size: 0.8em; color: white; }
-    .GET { background: #2ecc71; } .POST { background: #f1c40f; color: black; }
-
-    /* 测试用例展示区域 */
-    .testcase-container { margin-top: 20px; }
-    .testcase-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-    .testcase-actions { display: flex; gap: 10px; }
-    .testcase-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(500px, 1fr)); gap: 20px; margin-top: 20px; }
-    .testcase-box { border: 1px solid #e0e0e0; border-radius: 6px; background: #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.05); overflow: hidden; }
-    .testcase-title { background: #f8f9fa; padding: 12px 15px; border-bottom: 1px solid #e0e0e0; font-weight: bold; color: #2c3e50; display: flex; justify-content: space-between; align-items: center; }
-    .testcase-content { padding: 15px; font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace; font-size: 12px; line-height: 1.5; max-height: 400px; overflow-y: auto; background: #fafafa; }
-    .testcase-code { white-space: pre-wrap; word-wrap: break-word; color: #333; }
-    .testcase-code-editor { width: 100%; min-height: 300px; font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace; font-size: 12px; line-height: 1.5; border: 1px solid #3498db; border-radius: 4px; padding: 10px; resize: vertical; }
-    .testcase-meta { font-size: 11px; color: #666; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #eee; }
-    .testcase-action-buttons { display: flex; justify-content: flex-end; gap: 5px; }
-
-    /* 场景名输入区域 */
-    .scenario-name-input { margin: 20px 0; padding: 15px; background: #f8f9fa; border-radius: 4px; }
-    .scenario-name-input h4 { margin-top: 0; color: #2c3e50; }
-    .name-input-container { display: flex; gap: 10px; align-items: center; }
-    .name-input-container input { flex: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-
-    /* 分析结果区域 */
-    .analysis-container { 
-      margin-top: 20px; 
-      padding: 15px; 
-      background: #f8f9fa; 
-      border-radius: 4px; 
-      display: block !important; /* 确保可以显示 */
-      visibility: visible !important;
-      opacity: 1 !important;
-    }
-    .analysis-header { 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
-      margin-bottom: 15px; 
-    }
-    .metrics-grid { 
-      display: grid; 
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-      gap: 15px; 
-      margin-bottom: 15px; 
-    }
-    .metric-card { 
-      background: white; 
-      padding: 15px; 
-      border-radius: 4px; 
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
-    }
-    .metric-label { 
-      font-size: 0.9em; 
-      color: #666; 
-      margin-bottom: 5px; 
-    }
-    .metric-value { 
-      font-size: 1.5em; 
-      font-weight: bold; 
-      color: #3498db; 
-    }
-    .coverage-score { 
-      font-size: 2em; 
-      color: #2ecc71; 
-      font-weight: bold;
-    }
-    .suggestions { 
-      background: white; 
-      padding: 15px; 
-      border-radius: 4px; 
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1); 
-    }
-    .suggestions h4 { 
-      margin-top: 0; 
-      color: #2c3e50; 
-    }
-    .suggestions ul { 
-      margin: 0; 
-      padding-left: 20px; 
-    }
-    .suggestions li { 
-      margin-bottom: 5px; 
-      color: #333;
-    }
-
-    /* 执行结果区域 - 已移除 */
-
-    /* 上传区样式 */
-    .upload-section { margin-bottom: 30px; }
-    .upload-box { border: 2px dashed #bdc3c7; border-radius: 8px; padding: 30px; text-align: center; background: #f9f9f9; }
-    .upload-box h3 { margin-top: 0; color: #7f8c8d; }
-
-    /* 分页控件 */
-    .pagination { display: flex; justify-content: center; align-items: center; margin: 20px 0; }
-    .page-btn { padding: 8px 15px; margin: 0 5px; background: #ecf0f1; border: 1px solid #bdc3c7; border-radius: 4px; cursor: pointer; }
-    .page-btn.active { background: #3498db; color: white; border-color: #2980b9; }
-    .page-info { margin: 0 15px; color: #7f8c8d; }
-
-    /* 场景信息面板 */
-    .scenario-info-panel { background: #f0f7ff; border-left: 4px solid #3498db; padding: 15px; margin-bottom: 20px; border-radius: 4px; }
-    .scenario-info-panel h4 { margin-top: 0; color: #2c3e50; }
-    .scenario-info-panel .info-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-top: 10px; }
-    .info-item { background: white; padding: 10px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-    .info-label { font-size: 0.8em; color: #666; margin-bottom: 5px; }
-    .info-value { font-weight: bold; color: #2c3e50; }
-
-    /* 测试用例统计 */
-    .testcase-stats { display: flex; gap: 20px; margin: 15px 0; padding: 15px; background: #f8f9fa; border-radius: 4px; }
-    .stat-item { text-align: center; }
-    .stat-value { font-size: 24px; font-weight: bold; color: #3498db; }
-    .stat-label { font-size: 12px; color: #666; margin-top: 5px; }
-
-    /* 加载动画 */
-    .loading { display: inline-block; width: 20px; height: 20px; border: 3px solid #f3f3f3; border-top: 3px solid #3498db; border-radius: 50%; animation: spin 1s linear infinite; }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-    /* 状态提示 */
-    .status-message { padding: 10px; border-radius: 4px; margin: 10px 0; }
-    .status-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-    .status-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-    .status-info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
-
-    /* 批量操作按钮组 */
-    .batch-actions { display: flex; gap: 8px; align-items: center; }
-
-    /* 全选控件 */
-    .select-all-container {
-      margin: 15px 0;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px;
-      background: #f8f9fa;
-      border-radius: 4px;
-      border: 1px solid #e0e0e0;
-    }
-    .select-all-container label {
-      font-weight: bold;
-      color: #2c3e50;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 14px;
-    }
-    .select-all-checkbox {
-      width: 18px;
-      height: 18px;
-      cursor: pointer;
-    }
-    .select-all-text {
-      font-size: 12px;
-      color: #666;
-      margin-left: auto;
+    .fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
-<body>
+<body class="text-slate-800">
 
-<div class="container">
-  <h1>自动化测试平台</h1>
-
-  <!-- 导航链接 -->
-  <div style="margin-bottom: 20px; text-align: right;">
-    <a href="/case" class="btn btn-info" style="text-decoration: none; display: inline-block;">
-      查看已有用例
-    </a>
+<!-- 1. 顶部导航栏 -->
+<nav class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16">
+      <div class="flex items-center gap-3">
+        <div class="bg-indigo-600 text-white p-2 rounded-lg shadow-md shadow-indigo-200">
+          <i class="fas fa-robot"></i>
+        </div>
+        <span class="font-bold text-xl tracking-tight text-slate-800">自动化测试平台</span>
+      </div>
+      <div class="flex items-center">
+        <a href="/case.html" class="text-slate-500 hover:text-indigo-600 px-4 py-2 rounded-md text-sm font-medium transition flex items-center gap-2 hover:bg-slate-50">
+          <i class="fas fa-folder-open text-indigo-500"></i> 查看已有用例
+        </a>
+      </div>
+    </div>
   </div>
+</nav>
 
-  <!-- 上传区 -->
-  <div class="upload-section" id="uploadSection">
-    <div class="upload-box">
-      <h3>上传接口文档</h3>
-      <p>请上传Swagger/OpenAPI格式的JSON文件</p>
-      <input type="file" id="fileInput" accept=".json">
-      <button class="btn btn-primary" onclick="uploadFile()">解析文档</button>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+  <!-- 2. 步骤指示器 -->
+  <div class="mb-10" id="stepIndicator">
+    <div class="flex items-center justify-center space-x-4">
+      <div class="flex items-center text-indigo-600 font-bold step-item" data-step="1">
+        <span class="w-8 h-8 flex items-center justify-center border-2 border-indigo-600 rounded-full mr-2 bg-indigo-50">1</span>
+        上传文档
+      </div>
+      <div class="w-16 h-0.5 bg-slate-300"></div>
+      <div class="flex items-center text-slate-400 font-medium step-item" data-step="2" id="step2-label">
+        <span class="w-8 h-8 flex items-center justify-center border-2 border-slate-300 rounded-full mr-2">2</span>
+        配置场景
+      </div>
+      <div class="w-16 h-0.5 bg-slate-300"></div>
+      <div class="flex items-center text-slate-400 font-medium step-item" data-step="3" id="step3-label">
+        <span class="w-8 h-8 flex items-center justify-center border-2 border-slate-300 rounded-full mr-2">3</span>
+        生成结果
+      </div>
     </div>
   </div>
 
-  <!-- 列表配置区 -->
-  <div id="configSection" style="display:none; margin-top: 20px;">
-    <h3>接口列表 (请勾选需要测试的接口)</h3>
-    <table id="apiTable">
-      <thead>
-      <tr>
-        <th width="50">选</th>
-        <th width="80">Method</th>
-        <th>URL</th>
-        <th>操作</th>
-      </tr>
-      </thead>
-      <tbody id="apiTableBody"></tbody>
-    </table>
+  <!-- 3. 上传区域 -->
+  <div id="uploadSection" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-12 text-center transition-all duration-300 hover:shadow-md max-w-2xl mx-auto fade-in-up">
+    <div class="mb-6 text-indigo-100 bg-indigo-50 w-24 h-24 rounded-full flex items-center justify-center mx-auto">
+      <i class="fas fa-cloud-upload-alt text-4xl text-indigo-600"></i>
+    </div>
+    <h2 class="text-2xl font-bold text-slate-800 mb-2">上传接口文档</h2>
+    <p class="text-slate-500 mb-8">请上传 Swagger / OpenAPI 格式的 JSON 文件</p>
 
-    <div style="margin-top: 20px; text-align: right;">
-      <button class="btn btn-success" onclick="generateCode()">生成测试代码</button>
+    <div class="relative group cursor-pointer">
+      <input type="file" id="fileInput" accept=".json" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+      <div id="uploadBox" class="border-2 border-dashed border-slate-300 rounded-xl py-10 px-4 group-hover:border-indigo-500 group-hover:bg-indigo-50/50 transition duration-300 flex flex-col items-center justify-center bg-slate-50">
+        <p id="uploadFileName" class="text-sm text-slate-600 font-medium">点击此处选择文件 或 拖拽文件到这里</p>
+      </div>
+    </div>
+
+    <button onclick="uploadFile()" class="mt-8 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl transition shadow-lg shadow-indigo-200 transform active:scale-95">
+      解析文档
+    </button>
+  </div>
+
+  <!-- 4. 配置区域 -->
+  <div id="configSection" class="hidden fade-in-up space-y-6">
+    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+        <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+          <i class="fas fa-list-ul text-indigo-500"></i> 接口列表
+        </h3>
+        <span class="text-xs font-medium bg-amber-100 text-amber-800 px-3 py-1 rounded-full">请勾选需要测试的接口</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm text-slate-600">
+          <thead class="bg-slate-50 text-xs uppercase font-semibold text-slate-500 border-b border-slate-200">
+          <tr>
+            <th class="px-6 py-4 w-16">选择</th>
+            <th class="px-6 py-4 w-24">Method</th>
+            <th class="px-6 py-4">URL / 描述</th>
+            <th class="px-6 py-4 text-right w-40">操作</th>
+          </tr>
+          </thead>
+          <tbody id="apiTableBody" class="divide-y divide-slate-100"></tbody>
+        </table>
+      </div>
+
+      <div class="p-6 bg-slate-50 border-t border-slate-200 text-right sticky bottom-0">
+        <button onclick="generateCode()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg shadow-emerald-200 transition flex items-center ml-auto gap-2 transform active:scale-95">
+          <i class="fas fa-code"></i> 生成测试代码
+        </button>
+      </div>
     </div>
   </div>
 
-  <!-- 测试用例管理区 -->
-  <div id="testCaseSection" style="display:none; margin-top: 20px;">
-    <div class="testcase-header">
-      <h3>测试用例管理</h3>
-      <div class="testcase-actions">
-        <div class="batch-actions">
-          <button class="btn btn-warning" onclick="batchExecuteTestCases()">批量执行</button>
-          <button class="btn btn-danger" onclick="batchDeleteTestCases()">批量删除</button>
-          <button class="btn btn-info" onclick="batchAnalyzeTestCases()">批量分析</button>
+  <!-- 5. 测试用例管理区域 -->
+  <div id="testCaseSection" class="hidden fade-in-up space-y-6">
+
+    <!-- 工具栏 -->
+    <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex flex-wrap justify-between items-center gap-4 sticky top-20 z-30 shadow-md">
+      <div class="flex items-center gap-2 w-full md:w-auto">
+        <div class="relative flex-grow md:flex-grow-0 group">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 group-focus-within:text-indigo-500 transition-colors">
+                        <i class="fas fa-project-diagram"></i>
+                    </span>
+          <input type="text" id="scenarioNameInput" value="search_chats_api"
+                 class="pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none w-full md:w-72 text-sm transition-shadow shadow-sm" placeholder="场景名称">
+        </div>
+        <button onclick="updateScenarioName()" class="bg-indigo-50 text-indigo-600 hover:bg-indigo-100 px-3 py-2.5 rounded-lg transition border border-indigo-200 font-medium text-sm">
+          <i class="fas fa-sync-alt mr-1"></i> 更新
+        </button>
+        <div class="text-xs text-slate-400 ml-2 font-mono" id="savePathPreview">path: case_generated/search_chats_api/</div>
+      </div>
+
+      <div class="flex gap-2">
+        <button onclick="batchExecuteTestCases()" class="bg-amber-500 hover:bg-amber-600 text-white px-4 py-2.5 rounded-lg text-sm font-medium shadow-sm transition flex items-center gap-2">
+          <i class="fas fa-play"></i> 批量执行
+        </button>
+        <button onclick="saveSelectedTestCases()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2.5 rounded-lg text-sm font-medium shadow-sm transition flex items-center gap-2">
+          <i class="fas fa-save"></i> 批量保存
+        </button>
+        <button onclick="batchAnalyzeTestCases()" class="bg-cyan-500 hover:bg-cyan-600 text-white px-4 py-2.5 rounded-lg text-sm font-medium shadow-sm transition flex items-center gap-2">
+          <i class="fas fa-magic"></i> 分析
+        </button>
+        <button onclick="batchDeleteTestCases()" class="bg-rose-100 text-rose-600 hover:bg-rose-200 px-4 py-2.5 rounded-lg text-sm font-medium shadow-sm transition">
+          <i class="fas fa-trash-alt"></i>
+        </button>
+        <button onclick="backToConfig()" class="bg-slate-100 text-slate-600 hover:bg-slate-200 px-4 py-2.5 rounded-lg text-sm font-medium shadow-sm transition">
+          返回
+        </button>
+      </div>
+    </div>
+
+    <!-- 场景信息统计 -->
+    <div id="scenarioInfoPanel" class="bg-blue-50 border border-blue-100 rounded-xl p-4 hidden">
+      <div class="flex flex-wrap gap-8 items-center text-sm">
+        <div>
+          <span class="text-blue-500 font-medium">场景名称</span>
+          <div class="font-bold text-slate-700 text-lg" id="scenarioNameDisplay">-</div>
+        </div>
+        <div class="h-8 w-px bg-blue-200"></div>
+        <div>
+          <span class="text-blue-500 font-medium">总用例数</span>
+          <div class="font-bold text-slate-700 text-lg" id="totalTestCases">0</div>
         </div>
         <div>
-          <!-- 修改：将"保存所有用例"改为"批量保存" -->
-          <button class="btn btn-primary" onclick="saveSelectedTestCases()">批量保存</button>
-          <button class="btn btn-warning" onclick="analyzeTestCase()">分析测试用例</button>
-          <button class="btn btn-secondary" onclick="backToConfig()">返回配置</button>
+          <span class="text-blue-500 font-medium">正向用例</span>
+          <div class="font-bold text-green-600 text-lg" id="positiveCases">0</div>
+        </div>
+        <div>
+          <span class="text-blue-500 font-medium">反向用例</span>
+          <div class="font-bold text-amber-500 text-lg" id="negativeCases">0</div>
         </div>
       </div>
     </div>
 
-    <!-- 场景名输入区域 -->
-    <div class="scenario-name-input">
-      <h4>场景配置</h4>
-      <div class="name-input-container">
-        <label for="scenarioNameInput">场景名称 (英文):</label>
-        <input type="text" id="scenarioNameInput" placeholder="例如: search_chats_api" value="search_chats_api">
-        <button class="btn btn-primary" onclick="updateScenarioName()">更新场景名</button>
+    <!-- 详细统计卡片 -->
+    <div id="testcaseStats" class="grid grid-cols-2 md:grid-cols-4 gap-4 hidden">
+      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center">
+        <span class="text-3xl font-bold text-slate-700" id="statTotal">0</span>
+        <span class="text-xs text-slate-500 uppercase font-bold mt-1 tracking-wider">总测试类</span>
       </div>
-      <div style="font-size: 12px; color: #666; margin-top: 5px;">
-        保存路径: <span id="savePathPreview">case_generated/search_chats_api/</span>
+      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center">
+        <span class="text-3xl font-bold text-indigo-600" id="statMethods">0</span>
+        <span class="text-xs text-slate-500 uppercase font-bold mt-1 tracking-wider">测试方法</span>
       </div>
-    </div>
-
-    <!-- 场景信息面板 -->
-    <div id="scenarioInfoPanel" class="scenario-info-panel" style="display: none;">
-      <h4>测试场景信息</h4>
-      <div class="info-grid">
-        <div class="info-item">
-          <div class="info-label">场景名称</div>
-          <div class="info-value" id="scenarioNameDisplay">-</div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">总用例数</div>
-          <div class="info-value" id="totalTestCases">0</div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">正向用例</div>
-          <div class="info-value" id="positiveCases">0</div>
-        </div>
-        <div class="info-item">
-          <div class="info-label">反向用例</div>
-          <div class="info-value" id="negativeCases">0</div>
-        </div>
+      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center">
+        <span class="text-3xl font-bold text-emerald-600" id="statAssertions">0</span>
+        <span class="text-xs text-slate-500 uppercase font-bold mt-1 tracking-wider">断言数量</span>
+      </div>
+      <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center">
+        <span class="text-3xl font-bold text-slate-600" id="statLines">0</span>
+        <span class="text-xs text-slate-500 uppercase font-bold mt-1 tracking-wider">代码行数</span>
       </div>
     </div>
 
-    <!-- 测试用例统计 -->
-    <div id="testcaseStats" class="testcase-stats" style="display: none;">
-      <div class="stat-item">
-        <div class="stat-value" id="statTotal">0</div>
-        <div class="stat-label">总测试类</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-value" id="statMethods">0</div>
-        <div class="stat-label">测试方法</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-value" id="statAssertions">0</div>
-        <div class="stat-label">断言数量</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-value" id="statLines">0</div>
-        <div class="stat-label">代码行数</div>
-      </div>
-    </div>
-
-    <!-- 全选控件（放在统计信息和测试用例网格之间） -->
-    <div id="selectAllContainer" class="select-all-container" style="display: none;">
-      <label>
-        <input type="checkbox" class="select-all-checkbox" id="selectAllCheckbox" onchange="toggleSelectAll()">
-        全选当前页
+    <!-- 全选与分页栏 -->
+    <div id="selectAllContainer" class="flex justify-between items-center bg-slate-100 p-3 rounded-lg border border-slate-200 hidden">
+      <label class="flex items-center gap-2 cursor-pointer select-none text-sm font-medium text-slate-700">
+        <input type="checkbox" id="selectAllCheckbox" onchange="toggleSelectAll()" class="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500 border-gray-300">
+        全选当前页 <span id="selectedCount" class="text-slate-500 font-normal ml-2 text-xs">已选中 0 个</span>
       </label>
-      <span class="select-all-text" id="selectedCount">已选中 0 个测试用例</span>
-    </div>
-
-    <!-- 分页控件 -->
-    <div class="pagination" id="paginationControls" style="display: none;">
-      <button class="page-btn" onclick="changePage(-1)">上一页</button>
-      <span class="page-info" id="pageInfo">第 1 页 / 共 1 页</span>
-      <button class="page-btn" onclick="changePage(1)">下一页</button>
+      <div id="paginationControls" class="flex items-center gap-2 text-sm">
+        <button onclick="changePage(-1)" class="px-3 py-1 bg-white border border-slate-300 rounded hover:bg-slate-50 text-slate-600 disabled:opacity-50 transition">上一页</button>
+        <span id="pageInfo" class="text-slate-500 min-w-[80px] text-center">1 / 1</span>
+        <button onclick="changePage(1)" class="px-3 py-1 bg-white border border-slate-300 rounded hover:bg-slate-50 text-slate-600 disabled:opacity-50 transition">下一页</button>
+      </div>
     </div>
 
     <!-- 测试用例网格 -->
-    <div class="testcase-grid" id="testcaseGrid">
-      <!-- 这里动态插入测试用例框 -->
+    <div id="testcaseGrid" class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+      <!-- 动态内容 -->
     </div>
 
-    <!-- 分页控件 -->
-    <div class="pagination" id="paginationControlsBottom" style="display: none; margin-top: 20px;">
-      <button class="page-btn" onclick="changePage(-1)">上一页</button>
-      <span class="page-info" id="pageInfoBottom">第 1 页 / 共 1 页</span>
-      <button class="page-btn" onclick="changePage(1)">下一页</button>
+    <!-- 底部翻页 -->
+    <div class="flex justify-center mt-6" id="paginationControlsBottom" style="display: none;">
+      <button onclick="changePage(-1)" class="px-4 py-2 bg-white border border-slate-300 rounded-l-lg hover:bg-slate-50 text-slate-600 disabled:opacity-50">上一页</button>
+      <span id="pageInfoBottom" class="px-4 py-2 bg-slate-50 border-t border-b border-slate-300 text-slate-600 font-medium">1 / 1</span>
+      <button onclick="changePage(1)" class="px-4 py-2 bg-white border border-slate-300 rounded-r-lg hover:bg-slate-50 text-slate-600 disabled:opacity-50">下一页</button>
     </div>
 
-    <!-- 分析结果区域 -->
-    <div id="analysisSection" class="analysis-container" style="display:none;">
-      <div class="analysis-header">
-        <h4>测试用例分析结果</h4>
-        <div class="coverage-score" id="coverageScore">0</div>
-      </div>
-
-      <div class="metrics-grid">
-        <div class="metric-card">
-          <div class="metric-label">总代码行数</div>
-          <div class="metric-value" id="totalLines">0</div>
+    <!-- 分析结果面板 -->
+    <div id="analysisSection" class="hidden bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl text-white p-8 shadow-xl mt-8">
+      <div class="flex justify-between items-start mb-8">
+        <div>
+          <h4 class="text-xl font-bold flex items-center gap-2"><i class="fas fa-chart-pie text-cyan-400"></i> AI 分析报告</h4>
+          <p class="text-slate-400 text-sm mt-1">基于当前选中的代码生成</p>
         </div>
-        <div class="metric-card">
-          <div class="metric-label">测试方法数</div>
-          <div class="metric-value" id="testMethodCount">0</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-label">断言数量</div>
-          <div class="metric-value" id="assertionCount">0</div>
-        </div>
-        <div class="metric-card">
-          <div class="metric-label">覆盖度评分</div>
-          <div class="metric-value coverage-score" id="coverageScoreDisplay">0</div>
+        <div class="text-right">
+          <div class="text-5xl font-bold text-emerald-400" id="coverageScoreDisplay">0</div>
+          <div class="text-xs text-slate-400 uppercase font-bold tracking-widest mt-1">覆盖评分</div>
         </div>
       </div>
 
-      <div class="suggestions">
-        <h4>智能建议</h4>
-        <ul id="suggestionsList"></ul>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-white/10 rounded-xl p-6 backdrop-blur-sm border border-white/10">
+          <h5 class="font-bold text-slate-200 mb-4 border-b border-white/10 pb-2 flex items-center gap-2">
+            <i class="fas fa-tachometer-alt"></i> 基础指标
+          </h5>
+          <div class="space-y-4">
+            <div class="flex justify-between items-center">
+              <span class="text-slate-300">总代码行数</span>
+              <span id="totalLines" class="font-mono text-xl font-bold text-cyan-300">0</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-300">测试方法数</span>
+              <span id="testMethodCount" class="font-mono text-xl font-bold text-cyan-300">0</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-300">断言总数</span>
+              <span id="assertionCount" class="font-mono text-xl font-bold text-cyan-300">0</span>
+            </div>
+            <div class="hidden" id="coverageScore">0</div>
+          </div>
+        </div>
+        <div class="bg-white/10 rounded-xl p-6 backdrop-blur-sm border border-white/10">
+          <h5 class="font-bold text-amber-300 mb-4 border-b border-white/10 pb-2 flex items-center gap-2">
+            <i class="fas fa-lightbulb"></i> 智能建议
+          </h5>
+          <ul id="suggestionsList" class="text-sm space-y-3 text-slate-300 list-none">
+            <!-- 动态内容 -->
+          </ul>
+        </div>
       </div>
     </div>
 
   </div>
+
 </div>
 
+<!-- 6. 加载动画 (简洁版) -->
+<div id="loading-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center">
+  <div class="bg-white p-8 rounded-2xl shadow-2xl flex flex-col items-center transform scale-100 transition-transform">
+    <div class="animate-spin rounded-full h-14 w-14 border-[5px] border-indigo-100 border-t-indigo-600 mb-5"></div>
+    <p class="text-slate-700 font-bold text-lg animate-pulse">正在处理...</p>
+    <p class="text-slate-500 text-sm mt-2">AI 正在生成/分析数据，请稍候</p>
+  </div>
+</div>
+
+<!-- 7. 消息提示容器 -->
+<div id="toast-container" class="fixed top-24 right-5 z-50 space-y-3 pointer-events-none"></div>
+
+<!-- ================= 脚本部分 ================= -->
 <script>
-  // 全局变量存储解析后的原始数据
+  // 全局变量
   let allApiData = [];
   let ApiData_text = null;
+  let currentTestCases = [];
   let currentTestCaseId = null;
   let generatedTestData = null;
-  // 存储环境和依赖关系
   let environment = '';
   let dependency = '';
-
-  // 测试用例分页相关变量
-  let currentTestCases = [];
   let currentPage = 1;
-  const casesPerPage = 6; // 每页显示6个测试用例
+  const casesPerPage = 6;
   let selectedTestCaseIndex = null;
-
-  // 场景名
   let scenarioName = "search_chats_api";
-  let editingTestCaseIndex = null; // 当前正在编辑的测试用例索引
+  let editingTestCaseIndex = null;
 
-  // 生成唯一ID
+  // ============== 1. 上传文件交互逻辑 ==============
+  document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.getElementById('fileInput');
+    const uploadBox = document.getElementById('uploadBox');
+    const uploadFileName = document.getElementById('uploadFileName');
+
+    fileInput.addEventListener('change', function(e) {
+      if (this.files && this.files.length > 0) {
+        const file = this.files[0];
+        uploadBox.classList.remove('border-dashed', 'border-slate-300', 'bg-slate-50');
+        uploadBox.classList.add('border-solid', 'border-indigo-500', 'bg-indigo-50/50', 'shadow-inner');
+        uploadFileName.innerHTML = `
+                    <div class="flex flex-col items-center animate-pulse">
+                        <i class="fas fa-file-code text-indigo-600 text-3xl mb-2"></i>
+                        <span class="font-bold text-slate-800 text-lg">${file.name}</span>
+                        <span class="text-sm text-slate-500 mt-1 bg-white px-2 py-1 rounded border border-indigo-100 shadow-sm">
+                            ${(file.size / 1024).toFixed(2)} KB
+                        </span>
+                    </div>
+                `;
+      } else {
+        uploadBox.classList.add('border-dashed', 'border-slate-300', 'bg-slate-50');
+        uploadBox.classList.remove('border-solid', 'border-indigo-500', 'bg-indigo-50/50', 'shadow-inner');
+        uploadFileName.innerHTML = '点击此处选择文件 或 拖拽文件到这里';
+      }
+    });
+
+    // === 新增：页面加载时检查 URL 参数，决定是否恢复状态 ===
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('restore') === 'true') {
+      restoreAppState();
+      // 清除 URL 参数，防止刷新时重复触发提示
+      window.history.replaceState({}, document.title, "/");
+    }
+  });
+
+  // 辅助函数
   function generateId() {
     return 'testcase_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
   }
 
-  // 更新场景名
-  function updateScenarioName() {
-    const input = document.getElementById('scenarioNameInput');
-    const newName = input.value.trim();
-
-    if (!newName) {
-      alert("场景名称不能为空！");
-      return;
-    }
-
-    // 检查场景名是否只包含英文字母、数字和下划线
-    if (!/^[a-zA-Z0-9_]+$/.test(newName)) {
-      alert("场景名称只能包含英文字母、数字和下划线！");
-      return;
-    }
-
-    scenarioName = newName;
-
-    // 更新保存路径预览
-    document.getElementById('savePathPreview').textContent = `${scenarioName}/`;
-
-    // 更新场景信息面板中的显示
-    document.getElementById('scenarioNameDisplay').textContent = scenarioName;
-
-    showStatusMessage(`场景名称已更新为: ${scenarioName}`, 'success');
-  }
-
-  // 显示状态消息
   function showStatusMessage(message, type = 'info') {
-    // 移除现有的状态消息
-    const existingStatus = document.querySelector('.status-message');
-    if (existingStatus) {
-      existingStatus.remove();
-    }
-
-    // 创建新的状态消息
-    const statusDiv = document.createElement('div');
-    statusDiv.className = `status-message status-${type}`;
-    statusDiv.textContent = message;
-
-    // 插入到场景名输入区域后面
-    const scenarioNameInput = document.querySelector('.scenario-name-input');
-    scenarioNameInput.parentNode.insertBefore(statusDiv, scenarioNameInput.nextSibling);
-
-    // 3秒后自动移除
-    setTimeout(() => {
-      if (statusDiv.parentNode) {
-        statusDiv.remove();
-      }
-    }, 3000);
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    const styles = { success: 'bg-emerald-500 border-emerald-600', error: 'bg-rose-500 border-rose-600', warning: 'bg-amber-500 border-amber-600', info: 'bg-blue-500 border-blue-600' };
+    const icons = { success: 'fa-check-circle', error: 'fa-times-circle', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
+    toast.className = `${styles[type]} border-l-4 text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 min-w-[300px] transform transition-all duration-300 translate-x-full opacity-0 pointer-events-auto`;
+    toast.innerHTML = `<i class="fas ${icons[type]} text-xl"></i><span class="font-medium">${message}</span>`;
+    container.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.remove('translate-x-full', 'opacity-0'));
+    setTimeout(() => { toast.classList.add('opacity-0', 'translate-x-full'); setTimeout(() => toast.remove(), 300); }, 3500);
   }
 
-  // 1. 上传并解析
+  function showLoading(show = true) {
+    document.getElementById('loading-modal').classList.toggle('hidden', !show);
+  }
+
+  function updateStepUI(step) {
+    const items = document.querySelectorAll('.step-item');
+    items.forEach(item => {
+      const itemStep = parseInt(item.dataset.step);
+      const circle = item.querySelector('span');
+      if (itemStep <= step) {
+        item.className = 'flex items-center text-indigo-600 font-bold step-item';
+        circle.className = 'w-8 h-8 flex items-center justify-center border-2 border-indigo-600 rounded-full mr-2 bg-indigo-50';
+        if(itemStep < step) {
+          circle.innerHTML = '<i class="fas fa-check"></i>';
+          circle.className = 'w-8 h-8 flex items-center justify-center border-none bg-indigo-600 text-white rounded-full mr-2';
+        } else {
+          circle.innerHTML = itemStep;
+        }
+      } else {
+        item.className = 'flex items-center text-slate-400 font-medium step-item';
+        circle.className = 'w-8 h-8 flex items-center justify-center border-2 border-slate-300 rounded-full mr-2 bg-white';
+        circle.innerHTML = itemStep;
+      }
+    });
+  }
+
+  // ============== 2. 真实业务逻辑 ==============
   async function uploadFile() {
     const fileInput = document.getElementById('fileInput');
-    if (!fileInput.files[0]) return alert("请选择文件");
+    if (!fileInput.files[0]) return showStatusMessage("请先选择文件！", 'error');
 
     const formData = new FormData();
     formData.append("file", fileInput.files[0]);
 
     try {
+      showLoading(true);
       const res = await fetch('/api/parse', { method: 'POST', body: formData });
-      if (!res.ok) throw new Error("Network response was not ok");
+      if (!res.ok) throw new Error("解析请求失败");
 
       const data = await res.json();
-      if (!Array.isArray(data) || data.length === 0) {
-        return alert("返回数据为空！");
-      }
+      if (!Array.isArray(data) || data.length === 0) return showStatusMessage("返回数据为空！", 'error');
 
-      const firstGroup = data[0];
-      allApiData = firstGroup.apis;
-      ApiData_text = firstGroup.info;
+      allApiData = data[0].apis;
+      ApiData_text = data[0].info;
 
       renderTable();
-      document.getElementById('configSection').style.display = 'block';
-      document.getElementById('uploadSection').style.display = 'none';
-
-      console.log('接口列表:', allApiData);
-      console.log('swagger info:', ApiData_text);
+      document.getElementById('uploadSection').classList.add('hidden');
+      document.getElementById('configSection').classList.remove('hidden');
+      updateStepUI(2);
+      showStatusMessage("解析成功，请配置场景", 'success');
     } catch (e) {
       console.error(e);
-      alert("解析失败，请检查控制台");
+      showStatusMessage("解析失败: " + e.message, 'error');
+    } finally {
+      showLoading(false);
     }
   }
 
-  // 2. 渲染表格
   function renderTable() {
     const tbody = document.getElementById('apiTableBody');
     tbody.innerHTML = '';
-
-    if(allApiData.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="4">未解析到接口</td></tr>';
-      return;
-    }
+    if(allApiData.length === 0) return tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-slate-400">未解析到接口数据</td></tr>';
 
     allApiData.forEach((api, index) => {
-      // 主行
+      const methodColors = { 'GET': 'bg-blue-100 text-blue-700 border border-blue-200', 'POST': 'bg-emerald-100 text-emerald-700 border border-emerald-200', 'PUT': 'bg-amber-100 text-amber-700 border border-amber-200', 'DELETE': 'bg-rose-100 text-rose-700 border border-rose-200' };
+      const badgeClass = methodColors[api.method.toUpperCase()] || 'bg-slate-100 text-slate-700';
+
       const tr = document.createElement('tr');
+      tr.className = "hover:bg-slate-50 transition-colors group";
       tr.innerHTML = `
-                <td><input type="checkbox" class="api-checkbox" data-index="${index}" onchange="toggleConfig(${index})"></td>
-                <td><span class="tag ${api.method}">${api.method}</span></td>
-                <td>${api.path} <span style="color:#888;font-size:0.9em">${api.summary || ''}</span></td>
-                <td><button class="btn btn-add" onclick="addScenario(${index})">+ 加场景</button></td>
+                <td class="px-6 py-4 border-b border-slate-50"><input type="checkbox" class="api-checkbox w-5 h-5 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500 cursor-pointer" data-index="${index}" onchange="toggleConfig(${index})"></td>
+                <td class="px-6 py-4 border-b border-slate-50"><span class="px-2.5 py-1 text-xs font-bold rounded-md ${badgeClass}">${api.method}</span></td>
+                <td class="px-6 py-4 border-b border-slate-50"><div class="font-medium text-slate-700 text-sm font-mono">${api.path}</div><div class="text-xs text-slate-500 mt-1">${api.summary || '暂无描述'}</div></td>
+                <td class="px-6 py-4 border-b border-slate-50 text-right"><button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium hover:bg-indigo-50 px-3 py-1 rounded transition" onclick="addScenario(${index})"><i class="fas fa-plus mr-1"></i> 加场景</button></td>
             `;
       tbody.appendChild(tr);
 
-      // 配置行 (默认隐藏)
       const configTr = document.createElement('tr');
       configTr.id = `config-row-${index}`;
-      configTr.className = 'config-row';
-      configTr.style.display = 'none';
-      configTr.innerHTML = `
-                <td colspan="4">
-                    <div id="scenarios-${index}">
-                        <!-- 这里动态插入场景表单 -->
-                    </div>
-                </td>
-            `;
+      configTr.className = 'hidden bg-slate-50/50';
+      configTr.innerHTML = `<td colspan="4" class="p-0"><div class="border-l-4 border-indigo-500 ml-6 my-2 pl-4 pr-6 py-4" id="scenarios-${index}"></div></td>`;
       tbody.appendChild(configTr);
     });
   }
 
-  // 3. 勾选时展开/收起配置区
   function toggleConfig(index) {
     const checkbox = document.querySelector(`.api-checkbox[data-index="${index}"]`);
     const row = document.getElementById(`config-row-${index}`);
     const container = document.getElementById(`scenarios-${index}`);
-
     if (checkbox.checked) {
-      row.style.display = 'table-row';
-      // 如果没有任何场景，初始化一个默认场景
-      if (container.children.length === 0) {
-        addScenario(index);
-      }
+      row.classList.remove('hidden');
+      if (container.children.length === 0) addScenario(index);
     } else {
-      row.style.display = 'none';
+      row.classList.add('hidden');
     }
   }
 
-  // 4. 添加一个场景表单
   function addScenario(index) {
     const api = allApiData[index];
     const container = document.getElementById(`scenarios-${index}`);
-
-    let paramsHtml = '';
-    if (api.parameters && api.parameters.length > 0) {
-      paramsHtml = api.parameters.map(p => {
-        const placeholder = p.in === 'body' ? `JSON结构 (留空自动生成)` : `默认值 (${p.type})`;
-        return `
-            <div class="input-group">
-                <label>${p.name} <span style="color:#aaa;font-weight:normal">(${p.type})</span></label>
-                <input type="text" class="param-input"
-                       data-key="${p.name}"
-                       data-type="${p.type || 'string'}"
-                       placeholder="${placeholder}">
-                <span class="param-desc">${p.required ? '<span style="color:red">*必填</span>' : '选填'}</span>
+    let paramsHtml = api.parameters && api.parameters.length > 0 ? api.parameters.map(p => `
+            <div class="flex items-center gap-3 mb-2">
+                <label class="w-32 text-xs font-bold text-slate-600 truncate text-right" title="${p.name}">${p.name} <span class="font-normal text-slate-400">(${p.type})</span></label>
+                <input type="text" class="scenario-name param-input flex-1 px-3 py-1.5 text-sm border border-slate-300 rounded focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 outline-none transition" data-key="${p.name}" placeholder="${p.in === 'body' ? 'JSON 结构' : '默认值'}">
+                <span class="text-xs ${p.required ? 'text-rose-500 font-bold' : 'text-slate-400'} w-12">${p.required ? '*必填' : '选填'}</span>
             </div>
-            `;
-      }).join('');
-    } else {
-      paramsHtml = '<div style="color:#666; padding:10px;">该接口无参数，无需配置</div>';
-    }
+        `).join('') : '<div class="text-xs text-slate-400 italic py-2 text-center">无参数需配置</div>';
 
     const html = `
-        <div class="scenario-box">
-            <div class="scenario-header">
-                <div>
-                    <input type="text" value="新场景" class="scenario-name"
-                           style="border:none; border-bottom:1px solid #ccc; font-weight:bold; width:200px; margin-right:10px;">
-                    <span style="font-size:12px; color:#888;">💡 值留空则生成 TODO 代码</span>
+            <div class="scenario-box bg-white p-4 rounded-lg border border-slate-200 shadow-sm mb-3 relative group hover:border-indigo-300 transition-colors">
+                <div class="flex items-center justify-between mb-3 border-b border-slate-100 pb-2">
+                    <div class="flex items-center gap-2"><span class="bg-indigo-100 text-indigo-700 text-xs px-2 py-0.5 rounded font-bold">场景</span><input type="text" value="新场景" class="scenario-name font-bold text-slate-700 border-none focus:ring-0 p-0 w-40 bg-transparent placeholder-slate-300 focus:text-indigo-600" placeholder="场景名称"></div>
+                    <div class="flex items-center gap-4"><div class="flex items-center gap-2 text-xs"><span class="text-slate-500">预期状态码:</span><input type="text" class="expect-code w-12 text-center border border-slate-200 rounded py-0.5 focus:border-indigo-500 outline-none text-slate-700 font-mono" value="200"></div><button onclick="this.closest('.scenario-box').remove()" class="text-slate-400 hover:text-rose-500 transition px-2"><i class="fas fa-trash-alt"></i></button></div>
                 </div>
-                <button onclick="this.closest('.scenario-box').remove()" style="color:red;border:none;background:none;cursor:pointer;">删除</button>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4"><div class="bg-slate-50 p-3 rounded-md border border-slate-100">${paramsHtml}</div></div>
             </div>
-            ${paramsHtml}
-            <div class="input-group">
-                <label>预期状态码</label>
-                <input type="text" class="expect-code" value="200" style="width:50px; flex:none;">
-            </div>
-        </div>
-    `;
+        `;
     container.insertAdjacentHTML('beforeend', html);
   }
 
-  // 5. 收集数据并提交生成
   async function generateCode() {
-    if (!allApiData || Object.keys(allApiData).length === 0) {
-      return alert("请先上传并解析文件！");
-    }
+    if (!allApiData || Object.keys(allApiData).length === 0) return showStatusMessage("请先上传文件！", 'warning');
     const payload = [];
-
-    // 遍历所有场景表单
-    document.querySelectorAll('.scenario-box').forEach((box, index) => {
-      const changjingInput = box.querySelector('.scenario-name').value.trim() || "默认场景";
-      const userInfoInput = box.querySelector('.user-info-input')?.value.trim() || "";
-
-      payload.push({
-        changjing: changjingInput,
-        user_info: userInfoInput,
-        map_data: ApiData_text
+    document.querySelectorAll('.scenario-box').forEach((box) => {
+      // 收集场景中的参数配置
+      const scenarioParams = {};
+      box.querySelectorAll('.param-input').forEach(input => {
+        const key = input.dataset.key;
+        const value = input.value.trim();
+        if (value) {
+          scenarioParams[key] = value;
+        }
+      });
+      
+      payload.push({ 
+        changjing: box.querySelector('.scenario-name').value.trim() || "默认场景", 
+        user_info: JSON.stringify(scenarioParams), 
+        map_data: ApiData_text 
       });
     });
-
-    if (payload.length === 0) return alert("请至少添加一个场景表单！");
-
-    console.log('发送的payload:', payload);
+    if (payload.length === 0) return showStatusMessage("请至少添加一个场景！", 'warning');
 
     try {
-      // 显示加载状态
-      showLoading();
-
+      showLoading(true);
       const res = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
       });
-
-      if (!res.ok) throw new Error("生成失败");
-
+      if (!res.ok) throw new Error("生成请求失败");
       const result = await res.json();
-      console.log('生成结果:', result);
 
-      document.getElementById('configSection').style.display = 'none';
-      document.getElementById('testCaseSection').style.display = 'block';
-
-      // 保存生成的数据
+      document.getElementById('configSection').classList.add('hidden');
+      document.getElementById('testCaseSection').classList.remove('hidden');
+      updateStepUI(3);
       generatedTestData = result;
-
-      // 处理生成的测试用例
       processGeneratedTestCases(result);
 
+      // === 关键新增：保存状态到 SessionStorage ===
+      saveAppState();
+      // ======================================
+
+      showStatusMessage("代码生成成功！", 'success');
     } catch (e) {
-      alert("生成失败，请检查后端日志: " + e.message);
-      console.error(e);
+      showStatusMessage("生成失败: " + e.message, 'error');
     } finally {
-      hideLoading();
+      showLoading(false);
     }
   }
 
-  // 显示加载状态
-  function showLoading() {
-    const loadingModal = document.createElement('div');
-    loadingModal.id = 'loading-modal';
-    loadingModal.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:1000;color:white;font-size:18px;";
-    loadingModal.innerHTML = `
-            <div class="loading" style="width: 40px; height: 40px; margin-bottom: 15px;"></div>
-            <div>正在生成测试用例...</div>
-        `;
-    document.body.appendChild(loadingModal);
-  }
-
-  // 隐藏加载状态
-  function hideLoading() {
-    const loadingModal = document.getElementById('loading-modal');
-    if (loadingModal) {
-      loadingModal.remove();
-    }
-  }
-
-  // 处理生成的测试用例，转换为分框展示
   function processGeneratedTestCases(testData) {
-    console.log('处理测试数据:', testData);
-
-    // 清空之前的测试用例
     currentTestCases = [];
     const testcaseGrid = document.getElementById('testcaseGrid');
     testcaseGrid.innerHTML = '';
+    document.getElementById('scenarioInfoPanel').classList.remove('hidden');
 
-    // 显示场景信息面板
-    document.getElementById('scenarioInfoPanel').style.display = 'block';
-
-    // 更新场景信息
     if (testData.test_cases) {
       const originalScenarioName = Object.keys(testData.test_cases)[0] || '新场景';
       const scenario = testData.test_cases[originalScenarioName];
-
       document.getElementById('scenarioNameDisplay').textContent = scenarioName;
-      document.getElementById('positiveCases').textContent = scenario.PositiveCases ? scenario.PositiveCases.length : 0;
-      document.getElementById('negativeCases').textContent = scenario.NegativeCases ? scenario.NegativeCases.length : 0;
-      document.getElementById('totalTestCases').textContent = (scenario.PositiveCases ? scenario.PositiveCases.length : 0) +
-              (scenario.NegativeCases ? scenario.NegativeCases.length : 0);
+      const pos = scenario.PositiveCases ? scenario.PositiveCases.length : 0;
+      const neg = scenario.NegativeCases ? scenario.NegativeCases.length : 0;
+      document.getElementById('positiveCases').textContent = pos;
+      document.getElementById('negativeCases').textContent = neg;
+      document.getElementById('totalTestCases').textContent = pos + neg;
     }
 
-    // 提取Java测试代码
     let javaTestCases = [];
-
     if (testData.generated_java_code) {
-      const originalScenarioName = Object.keys(testData.generated_java_code)[0] || '新场景';
-      const testCaseArrays = testData.generated_java_code[originalScenarioName];
-
-      if (testCaseArrays && typeof testCaseArrays === 'object') {
-        // 遍历所有场景名称（如"新场景"）
-        Object.keys(testCaseArrays).forEach(sceneKey => {
-          const testCaseArray = testCaseArrays[sceneKey];
-
-          if (Array.isArray(testCaseArray)) {
-            testCaseArray.forEach((javaCode, index) => {
-              javaTestCases.push({
-                id: generateId(), // 为每个测试用例生成唯一ID
-                name: `测试类 ${javaTestCases.length + 1}`,
-                code: javaCode,
-                originalSceneName: originalScenarioName,
-                sceneKey: sceneKey,
-                index: index
-              });
-            });
-          }
-        });
-      }
-    }
-
-    // 如果没有提取到Java代码，尝试从其他位置提取
-    if (javaTestCases.length === 0 && testData.generated_java_code) {
-      // 尝试直接遍历generated_java_code
-      Object.keys(testData.generated_java_code).forEach(key => {
-        const value = testData.generated_java_code[key];
-        if (Array.isArray(value)) {
-          value.forEach((javaCode, index) => {
-            javaTestCases.push({
-              id: generateId(), // 为每个测试用例生成唯一ID
-              name: `测试类 ${javaTestCases.length + 1}`,
-              code: javaCode,
-              originalSceneName: key,
-              sceneKey: key,
-              index: index
-            });
+      Object.keys(testData.generated_java_code).forEach(sceneKey => {
+        const val = testData.generated_java_code[sceneKey];
+        if(Array.isArray(val)) {
+          val.forEach((code, idx) => javaTestCases.push({id: generateId(), name: `TestClass_${idx+1}`, code, sceneKey, index: idx}));
+        } else if (typeof val === 'object') {
+          Object.keys(val).forEach(subKey => {
+            if(Array.isArray(val[subKey])) val[subKey].forEach((code, idx) => javaTestCases.push({id: generateId(), name: `TestClass_${idx+1}`, code, sceneKey: subKey, index: idx}));
           });
         }
       });
     }
-
-    console.log('提取到的Java测试用例:', javaTestCases);
-
-    // 更新测试用例统计
     updateTestcaseStats(javaTestCases);
-
-    // 如果没有Java测试用例，显示消息
+    currentTestCases = javaTestCases;
     if (javaTestCases.length === 0) {
-      testcaseGrid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: #666;">未生成Java测试代码</div>';
+      testcaseGrid.innerHTML = '<div class="col-span-full text-center py-20 text-slate-400">未生成 Java 代码</div>';
       return;
     }
-
-    // 存储当前测试用例
-    currentTestCases = javaTestCases;
-
-    // 显示测试用例
-    showPage(currentPage);
-
-    // 显示分页控件（如果测试用例较多）
-    if (currentTestCases.length > casesPerPage) {
-      setupPagination();
-    } else {
-      document.getElementById('paginationControls').style.display = 'none';
-      document.getElementById('paginationControlsBottom').style.display = 'none';
-    }
-
-    // 显示全选控件
-    document.getElementById('selectAllContainer').style.display = 'flex';
+    document.getElementById('selectAllContainer').classList.remove('hidden');
+    setupPagination();
   }
 
-  // 更新测试用例统计信息
   function updateTestcaseStats(testCases) {
-    let totalMethods = 0;
-    let totalAssertions = 0;
-    let totalLines = 0;
-
-    testCases.forEach(testCase => {
-      // 统计方法数
-      const methodMatches = testCase.code.match(/@Test/g) || [];
-      totalMethods += methodMatches.length;
-
-      // 统计断言数
-      const assertionMatches = testCase.code.match(/assert|assertEquals|assertTrue|assertFalse|assertNull|assertNotNull/g) || [];
-      totalAssertions += assertionMatches.length;
-
-      // 统计行数
-      totalLines += testCase.code.split('\n').length;
+    let totalMethods = 0, totalAssertions = 0, totalLines = 0;
+    testCases.forEach(tc => {
+      totalMethods += (tc.code.match(/@Test/g) || []).length;
+      totalAssertions += (tc.code.match(/assert|assertEquals/g) || []).length;
+      totalLines += tc.code.split('\n').length;
     });
-
     document.getElementById('statTotal').textContent = testCases.length;
     document.getElementById('statMethods').textContent = totalMethods;
     document.getElementById('statAssertions').textContent = totalAssertions;
     document.getElementById('statLines').textContent = totalLines;
-    document.getElementById('testcaseStats').style.display = 'flex';
+    document.getElementById('testcaseStats').classList.remove('hidden');
   }
 
-  // 设置分页
-  function setupPagination() {
-    const totalPages = Math.ceil(currentTestCases.length / casesPerPage);
-
-    document.getElementById('paginationControls').style.display = 'flex';
-    document.getElementById('paginationControlsBottom').style.display = 'flex';
-    document.getElementById('pageInfo').textContent = `第 ${currentPage} 页 / 共 ${totalPages} 页`;
-    document.getElementById('pageInfoBottom').textContent = `第 ${currentPage} 页 / 共 ${totalPages} 页`;
-
-    showPage(currentPage);
-  }
-
-  // 显示指定页的测试用例
-  function showPage(page) {
-    const testcaseGrid = document.getElementById('testcaseGrid');
-    testcaseGrid.innerHTML = '';
-
-    const startIndex = (page - 1) * casesPerPage;
-    const endIndex = Math.min(startIndex + casesPerPage, currentTestCases.length);
-
-    for (let i = startIndex; i < endIndex; i++) {
-      const testCase = currentTestCases[i];
-      createTestCaseBox(testCase, i);
-    }
-
-    // 如果有选中的测试用例，高亮显示
-    if (selectedTestCaseIndex !== null) {
-      const selectedBox = document.querySelector(`.testcase-box[data-index="${selectedTestCaseIndex}"]`);
-      if (selectedBox) {
-        selectedBox.style.boxShadow = '0 0 0 2px #3498db';
-      }
-    }
-
-    // 更新选中数量
-    updateSelectedCount();
-  }
-
-  // 创建测试用例框
-  function createTestCaseBox(testCase, index) {
-    // 提取类名（用于文件名）
-    const classNameMatch = testCase.code.match(/public class (\w+)/);
-    const className = classNameMatch ? classNameMatch[1] : `TestClass_${index+1}`;
-    
-    // 保存类名到测试用例对象中，用于文件路径
-    if (!testCase.className) {
-      testCase.className = className;
-    }
-
-    // 提取测试方法数
-    const testMethodMatches = testCase.code.match(/@Test/g) || [];
-    const testMethodCount = testMethodMatches.length;
-
-    // 提取断言数量
-    const assertionMatches = testCase.code.match(/assert|assertEquals|assertTrue|assertFalse|assertNull|assertNotNull/g) || [];
-    const assertionCount = assertionMatches.length;
-
-    const testCaseDiv = document.createElement('div');
-    testCaseDiv.className = 'testcase-box';
-    testCaseDiv.dataset.index = index;
-    testCaseDiv.dataset.id = testCase.id; // 存储测试用例ID
-
-    // 对代码进行HTML转义，防止HTML标签被解析
-    const escapedCode = escapeHtml(testCase.code);
-
-    // 检查是否正在编辑此测试用例
-    const isEditing = editingTestCaseIndex === index;
-
-    // 检查当前测试用例是否被选中
-    const isSelected = document.getElementById(`checkbox-${index}`)?.checked || false;
-
-    testCaseDiv.innerHTML = `
-            <div class="testcase-title">
-                <span>${className} ${isEditing ? '(编辑中)' : ''}</span>
-                <div>
-                    <input type="checkbox" class="testcase-checkbox" id="checkbox-${index}"
-                           onchange="updateSelectedCount()" ${isSelected ? 'checked' : ''}>
-                </div>
-            </div>
-            <div class="testcase-content">
-                ${isEditing ?
-            `<textarea class="testcase-code-editor" id="editor-${index}">${testCase.code}</textarea>` :
-            `<div class="testcase-code">${escapedCode}</div>`
-    }
-                <div class="testcase-meta">
-                    <div>场景: ${testCase.sceneKey}</div>
-                    <div>测试方法: ${testMethodCount} 个</div>
-                    <div>断言: ${assertionCount} 个</div>
-                    <div>代码行数: ${testCase.code.split('\n').length} 行</div>
-                </div>
-            </div>
-            <div class="testcase-action-buttons">
-                ${isEditing ?
-            `<button class="btn btn-save" onclick="event.stopPropagation(); saveTestCaseEdit(${index})">保存</button>
-                         <button class="btn btn-cancel" onclick="event.stopPropagation(); cancelTestCaseEdit(${index})">取消</button>` :
-            `<button class="btn btn-edit" onclick="event.stopPropagation(); editTestCase(${index})">编辑</button>
-                         <button class="btn btn-success" onclick="event.stopPropagation(); saveSingleTestCase(${index})">保存</button>
-                         <button class="btn btn-primary" onclick="event.stopPropagation(); executeSingleTestCase(${index})">执行</button>
-                         <button class="btn btn-delete" onclick="event.stopPropagation(); deleteTestCase(${index})">删除</button>`
-    }
-            </div>
-        `;
-
-    const testcaseGrid = document.getElementById('testcaseGrid');
-    testcaseGrid.appendChild(testCaseDiv);
-  }
-
-  // 编辑测试用例
-  function editTestCase(index) {
-    // 如果已经有正在编辑的测试用例，先取消
-    if (editingTestCaseIndex !== null && editingTestCaseIndex !== index) {
-      cancelTestCaseEdit(editingTestCaseIndex);
-    }
-
-    editingTestCaseIndex = index;
-    showPage(currentPage);
-  }
-
-  // 保存测试用例编辑
-  function saveTestCaseEdit(index) {
-    const editor = document.getElementById(`editor-${index}`);
-    if (!editor) return;
-
-    const newCode = editor.value;
-
-    // 更新测试用例代码
-    currentTestCases[index].code = newCode;
-
-    // 更新测试用例统计
-    updateTestcaseStats(currentTestCases);
-
-    // 退出编辑模式
-    editingTestCaseIndex = null;
-
-    // 重新显示当前页
-    showPage(currentPage);
-
-    showStatusMessage(`测试用例 ${index + 1} 已保存`, 'success');
-  }
-
-  // 取消测试用例编辑
-  function cancelTestCaseEdit(index) {
-    editingTestCaseIndex = null;
-    showPage(currentPage);
-  }
-
-  // 删除测试用例
-  async function deleteTestCase(index) {
-    if (!confirm(`确定要删除测试用例 ${index + 1} 吗？`)) {
-      return;
-    }
-
+  async function saveSingleTestCase(index) {
+    if (index < 0 || index >= currentTestCases.length) return;
     const testCase = currentTestCases[index];
-    // 从代码中提取类名作为文件名
     const classNameMatch = testCase.code.match(/public class (\w+)/);
     const className = classNameMatch ? classNameMatch[1] : (testCase.className || `TestClass_${index+1}`);
-    // 使用类名作为文件名，路径格式：case_generated/${scenarioName}/${className}.java
     const filePath = testCase.filePath || `case_generated/${scenarioName}/${className}.java`;
 
-    // 传入路径，如果有的话，则删除，如果没有则不删
-    if (filePath) {
-      try {
-        const res = await fetch(`/api/testcase/deletefile?filepath=${encodeURIComponent(filePath)}`, {
-          method: 'DELETE'
-        });
-
-        const result = await res.json();
-        if (result.success) {
-          showStatusMessage(`文件删除成功`, 'success');
-        } else {
-          showStatusMessage(`删除文件失败: ${result.message}`, 'error');
-          // 即使后端删除失败，也继续删除前端界面
-        }
-      } catch (e) {
-        console.error('删除文件失败:', e);
-        showStatusMessage(`删除文件失败: ${e.message}`, 'error');
-        // 即使后端删除失败，也继续删除前端界面
-      }
-    }
-
-    // 如果正在编辑此测试用例，先取消编辑
-    if (editingTestCaseIndex === index) {
-      editingTestCaseIndex = null;
-    }
-
-    // 从数组中删除测试用例
-    currentTestCases.splice(index, 1);
-
-    // 更新所有测试用例的索引
-    currentTestCases.forEach((testCase, i) => {
-      testCase.id = i;
-    });
-
-    // 更新测试用例统计
-    updateTestcaseStats(currentTestCases);
-
-    // 重新计算分页
-    const totalPages = Math.ceil(currentTestCases.length / casesPerPage);
-    if (currentPage > totalPages && totalPages > 0) {
-      currentPage = totalPages;
-    }
-
-    // 重新显示当前页
-    showPage(currentPage);
-
-    // 更新分页信息
-    if (currentTestCases.length > casesPerPage) {
-      document.getElementById('pageInfo').textContent = `第 ${currentPage} 页 / 共 ${totalPages} 页`;
-      document.getElementById('pageInfoBottom').textContent = `第 ${currentPage} 页 / 共 ${totalPages} 页`;
-    } else {
-      document.getElementById('paginationControls').style.display = 'none';
-      document.getElementById('paginationControlsBottom').style.display = 'none';
-    }
-
-    // 如果没有测试用例了，隐藏全选控件
-    if (currentTestCases.length === 0) {
-      document.getElementById('selectAllContainer').style.display = 'none';
-      document.getElementById('paginationControls').style.display = 'none';
-      document.getElementById('paginationControlsBottom').style.display = 'none';
-      document.getElementById('testcaseStats').style.display = 'none';
-    }
-
-    showStatusMessage(`测试用例 ${index + 1} 已删除`, 'success');
-  }
-
-  // HTML转义函数
-  function escapeHtml(text) {
-    const map = {
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      '"': '&quot;',
-      "'": '&#039;'
-    };
-    return text.replace(/[&<>"']/g, function(m) { return map[m]; });
-  }
-
-  // 选择测试用例
-  function selectTestCase(index) {
-    // 如果正在编辑，不允许选择
-    if (editingTestCaseIndex !== null) return;
-
-    // 移除之前选中的样式
-    if (selectedTestCaseIndex !== null) {
-      const prevBox = document.querySelector(`.testcase-box[data-index="${selectedTestCaseIndex}"]`);
-      if (prevBox) {
-        prevBox.style.boxShadow = '';
-      }
-    }
-
-    // 设置新的选中测试用例
-    selectedTestCaseIndex = index;
-
-    // 添加选中样式
-    const selectedBox = document.querySelector(`.testcase-box[data-index="${selectedTestCaseIndex}"]`);
-    if (selectedBox) {
-      selectedBox.style.boxShadow = '0 0 0 2px #3498db';
-    }
-
-    // 选中复选框
-    const checkbox = document.getElementById(`checkbox-${index}`);
-    if (checkbox) {
-      checkbox.checked = true;
-    }
-
-    // 更新选中数量
-    updateSelectedCount();
-  }
-
-  // 切换页面
-  function changePage(delta) {
-    const totalPages = Math.ceil(currentTestCases.length / casesPerPage);
-    const newPage = currentPage + delta;
-
-    if (newPage >= 1 && newPage <= totalPages) {
-      currentPage = newPage;
-      showPage(currentPage);
-
-      document.getElementById('pageInfo').textContent = `第 ${currentPage} 页 / 共 ${totalPages} 页`;
-      document.getElementById('pageInfoBottom').textContent = `第 ${currentPage} 页 / 共 ${totalPages} 页`;
-
-      // 重置全选复选框
-      document.getElementById('selectAllCheckbox').checked = false;
-      updateSelectedCount();
-    }
-  }
-
-  // 全选/取消全选
-  function toggleSelectAll() {
-    const selectAllCheckbox = document.getElementById('selectAllCheckbox');
-    const isChecked = selectAllCheckbox.checked;
-
-    // 获取当前页的所有测试用例复选框
-    const startIndex = (currentPage - 1) * casesPerPage;
-    const endIndex = Math.min(startIndex + casesPerPage, currentTestCases.length);
-
-    for (let i = startIndex; i < endIndex; i++) {
-      const checkbox = document.getElementById(`checkbox-${i}`);
-      if (checkbox) {
-        checkbox.checked = isChecked;
-      }
-    }
-
-    // 更新选中数量
-    updateSelectedCount();
-  }
-
-  // 更新选中数量显示
-  function updateSelectedCount() {
-    const checkboxes = document.querySelectorAll('.testcase-checkbox:checked');
-    const selectedCount = checkboxes.length;
-    document.getElementById('selectedCount').textContent = `已选中 ${selectedCount} 个测试用例`;
-
-    // 更新全选复选框状态
-    const startIndex = (currentPage - 1) * casesPerPage;
-    const endIndex = Math.min(startIndex + casesPerPage, currentTestCases.length);
-    const totalCheckboxes = Math.min(casesPerPage, endIndex - startIndex);
-
-    const selectAllCheckbox = document.getElementById('selectAllCheckbox');
-    if (selectedCount === totalCheckboxes && totalCheckboxes > 0) {
-      selectAllCheckbox.checked = true;
-    } else {
-      selectAllCheckbox.checked = false;
-    }
-  }
-
-  // 保存单个测试用例
-  async function saveSingleTestCase(index) {
-    if (index >= 0 && index < currentTestCases.length) {
-      const testCase = currentTestCases[index];
-      // 从代码中提取类名作为文件名
-      const classNameMatch = testCase.code.match(/public class (\w+)/);
-      const className = classNameMatch ? classNameMatch[1] : (testCase.className || `TestClass_${index+1}`);
-      // 使用类名作为文件名，路径格式：case_generated/${scenarioName}/${className}.java
-      const filePath = testCase.filePath || `case_generated/${scenarioName}/${className}.java`;
-
-      try {
-        const saveData = {
-          filePath: filePath,
-          content: testCase.code
-        };
-
-        const res = await fetch('/api/testcase/save', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(saveData)
-        });
-
-        const result = await res.json();
-        if (result.success) {
-          // 更新测试用例的文件路径
-          testCase.filePath = filePath;
-          showStatusMessage(`测试用例 "${testCase.name}" 保存成功！`, 'success');
-        } else {
-          showStatusMessage(`保存失败: ${result.message}`, 'error');
-        }
-      } catch (e) {
-        showStatusMessage(`保存失败: ${e.message}`, 'error');
-        console.error(e);
-      }
-    }
-  }
-
-  // 批量保存选中的测试用例
-  async function saveSelectedTestCases() {
-    // 获取所有选中的测试用例
-    const checkboxes = document.querySelectorAll('.testcase-checkbox:checked');
-    const selectedIndices = Array.from(checkboxes).map(cb => {
-      const id = cb.id.replace('checkbox-', '');
-      return parseInt(id);
-    });
-
-    if (selectedIndices.length === 0) {
-      alert("请至少选择一个测试用例！");
-      return;
-    }
-
-    // 获取选中的测试用例数据，构建路径数组和内容数组（传入的是路径数组和内容数组）
-    const filePaths = [];
-    const contents = [];
-    
-    selectedIndices
-      .filter(index => index >= 0 && index < currentTestCases.length)
-      .forEach(index => {
-        const testCase = currentTestCases[index];
-        // 从代码中提取类名作为文件名
-        const classNameMatch = testCase.code.match(/public class (\w+)/);
-        const className = classNameMatch ? classNameMatch[1] : (testCase.className || `TestClass_${index+1}`);
-        // 使用类名作为文件名，路径格式：case_generated/${scenarioName}/${className}.java
-        const filePath = testCase.filePath || `case_generated/${scenarioName}/${className}.java`;
-        filePaths.push(filePath);
-        contents.push(testCase.code);
-        // 更新测试用例的文件路径和类名
-        testCase.filePath = filePath;
-        testCase.className = className;
-      });
-
-    if (filePaths.length === 0) {
-      alert("没有有效的测试用例！");
-      return;
-    }
-
     try {
-      const saveData = {
-        filePaths: filePaths,
-        contents: contents
-      };
-
-      const res = await fetch('/api/testcase/batch/update', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(saveData)
-      });
-
-      const result = await res.json();
-      if (result.success) {
-        showStatusMessage(`成功保存 ${filePaths.length} 个测试用例！`, 'success');
-      } else {
-        showStatusMessage(`批量保存失败: ${result.message}`, 'error');
-      }
-    } catch (e) {
-      showStatusMessage(`批量保存失败: ${e.message}`, 'error');
-      console.error(e);
-    }
-  }
-
-  // 保存所有测试用例到服务器
-  async function saveAllTestCasesToServer(testData) {
-    try {
-      const testCaseId = generateId();
-      const saveData = {
-        testCaseId,
-        scenarioName,
-        testData: JSON.stringify(testData),
-        javaTestCases: currentTestCases.map(tc => tc.code)
-      };
-
+      showStatusMessage(`正在保存: ${className}...`, 'info');
       const res = await fetch('/api/testcase/save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(saveData)
+        body: JSON.stringify({ filePath: filePath, content: testCase.code })
       });
-
-      const result = await res.json();
-      if (!result.success) {
-        console.warn('保存测试用例失败:', result.message);
-        showStatusMessage('保存测试用例失败: ' + result.message, 'error');
-      } else {
-        currentTestCaseId = testCaseId;
-        showStatusMessage('测试用例已保存到服务器', 'success');
-      }
-    } catch (e) {
-      console.error('保存测试用例到服务器失败:', e);
-      showStatusMessage('保存测试用例失败: ' + e.message, 'error');
-    }
-  }
-
-  // 保存所有测试用例
-  async function saveAllTestCases() {
-    if (!currentTestCases || currentTestCases.length === 0) {
-      alert("没有可保存的测试用例！");
-      return;
-    }
-
-    // 如果有正在编辑的测试用例，先保存
-    if (editingTestCaseIndex !== null) {
-      saveTestCaseEdit(editingTestCaseIndex);
-    }
-
-    try {
-      const saveData = {
-        testCaseId: currentTestCaseId || generateId(),
-        scenarioName: scenarioName,
-        testData: JSON.stringify(generatedTestData),
-        javaTestCases: currentTestCases.map(tc => tc.code),
-        savePath: `case_generated/${scenarioName}/`
-      };
-
-      const res = await fetch('/api/testcase/update', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(saveData)
-      });
-
       const result = await res.json();
       if (result.success) {
-        currentTestCaseId = saveData.testCaseId;
-        showStatusMessage(`所有测试用例保存成功！保存路径: case_generated/${saveData.savePath}`, 'success');
+        testCase.filePath = filePath;
+        testCase.className = className;
+        showStatusMessage(`保存成功！路径: ${filePath}`, 'success');
       } else {
-        showStatusMessage("测试用例保存失败: " + result.message, 'error');
+        showStatusMessage(`保存失败: ${result.message}`, 'error');
       }
     } catch (e) {
-      showStatusMessage("保存测试用例失败: " + e.message, 'error');
-      console.error(e);
+      showStatusMessage(`保存出错: ${e.message}`, 'error');
     }
   }
 
-  // 分析测试用例
-  async function analyzeTestCase() {
-    if (!generatedTestData || currentTestCases.length === 0) {
-      alert("没有可分析的测试用例数据！");
-      return;
-    }
+  async function saveSelectedTestCases() {
+    const checkboxes = document.querySelectorAll('.testcase-checkbox:checked');
+    const selectedIndices = Array.from(checkboxes).map(cb => parseInt(cb.id.replace('checkbox-', '')));
+    if (selectedIndices.length === 0) return showStatusMessage("请至少选择一个测试用例！", 'warning');
+
+    const filePaths = [];
+    const contents = [];
+    selectedIndices.forEach(index => {
+      if(index >= 0 && index < currentTestCases.length) {
+        const testCase = currentTestCases[index];
+        const classNameMatch = testCase.code.match(/public class (\w+)/);
+        const className = classNameMatch ? classNameMatch[1] : (testCase.className || `TestClass_${index+1}`);
+        const filePath = testCase.filePath || `case_generated/${scenarioName}/${className}.java`;
+        filePaths.push(filePath);
+        contents.push(testCase.code);
+        testCase.filePath = filePath;
+        testCase.className = className;
+      }
+    });
 
     try {
-      // 传入的是接口文档、环境以及生成的测试脚本
-      const allCode = currentTestCases.map(tc => tc.code).join('\n\n');
-      
-      // 获取场景名称（从第一个测试用例的场景字段获取，或使用场景名）
-      const sceneName = currentTestCases.length > 0 && currentTestCases[0].sceneKey 
-        ? currentTestCases[0].sceneKey 
-        : scenarioName;
-      
-      // 获取接口文档（ApiData_text的JSON字符串），如果没有默认为空
-      const apiDoc = ApiData_text ? JSON.stringify(ApiData_text) : '';
-      
-      // 获取环境和依赖关系，如果没有默认为空
-      const env = environment || '';
-      const dep = dependency || '';
-
-      const analysisRequest = {
-        testCode: allCode, // 生成的测试脚本
-        testText: sceneName, // 传入场景名称（自己输入的场景字段）
-        apiDoc: apiDoc || '', // 接口文档，如果没有默认为空
-        environment: env || '', // 环境，如果没有默认为空
-        dependency: dep || '' // 接口依赖关系，如果没有默认为空
-      };
-
-      console.log('发送的数据结构:', analysisRequest);
-      console.log('测试代码长度:', allCode ? allCode.length : 0);
-      console.log('接口文档:', apiDoc ? apiDoc.substring(0, 100) : '空');
-      console.log('环境:', env || '空');
-      console.log('依赖:', dep || '空');
-
-      showStatusMessage('正在分析测试用例...', 'info');
-
-      const response = await fetch('/api/testcase/analyze', {
+      showStatusMessage(`正在批量保存 ${filePaths.length} 个文件...`, 'info');
+      const res = await fetch('/api/testcase/batch/update', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(analysisRequest)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filePaths: filePaths, contents: contents })
       });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      if (!data.success) {
-        throw new Error(data.message || '分析失败');
-      }
-      
-      const analysisObj = JSON.parse(data.analysis);
-      console.log('分析结果:', analysisObj);
-      
-      // 显示分析结果在覆盖度分析和智能建议模块中
-      displayAnalysisResult(analysisObj);
-      
-      showStatusMessage('分析完成', 'success');
-
-    } catch (error) {
-      console.error('请求失败:', error);
-      showStatusMessage('分析请求失败: ' + error.message, 'error');
+      const result = await res.json();
+      if (result.success) showStatusMessage(`成功保存 ${filePaths.length} 个文件！`, 'success');
+      else showStatusMessage(`批量保存失败: ${result.message}`, 'error');
+    } catch (e) {
+      showStatusMessage(`请求错误: ${e.message}`, 'error');
     }
   }
 
-  // 显示分析结果
-  function displayAnalysisResult(analysis) {
-    console.log('=== 开始显示分析结果 ===');
-    console.log('完整分析结果对象:', analysis);
-    
-    if (!analysis) {
-      console.error('分析结果为空');
-      showStatusMessage('分析结果为空', 'error');
-      return;
-    }
-
-    // 检查analysisSection元素是否存在
-    const analysisSection = document.getElementById('analysisSection');
-    if (!analysisSection) {
-      console.error('找不到analysisSection元素！');
-      showStatusMessage('找不到分析结果区域', 'error');
-      return;
-    }
-
-    const metrics = analysis.metrics || {};
-    const suggestions = analysis.suggestions || [];
-
-    console.log('提取的metrics:', metrics);
-    console.log('提取的suggestions:', suggestions);
-    console.log('metrics类型:', typeof metrics);
-    console.log('suggestions类型:', Array.isArray(suggestions) ? '数组' : typeof suggestions);
-
-    // 显示覆盖度分析
-    try {
-      const totalLinesEl = document.getElementById('totalLines');
-      const testMethodCountEl = document.getElementById('testMethodCount');
-      const assertionCountEl = document.getElementById('assertionCount');
-      const coverageScoreEl = document.getElementById('coverageScore');
-      const coverageScoreDisplayEl = document.getElementById('coverageScoreDisplay');
-
-      if (!totalLinesEl || !testMethodCountEl || !assertionCountEl || !coverageScoreEl || !coverageScoreDisplayEl) {
-        console.error('找不到覆盖度分析的元素！');
-        console.error('totalLines:', totalLinesEl);
-        console.error('testMethodCount:', testMethodCountEl);
-        console.error('assertionCount:', assertionCountEl);
-        console.error('coverageScore:', coverageScoreEl);
-        console.error('coverageScoreDisplay:', coverageScoreDisplayEl);
-        showStatusMessage('找不到覆盖度分析元素', 'error');
-        return;
-      }
-
-      const totalLines = metrics.totalLines || metrics.total_lines || 0;
-      const testMethodCount = metrics.testMethodCount || metrics.test_method_count || 0;
-      const assertionCount = metrics.assertionCount || metrics.assertion_count || 0;
-      const coverageScore = metrics.coverageScore || metrics.coverage_score || 0;
-
-      console.log('设置覆盖度数据:', {
-        totalLines,
-        testMethodCount,
-        assertionCount,
-        coverageScore
-      });
-
-      totalLinesEl.textContent = totalLines;
-      testMethodCountEl.textContent = testMethodCount;
-      assertionCountEl.textContent = assertionCount;
-      coverageScoreEl.textContent = coverageScore;
-      coverageScoreDisplayEl.textContent = coverageScore;
-
-      console.log('覆盖度数据已设置');
-    } catch (e) {
-      console.error('设置覆盖度数据时出错:', e);
-      showStatusMessage('设置覆盖度数据失败: ' + e.message, 'error');
-    }
-
-    // 显示智能建议
-    try {
-      const suggestionsList = document.getElementById('suggestionsList');
-      if (!suggestionsList) {
-        console.error('找不到suggestionsList元素！');
-        showStatusMessage('找不到智能建议列表', 'error');
-        return;
-      }
-
-      suggestionsList.innerHTML = '';
-
-      if (Array.isArray(suggestions) && suggestions.length > 0) {
-        console.log('添加智能建议，共', suggestions.length, '条');
-        suggestions.forEach((item, index) => {
-          const li = document.createElement('li');
-          let priority = '未知';
-          let problemDesc = '无描述';
-
-          if (typeof item === 'string') {
-            problemDesc = item;
-          } else if (typeof item === 'object' && item !== null) {
-            priority = item.priority || item.Priority || '未知';
-            problemDesc = item.problem_desc || item.problemDesc || item.description || item.Description || item.suggestion || item.Suggestion || '无描述';
-          }
-
-          li.textContent = `[${priority}] ${problemDesc}`;
-          suggestionsList.appendChild(li);
-          console.log(`建议 ${index + 1}:`, `[${priority}] ${problemDesc}`);
-        });
-      } else {
-        console.log('没有建议或建议为空');
-        const li = document.createElement('li');
-        li.textContent = '暂无建议';
-        li.style.color = '#999';
-        suggestionsList.appendChild(li);
-      }
-
-      console.log('智能建议已设置');
-    } catch (e) {
-      console.error('设置智能建议时出错:', e);
-      showStatusMessage('设置智能建议失败: ' + e.message, 'error');
-    }
-
-    // 显示分析结果区域
-    try {
-      analysisSection.style.display = 'block';
-      console.log('analysisSection已显示');
-      
-      // 等待一小段时间确保DOM更新
-      setTimeout(() => {
-        // 滚动到分析结果区域
-        analysisSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        console.log('已滚动到分析结果区域');
-      }, 100);
-    } catch (e) {
-      console.error('显示分析结果区域时出错:', e);
-      showStatusMessage('显示分析结果区域失败: ' + e.message, 'error');
-    }
-
-    console.log('=== 分析结果显示完成 ===');
-  }
-
-  // 执行单个测试用例
-  async function executeSingleTestCase(index = null) {
-    let testCase;
-    let testIndex;
-
-    if (index !== null && index >= 0 && index < currentTestCases.length) {
-      // 执行特定的测试用例
-      testCase = currentTestCases[index];
-      testIndex = index;
-      selectedTestCaseIndex = index;
-      selectTestCase(index);
-    } else {
-      // 执行当前选中的测试用例
-      if (selectedTestCaseIndex !== null && selectedTestCaseIndex >= 0 && selectedTestCaseIndex < currentTestCases.length) {
-        testCase = currentTestCases[selectedTestCaseIndex];
-        testIndex = selectedTestCaseIndex;
-      } else {
-        alert("请先选择一个测试用例！");
-        return;
-      }
-    }
-
-    if (!testCase) {
-      alert("测试用例不存在！");
-      return;
-    }
-
-    // 从代码中提取类名作为文件名
+  async function executeSingleTestCase(index) {
+    const testCase = currentTestCases[index];
     const classNameMatch = testCase.code.match(/public class (\w+)/);
-    const className = classNameMatch ? classNameMatch[1] : (testCase.className || `TestClass_${testIndex+1}`);
-    // 使用类名作为文件名，路径格式：case_generated/${scenarioName}/${className}.java
+    const className = classNameMatch ? classNameMatch[1] : (testCase.className || `TestClass_${index+1}`);
     const filePath = testCase.filePath || `case_generated/${scenarioName}/${className}.java`;
-    
-    if (!filePath) {
-      showStatusMessage("测试用例文件路径不存在，执行失败", 'error');
-      return;
-    }
+
+    const box = document.querySelector(`.testcase-box[data-index="${index}"]`);
+    const resultDiv = box.querySelector('.execution-result');
+    resultDiv.classList.remove('hidden');
+    resultDiv.innerHTML = '<div class="flex items-center justify-center h-full text-indigo-500"><i class="fas fa-spinner fa-spin mr-2"></i> 正在执行...</div>';
 
     try {
-      showStatusMessage(`正在执行测试用例 "${testCase.name}"...`, 'info');
-      
-      const request = {
-        testCaseFileName: filePath
-      };
-
       const res = await fetch('/api/execute/single', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(request)
+        body: JSON.stringify({ testCaseFileName: filePath })
       });
-
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-
       const result = await res.json();
-      
-      // 显示执行结果（结果显示在下面）
-      displayExecutionResult(testIndex, result);
-      
-      if (result.passed) {
-        showStatusMessage(`测试用例 "${testCase.name}" 执行成功！`, 'success');
-      } else {
-        showStatusMessage(`测试用例 "${testCase.name}" 执行失败: ${result.failureReason || '未知错误'}`, 'error');
-      }
+
+      const colorClass = result.passed ? 'text-emerald-600' : 'text-rose-600';
+      const iconClass = result.passed ? 'fa-check-circle' : 'fa-times-circle';
+
+      resultDiv.innerHTML = `
+                <div class="flex justify-between items-center mb-2 border-b border-slate-100 pb-2">
+                    <span class="font-bold ${colorClass}"><i class="fas ${iconClass}"></i> ${result.passed ? '执行成功' : '执行失败'}</span>
+                    <button class="text-xs text-slate-400 hover:text-slate-600" onclick="this.closest('.execution-result').classList.add('hidden')"><i class="fas fa-times"></i></button>
+                </div>
+                ${result.failureReason ? `<div class="text-xs text-rose-500 mb-2 font-bold">原因: ${result.failureReason}</div>` : ''}
+                <div class="text-xs font-mono text-slate-600 whitespace-pre-wrap h-[200px] overflow-auto custom-scroll">${result.outputText || '无输出'}</div>
+            `;
+      if(result.passed) showStatusMessage(`${className} 执行通过`, 'success');
+      else showStatusMessage(`${className} 执行失败`, 'error');
+
     } catch (e) {
-      showStatusMessage(`执行失败: ${e.message}`, 'error');
-      console.error(e);
-      // 显示执行失败的结果
-      displayExecutionResult(testIndex, {
-        passed: false,
-        failureReason: e.message,
-        outputText: `执行失败: ${e.message}`
-      });
+      resultDiv.innerHTML = `<div class="text-rose-500 p-4">请求出错: ${e.message}</div>`;
     }
   }
 
-  // 显示执行结果
-  function displayExecutionResult(index, result) {
-    const testCaseBox = document.querySelector(`.testcase-box[data-index="${index}"]`);
-    if (!testCaseBox) return;
-
-    // 查找或创建结果显示区域
-    let resultDiv = testCaseBox.querySelector('.execution-result');
-    if (!resultDiv) {
-      resultDiv = document.createElement('div');
-      resultDiv.className = 'execution-result';
-      resultDiv.style.marginTop = '10px';
-      resultDiv.style.padding = '10px';
-      resultDiv.style.backgroundColor = '#f8f9fa';
-      resultDiv.style.borderRadius = '4px';
-      resultDiv.style.fontSize = '12px';
-      testCaseBox.querySelector('.testcase-content').appendChild(resultDiv);
-    }
-
-    const statusColor = result.passed ? '#2ecc71' : '#e74c3c';
-    const statusText = result.passed ? '✓ 执行成功' : '✗ 执行失败';
-    
-    resultDiv.innerHTML = `
-      <div style="font-weight: bold; color: ${statusColor}; margin-bottom: 5px;">${statusText}</div>
-      ${result.outputText ? `<div style="white-space: pre-wrap; font-family: monospace;">${escapeHtml(result.outputText)}</div>` : ''}
-      ${result.failureReason ? `<div style="color: #e74c3c; margin-top: 5px;">失败原因: ${escapeHtml(result.failureReason)}</div>` : ''}
-    `;
-  }
-
-  // 批量执行测试用例
   async function batchExecuteTestCases() {
-    // 获取所有选中的测试用例
     const checkboxes = document.querySelectorAll('.testcase-checkbox:checked');
-    const selectedIndices = Array.from(checkboxes).map(cb => {
-      const id = cb.id.replace('checkbox-', '');
-      return parseInt(id);
+    const selectedIndices = Array.from(checkboxes).map(cb => parseInt(cb.id.replace('checkbox-', '')));
+    if (selectedIndices.length === 0) return showStatusMessage("请至少选择一个测试用例！", 'warning');
+
+    const fileNames = [];
+    selectedIndices.forEach(idx => {
+      const tc = currentTestCases[idx];
+      const cls = tc.code.match(/public class (\w+)/)[1] || `TestClass_${idx+1}`;
+      fileNames.push(tc.filePath || `case_generated/${scenarioName}/${cls}.java`);
     });
 
-    if (selectedIndices.length === 0) {
-      alert("请至少选择一个测试用例！");
-      return;
-    }
-
-    // 获取选中的测试用例的文件路径（勾选的脚本的路径）
-    const testCaseFileNames = selectedIndices
-      .filter(index => index >= 0 && index < currentTestCases.length)
-      .map(index => {
-        const testCase = currentTestCases[index];
-        // 从代码中提取类名作为文件名
-        const classNameMatch = testCase.code.match(/public class (\w+)/);
-        const className = classNameMatch ? classNameMatch[1] : (testCase.className || `TestClass_${index+1}`);
-        if (!testCase.filePath) {
-          // 使用类名作为文件名，路径格式：case_generated/${scenarioName}/${className}.java
-          testCase.filePath = `case_generated/${scenarioName}/${className}.java`;
-        }
-        testCase.className = className;
-        return testCase.filePath;
-      })
-      .filter(path => path); // 过滤掉空路径
-
-    if (testCaseFileNames.length === 0) {
-      alert("选中的测试用例没有有效的文件路径！");
-      return;
-    }
-
     try {
-      showStatusMessage(`正在批量执行 ${testCaseFileNames.length} 个测试用例...`, 'info');
-
-      // 构建请求数据：List<Map<String, String>>，输入的是前端勾选的脚本的路径
-      const request = testCaseFileNames.map(filePath => ({
-        testCaseFileName: filePath
-      }));
-
+      showStatusMessage(`正在批量执行 ${fileNames.length} 个用例...`, 'info');
       const res = await fetch('/api/execute/batch', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(request)
+        body: JSON.stringify(fileNames.map(f => ({ testCaseFileName: f })))
       });
-
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-
       const result = await res.json();
-      
-      // 显示每个测试用例的执行结果（结果显示在下面）
-      if (Array.isArray(result)) {
-        result.forEach((execResult, idx) => {
-          const originalIndex = selectedIndices[idx];
-          if (originalIndex !== undefined && originalIndex >= 0 && originalIndex < currentTestCases.length) {
-            displayExecutionResult(originalIndex, execResult);
-          }
-        });
-        
-        const successCount = result.filter(r => r.passed).length;
-        const failCount = result.length - successCount;
-        showStatusMessage(`批量执行完成：成功 ${successCount} 个，失败 ${failCount} 个`, failCount === 0 ? 'success' : 'warning');
-      } else {
-        showStatusMessage('批量执行完成', 'success');
+      if(Array.isArray(result)) {
+        const passed = result.filter(r => r.passed).length;
+        showStatusMessage(`批量执行完成: ${passed}/${result.length} 通过`, passed === result.length ? 'success' : 'warning');
       }
     } catch (e) {
-      showStatusMessage(`批量执行失败: ${e.message}`, 'error');
-      console.error(e);
+      showStatusMessage("批量执行请求失败", 'error');
     }
   }
 
-  // 批量删除测试用例
+  async function deleteTestCase(index) {
+    if(!confirm("确定删除此用例文件吗？")) return;
+    const testCase = currentTestCases[index];
+    const cls = testCase.code.match(/public class (\w+)/)[1] || `TestClass_${index+1}`;
+    const filePath = testCase.filePath || `case_generated/${scenarioName}/${cls}.java`;
+
+    try {
+      await fetch(`/api/testcase/deletefile?filepath=${encodeURIComponent(filePath)}`, { method: 'DELETE' });
+      currentTestCases.splice(index, 1);
+      setupPagination();
+      updateTestcaseStats(currentTestCases);
+      showStatusMessage("已删除", "success");
+    } catch(e) {
+      showStatusMessage("删除失败: " + e.message, 'error');
+    }
+  }
+
   async function batchDeleteTestCases() {
-    // 获取所有选中的测试用例
     const checkboxes = document.querySelectorAll('.testcase-checkbox:checked');
-    const selectedIndices = Array.from(checkboxes).map(cb => {
-      const id = cb.id.replace('checkbox-', '');
-      return parseInt(id);
+    const indices = Array.from(checkboxes).map(cb => parseInt(cb.id.replace('checkbox-', ''))).sort((a,b)=>b-a);
+    if(indices.length === 0) return showStatusMessage("请先选择", "warning");
+
+    if(!confirm(`确定删除选中的 ${indices.length} 个用例文件吗？`)) return;
+
+    const filePaths = indices.map(idx => {
+      const tc = currentTestCases[idx];
+      const cls = tc.code.match(/public class (\w+)/)[1] || `TestClass_${idx+1}`;
+      return tc.filePath || `case_generated/${scenarioName}/${cls}.java`;
     });
 
-    if (selectedIndices.length === 0) {
-      alert("请至少选择一个测试用例！");
-      return;
+    try {
+      const query = filePaths.map(p => `filepath=${encodeURIComponent(p)}`).join('&');
+      await fetch(`/api/testcase/deletefiles?${query}`, { method: 'DELETE' });
+
+      indices.forEach(idx => currentTestCases.splice(idx, 1));
+      setupPagination();
+      updateTestcaseStats(currentTestCases);
+      showStatusMessage("批量删除成功", "success");
+    } catch(e) {
+      showStatusMessage("批量删除出错", "error");
     }
-
-    if (!confirm(`确定要删除选中的 ${selectedIndices.length} 个测试用例吗？`)) {
-      return;
-    }
-
-    // 获取所有选中的测试用例的文件路径（勾选的脚本的路径）
-    const filePaths = selectedIndices
-      .filter(index => index >= 0 && index < currentTestCases.length)
-      .map(index => {
-        const testCase = currentTestCases[index];
-        // 从代码中提取类名作为文件名
-        const classNameMatch = testCase.code.match(/public class (\w+)/);
-        const className = classNameMatch ? classNameMatch[1] : (testCase.className || `TestClass_${index+1}`);
-        // 使用类名作为文件名，路径格式：case_generated/${scenarioName}/${className}.java
-        return testCase.filePath || `case_generated/${scenarioName}/${className}.java`;
-      })
-      .filter(path => path); // 只保留有路径的
-
-    // 如果有文件路径，调用后端批量删除接口
-    if (filePaths.length > 0) {
-      try {
-        // 使用多个filepath参数
-        const queryParams = filePaths.map(path => `filepath=${encodeURIComponent(path)}`).join('&');
-        const res = await fetch(`/api/testcase/deletefiles?${queryParams}`, {
-          method: 'DELETE'
-        });
-
-        const result = await res.json();
-        if (!result.success) {
-          showStatusMessage(`批量删除文件失败: ${result.message}`, 'error');
-          // 即使后端删除失败，也继续删除前端界面
-        } else {
-          showStatusMessage(`批量删除文件成功`, 'success');
-        }
-      } catch (e) {
-        console.error('批量删除文件失败:', e);
-        showStatusMessage(`批量删除文件失败: ${e.message}`, 'error');
-        // 即使后端删除失败，也继续删除前端界面
-      }
-    }
-
-    // 从大到小排序，以便从后往前删除，避免索引变化
-    selectedIndices.sort((a, b) => b - a);
-
-    // 逐个删除前端界面
-    let deletedCount = 0;
-    selectedIndices.forEach(index => {
-      // 如果正在编辑此测试用例，先取消编辑
-      if (editingTestCaseIndex === index) {
-        editingTestCaseIndex = null;
-      }
-
-      // 确保索引有效
-      if (index >= 0 && index < currentTestCases.length) {
-        currentTestCases.splice(index, 1);
-        deletedCount++;
-      }
-    });
-
-    // 重新索引
-    currentTestCases.forEach((testCase, i) => {
-      testCase.id = i;
-    });
-
-    // 更新测试用例统计
-    updateTestcaseStats(currentTestCases);
-
-    // 重新计算分页
-    const totalPages = Math.ceil(currentTestCases.length / casesPerPage);
-    if (currentPage > totalPages && totalPages > 0) {
-      currentPage = totalPages;
-    }
-
-    // 重新显示当前页
-    showPage(currentPage);
-
-    // 更新分页信息
-    if (currentTestCases.length > casesPerPage) {
-      document.getElementById('pageInfo').textContent = `第 ${currentPage} 页 / 共 ${totalPages} 页`;
-      document.getElementById('pageInfoBottom').textContent = `第 ${currentPage} 页 / 共 ${totalPages} 页`;
-    } else {
-      document.getElementById('paginationControls').style.display = 'none';
-      document.getElementById('paginationControlsBottom').style.display = 'none';
-    }
-
-    // 如果没有测试用例了，隐藏全选控件和统计信息
-    if (currentTestCases.length === 0) {
-      document.getElementById('selectAllContainer').style.display = 'none';
-      document.getElementById('testcaseStats').style.display = 'none';
-    }
-
-    showStatusMessage(`已删除 ${deletedCount} 个测试用例`, 'success');
   }
 
-  // 批量分析测试用例
   async function batchAnalyzeTestCases() {
-    // 获取所有选中的测试用例
     const checkboxes = document.querySelectorAll('.testcase-checkbox:checked');
-    const selectedIndices = Array.from(checkboxes).map(cb => {
-      const id = cb.id.replace('checkbox-', '');
-      return parseInt(id);
-    });
+    const selectedTestCases = Array.from(checkboxes).map(cb => currentTestCases[parseInt(cb.id.replace('checkbox-', ''))]);
+    if(selectedTestCases.length === 0) return showStatusMessage("请选择要分析的用例", "warning");
 
-    if (selectedIndices.length === 0) {
-      alert("请至少选择一个测试用例！");
-      return;
-    }
-
-    // 获取选中的测试用例的代码内容（勾选的脚本的代码）
-    const selectedTestCases = selectedIndices
-      .filter(index => index >= 0 && index < currentTestCases.length)
-      .map(index => currentTestCases[index]);
-    
-    if (selectedTestCases.length === 0) {
-      alert("选中的测试用例无效！");
-      return;
-    }
-
-    // 合并所有选中的测试用例代码
+    showStatusMessage("正在进行 AI 分析...", "info");
     const allCode = selectedTestCases.map(tc => tc.code).join('\n\n');
-    
-    // 获取场景名称（从选中的测试用例的场景字段获取，如果有多个场景则合并）
-    const sceneNames = selectedTestCases
-      .map(tc => tc.sceneKey || scenarioName)
-      .filter((v, i, a) => a.indexOf(v) === i); // 去重
-    const sceneName = sceneNames.length > 0 ? sceneNames.join(', ') : scenarioName;
-    
-    // 获取接口文档（ApiData_text的JSON字符串），如果没有默认为空
-    const apiDoc = ApiData_text ? JSON.stringify(ApiData_text) : '';
-    
-    // 获取环境和依赖关系，如果没有默认为空
-    const env = environment || '';
-    const dep = dependency || '';
 
-    await analyzeBatchTestCode(allCode, sceneName, apiDoc, env, dep);
-  }
-
-  // 分析批量测试代码
-  async function analyzeBatchTestCode(testCode, sceneName, apiDoc, env, dep) {
     try {
-      showStatusMessage(`正在批量分析测试用例...`, 'info');
-      
-      const analysisRequest = {
-        testCode: testCode, // 传入勾选的脚本的代码内容
-        testText: sceneName, // 传入场景名称（自己输入的场景字段）
-        apiDoc: apiDoc || '', // 接口文档，如果没有默认为空
-        environment: env || '', // 环境，如果没有默认为空
-        dependency: dep || '' // 接口依赖关系，如果没有默认为空
-      };
-
-      console.log('发送的数据结构:', analysisRequest);
-      console.log('测试代码长度:', testCode ? testCode.length : 0);
-      console.log('接口文档:', apiDoc ? apiDoc.substring(0, 100) : '空');
-      console.log('环境:', env || '空');
-      console.log('依赖:', dep || '空');
-
-      const response = await fetch('/api/testcase/analyze', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(analysisRequest)
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-      if (!data.success) {
-        throw new Error(data.message || '分析失败');
-      }
-      
-      const analysisObj = JSON.parse(data.analysis);
-      console.log('分析结果:', analysisObj);
-      
-      // 显示分析结果在覆盖度分析和智能建议模块中
-      displayAnalysisResult(analysisObj);
-      
-      showStatusMessage('批量分析完成', 'success');
-
-    } catch (error) {
-      console.error('请求失败:', error);
-      showStatusMessage('分析请求失败: ' + error.message, 'error');
-    }
-  }
-
-  // 执行测试代码
-  async function executeTestCode(testCode) {
-    try {
-      // 显示加载状态
-      const loadingModal = document.createElement('div');
-      loadingModal.id = 'execution-loading-modal';
-      loadingModal.style.cssText = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:flex;flex-direction:column;justify-content:center;align-items:center;z-index:1000;color:white;font-size:18px;";
-      loadingModal.innerHTML = `
-                <div class="loading" style="width: 40px; height: 40px; margin-bottom: 15px;"></div>
-                <div>正在执行测试...</div>
-            `;
-      document.body.appendChild(loadingModal);
-
-      const res = await fetch(`/api/execute-direct`, {
+      showLoading(true);
+      const res = await fetch('/api/testcase/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ testCode })
+        body: JSON.stringify({
+          testCode: allCode,
+          testText: scenarioName,
+          apiDoc: ApiData_text ? JSON.stringify(ApiData_text) : '',
+          environment: '', dependency: ''
+        })
       });
+      const data = await res.json();
+      if(!data.success) throw new Error(data.message);
 
-      // 移除加载状态
-      loadingModal.remove();
-
-      if(!res.ok) throw new Error("执行测试失败");
-
-      const result = await res.text();
-      showStatusMessage(`测试执行完成: ${result.substring(0, 100)}...`, 'success');
-
-    } catch (e) {
-      // 移除加载状态
-      const loadingModal = document.getElementById('execution-loading-modal');
-      if (loadingModal) loadingModal.remove();
-
-      alert("执行测试失败: " + e.message);
-      console.error(e);
+      const analysis = JSON.parse(data.analysis);
+      displayAnalysisResult(analysis);
+      showStatusMessage("分析完成", "success");
+    } catch(e) {
+      showStatusMessage("分析失败: " + e.message, "error");
+    } finally {
+      showLoading(false);
     }
   }
 
-  // 返回配置页面
-  function backToConfig() {
-    // 如果有正在编辑的测试用例，先询问是否保存
-    if (editingTestCaseIndex !== null) {
-      if (!confirm("您有未保存的编辑，确定要返回吗？")) {
-        return;
+  function displayAnalysisResult(analysis) {
+    document.getElementById('analysisSection').classList.remove('hidden');
+    document.getElementById('analysisSection').scrollIntoView({behavior: 'smooth'});
+
+    const metrics = analysis.metrics || {};
+    document.getElementById('totalLines').textContent = metrics.totalLines || metrics.total_lines || 0;
+    document.getElementById('testMethodCount').textContent = metrics.testMethodCount || metrics.test_method_count || 0;
+    document.getElementById('assertionCount').textContent = metrics.assertionCount || metrics.assertion_count || 0;
+    document.getElementById('coverageScoreDisplay').textContent = metrics.coverageScore || metrics.coverage_score || 0;
+
+    const list = document.getElementById('suggestionsList');
+    list.innerHTML = '';
+    const suggestions = analysis.suggestions || [];
+
+    if (suggestions.length === 0) {
+      list.innerHTML = '<li class="text-slate-400 italic text-center p-2">AI 暂无优化建议 (代码质量良好或解析为空)</li>';
+    } else {
+      suggestions.forEach(s => {
+        const li = document.createElement('li');
+        li.className = "flex items-start gap-2 bg-white/5 p-3 rounded border border-white/10";
+        let content = '';
+        if (typeof s === 'string') {
+          content = s;
+        } else {
+          content = s.description || s.suggestion || s.problem_desc || s.desc || s.message || JSON.stringify(s);
+        }
+
+        let priorityBadge = '';
+        if (s.priority) {
+          const color = s.priority.toString().toLowerCase().includes('high') || s.priority.toString().includes('高') ? 'text-rose-400' : 'text-amber-400';
+          priorityBadge = `<span class="text-xs font-bold ${color} border border-current px-1 rounded mr-2 uppercase tracking-wider">${s.priority}</span>`;
+        }
+
+        li.innerHTML = `<i class="fas fa-lightbulb text-yellow-400 mt-1 flex-shrink-0"></i> <span class="text-sm text-slate-200 leading-relaxed">${priorityBadge}${content}</span>`;
+        list.appendChild(li);
+      });
+    }
+  }
+
+  function createTestCaseBox(testCase, index) {
+    const classNameMatch = testCase.code.match(/public class (\w+)/);
+    const className = classNameMatch ? classNameMatch[1] : `TestClass_${index+1}`;
+    if (!testCase.className) testCase.className = className;
+
+    const isSelected = document.getElementById(`checkbox-${index}`)?.checked || false;
+
+    const div = document.createElement('div');
+    div.className = `testcase-box bg-white rounded-xl border transition-all duration-200 relative group flex flex-col h-[500px] ${isSelected ? 'border-indigo-500 ring-2 ring-indigo-500/20 shadow-lg' : 'border-slate-200 shadow-sm hover:shadow-md'}`;
+    div.dataset.index = index;
+    div.dataset.id = testCase.id;
+
+    div.innerHTML = `
+            <div class="flex items-center justify-between p-4 border-b border-slate-100 bg-slate-50/50 rounded-t-xl">
+                <div class="flex items-center gap-3 overflow-hidden">
+                    <input type="checkbox" id="checkbox-${index}" class="testcase-checkbox w-5 h-5 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500 cursor-pointer" ${isSelected ? 'checked' : ''} onchange="updateSelectedCount(); toggleCardStyle(this)">
+                    <div class="flex flex-col min-w-0">
+                        <span class="font-bold text-slate-700 text-sm truncate flex items-center gap-2" title="${className}"><i class="fab fa-java text-indigo-500 text-lg"></i> ${className}</span>
+                        <span class="text-xs text-slate-400 truncate">场景: ${testCase.sceneKey}</span>
+                    </div>
+                </div>
+                <div class="flex gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                    <button class="p-2 text-slate-400 hover:text-indigo-600 hover:bg-white rounded-lg transition" onclick="event.stopPropagation(); editTestCase(${index})" title="编辑"><i class="fas fa-edit"></i></button>
+                    <button class="p-2 text-slate-400 hover:text-green-600 hover:bg-white rounded-lg transition" onclick="event.stopPropagation(); saveSingleTestCase(${index})" title="保存到本地"><i class="fas fa-save"></i></button>
+                    <button class="p-2 text-slate-400 hover:text-emerald-600 hover:bg-white rounded-lg transition" onclick="event.stopPropagation(); executeSingleTestCase(${index})" title="执行"><i class="fas fa-play"></i></button>
+                    <button class="p-2 text-slate-400 hover:text-rose-500 hover:bg-white rounded-lg transition" onclick="event.stopPropagation(); deleteTestCase(${index})" title="删除"><i class="fas fa-trash-alt"></i></button>
+                </div>
+            </div>
+            <div class="relative flex-1 overflow-hidden group/code">
+                <textarea id="editor-${index}" class="hidden w-full h-full p-4 font-mono text-xs outline-none resize-none border-2 border-indigo-100 bg-indigo-50/20 text-slate-700"></textarea>
+                <div class="testcase-content w-full h-full p-4 overflow-auto code-font text-xs text-slate-600 leading-relaxed whitespace-pre bg-white" id="code-view-${index}">${escapeHtml(testCase.code)}</div>
+                <div id="edit-actions-${index}" class="hidden absolute bottom-4 right-4 gap-2">
+                     <button class="bg-indigo-600 text-white px-3 py-1 rounded text-xs hover:bg-indigo-700" onclick="saveTestCaseEdit(${index})">确认修改</button>
+                     <button class="bg-slate-500 text-white px-3 py-1 rounded text-xs hover:bg-slate-600" onclick="cancelTestCaseEdit(${index})">取消</button>
+                </div>
+                <div class="execution-result hidden absolute inset-0 bg-white/95 backdrop-blur-sm p-4 z-10 overflow-auto border-t border-slate-100 flex flex-col"></div>
+            </div>
+            <div class="p-3 border-t border-slate-100 bg-white rounded-b-xl flex justify-between items-center text-xs text-slate-400 font-mono">
+                <div class="flex gap-3"><span><i class="fas fa-list-ol mr-1"></i>${testCase.code.split('\n').length} 行</span><span><i class="fas fa-check-circle mr-1"></i>${(testCase.code.match(/@Test/g) || []).length} 测试</span></div>
+            </div>
+        `;
+    document.getElementById('testcaseGrid').appendChild(div);
+  }
+
+  function toggleCardStyle(checkbox) {
+    const card = checkbox.closest('.testcase-box');
+    if(checkbox.checked) { card.classList.add('border-indigo-500', 'ring-2', 'ring-indigo-500/20', 'shadow-lg'); card.classList.remove('border-slate-200', 'shadow-sm'); }
+    else { card.classList.remove('border-indigo-500', 'ring-2', 'ring-indigo-500/20', 'shadow-lg'); card.classList.add('border-slate-200', 'shadow-sm'); }
+  }
+  function escapeHtml(text) { return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); }
+  function setupPagination() {
+    const totalPages = Math.ceil(currentTestCases.length / casesPerPage);
+    const info = `第 ${currentPage} / ${totalPages} 页`;
+    document.getElementById('pageInfo').textContent = info;
+    document.getElementById('pageInfoBottom').textContent = info;
+    document.getElementById('paginationControlsBottom').style.display = totalPages > 1 ? 'flex' : 'none';
+    showPage(currentPage);
+  }
+  function showPage(page) {
+    document.getElementById('testcaseGrid').innerHTML = '';
+    const start = (page - 1) * casesPerPage;
+    for (let i = start; i < Math.min(start + casesPerPage, currentTestCases.length); i++) createTestCaseBox(currentTestCases[i], i);
+    updateSelectedCount();
+  }
+  function changePage(delta) {
+    const totalPages = Math.ceil(currentTestCases.length / casesPerPage);
+    const newPage = currentPage + delta;
+    if (newPage >= 1 && newPage <= totalPages) { currentPage = newPage; showPage(currentPage); document.getElementById('pageInfo').textContent = `第 ${currentPage} / ${totalPages} 页`; document.getElementById('pageInfoBottom').textContent = `第 ${currentPage} / ${totalPages} 页`; document.getElementById('selectAllCheckbox').checked = false; }
+  }
+  function toggleSelectAll() {
+    const checkAll = document.getElementById('selectAllCheckbox');
+    document.querySelectorAll('.testcase-checkbox').forEach(box => { box.checked = checkAll.checked; toggleCardStyle(box); });
+    updateSelectedCount();
+  }
+  function updateSelectedCount() { document.getElementById('selectedCount').textContent = `已选中 ${document.querySelectorAll('.testcase-checkbox:checked').length} 个`; }
+
+  function updateScenarioName() {
+    const val = document.getElementById('scenarioNameInput').value.trim();
+    if(!val) return showStatusMessage("场景名不能为空", "error");
+    scenarioName = val;
+    document.getElementById('savePathPreview').textContent = `path: case_generated/${scenarioName}/`;
+    document.getElementById('scenarioNameDisplay').textContent = scenarioName;
+    showStatusMessage("场景名已更新", "success");
+  }
+  function backToConfig() { document.getElementById('testCaseSection').classList.add('hidden'); document.getElementById('configSection').classList.remove('hidden'); updateStepUI(2); }
+
+  function editTestCase(index) {
+    document.getElementById(`code-view-${index}`).classList.add('hidden');
+    const editor = document.getElementById(`editor-${index}`);
+    editor.classList.remove('hidden');
+    editor.value = currentTestCases[index].code;
+    document.getElementById(`edit-actions-${index}`).classList.remove('hidden');
+    document.getElementById(`edit-actions-${index}`).classList.add('flex');
+  }
+  function saveTestCaseEdit(index) {
+    currentTestCases[index].code = document.getElementById(`editor-${index}`).value;
+    cancelTestCaseEdit(index);
+    updateTestcaseStats(currentTestCases);
+    showPage(currentPage);
+    showStatusMessage("已保存编辑内容 (未同步到服务器)", "info");
+  }
+  function cancelTestCaseEdit(index) {
+    document.getElementById(`code-view-${index}`).classList.remove('hidden');
+    document.getElementById(`editor-${index}`).classList.add('hidden');
+    document.getElementById(`edit-actions-${index}`).classList.add('hidden');
+  }
+
+  // ================= 状态持久化逻辑 (新增) =================
+
+  // 1. 保存当前状态
+  function saveAppState() {
+    const state = {
+      step: 3,
+      allApiData: allApiData,
+      ApiData_text: ApiData_text,
+      currentTestCases: currentTestCases,
+      generatedTestData: generatedTestData,
+      scenarioName: scenarioName,
+      // 保存配置区的 HTML 状态（如果需要保留勾选状态，这里简化处理，只保存核心数据）
+    };
+    sessionStorage.setItem('autoTestState', JSON.stringify(state));
+  }
+
+  // 2. 恢复状态
+  function restoreAppState() {
+    try {
+      const savedJson = sessionStorage.getItem('autoTestState');
+      if (!savedJson) return;
+
+      const state = JSON.parse(savedJson);
+
+      // 恢复全局变量
+      allApiData = state.allApiData || [];
+      ApiData_text = state.ApiData_text;
+      currentTestCases = state.currentTestCases || [];
+      generatedTestData = state.generatedTestData;
+      scenarioName = state.scenarioName || "search_chats_api";
+
+      // 恢复 UI
+      // 1. 恢复表格数据
+      if(allApiData.length > 0) {
+        renderTable();
       }
-      editingTestCaseIndex = null;
+
+      // 2. 恢复场景名称输入框
+      document.getElementById('scenarioNameInput').value = scenarioName;
+
+      // 3. 核心：恢复生成结果页
+      if (state.step === 3 && currentTestCases.length > 0) {
+        document.getElementById('uploadSection').classList.add('hidden');
+        document.getElementById('configSection').classList.add('hidden');
+        document.getElementById('testCaseSection').classList.remove('hidden');
+
+        // 更新步骤条
+        updateStepUI(3);
+
+        // 重新渲染测试用例列表和统计
+        updateTestcaseStats(currentTestCases);
+        document.getElementById('scenarioInfoPanel').classList.remove('hidden');
+        document.getElementById('scenarioNameDisplay').textContent = scenarioName;
+
+        // 简单的统计恢复
+        const pos = currentTestCases.filter(tc => !tc.code.includes("Negative")).length;
+        document.getElementById('positiveCases').textContent = pos;
+        document.getElementById('totalTestCases').textContent = currentTestCases.length;
+
+        document.getElementById('selectAllContainer').classList.remove('hidden');
+        setupPagination();
+
+        showStatusMessage("已恢复上次生成的结果", "info");
+      }
+    } catch (e) {
+      console.error("恢复状态失败", e);
+      sessionStorage.removeItem('autoTestState');
     }
-
-    document.getElementById('testCaseSection').style.display = 'none';
-    document.getElementById('configSection').style.display = 'block';
-    document.getElementById('uploadSection').style.display = 'none';
   }
-</script>
 
+</script>
 </body>
 </html>
