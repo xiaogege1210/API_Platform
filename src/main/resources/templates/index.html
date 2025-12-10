@@ -13,17 +13,24 @@
   <style>
     body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
     .code-font { font-family: 'Menlo', 'Monaco', 'Courier New', monospace; }
+
     /* 美化滚动条 */
     ::-webkit-scrollbar { width: 8px; height: 8px; }
     ::-webkit-scrollbar-track { background: #f1f5f9; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
+    /* 动画效果 */
     .fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
     @keyframes fadeInUp {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    /* 步骤条可点击样式 */
+    .step-clickable { cursor: pointer; transition: all 0.2s; user-select: none; }
+    .step-clickable:hover { opacity: 0.8; transform: translateY(-1px); }
+    .step-clickable:active { transform: translateY(0); }
   </style>
 </head>
 <body class="text-slate-800">
@@ -32,11 +39,14 @@
 <nav class="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="flex justify-between h-16">
-      <div class="flex items-center gap-3">
-        <div class="bg-indigo-600 text-white p-2 rounded-lg shadow-md shadow-indigo-200">
-          <i class="fas fa-robot"></i>
-        </div>
-        <span class="font-bold text-xl tracking-tight text-slate-800">自动化测试平台</span>
+      <div class="flex items-center gap-4">
+        <!-- Logo 点击：清除状态并重置 -->
+        <a href="/" onclick="sessionStorage.clear();" class="flex items-center gap-3 cursor-pointer group">
+          <div class="bg-indigo-600 group-hover:bg-indigo-700 text-white p-2 rounded-lg shadow-md shadow-indigo-200 transition">
+            <i class="fas fa-robot"></i>
+          </div>
+          <span class="font-bold text-xl tracking-tight text-slate-800 group-hover:text-indigo-600 transition">自动化测试平台</span>
+        </a>
       </div>
       <div class="flex items-center">
         <a href="/case.html" class="text-slate-500 hover:text-indigo-600 px-4 py-2 rounded-md text-sm font-medium transition flex items-center gap-2 hover:bg-slate-50">
@@ -49,27 +59,35 @@
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-  <!-- 2. 步骤指示器 -->
+  <!-- 2. 步骤指示器 (可点击导航) -->
   <div class="mb-10" id="stepIndicator">
     <div class="flex items-center justify-center space-x-4">
-      <div class="flex items-center text-indigo-600 font-bold step-item" data-step="1">
+
+      <!-- 步骤 1: 上传 -->
+      <div class="flex items-center text-indigo-600 font-bold step-item step-clickable" data-step="1" onclick="navigateToStep(1)">
         <span class="w-8 h-8 flex items-center justify-center border-2 border-indigo-600 rounded-full mr-2 bg-indigo-50">1</span>
         上传文档
       </div>
+
       <div class="w-16 h-0.5 bg-slate-300"></div>
-      <div class="flex items-center text-slate-400 font-medium step-item" data-step="2" id="step2-label">
+
+      <!-- 步骤 2: 配置 -->
+      <div class="flex items-center text-slate-400 font-medium step-item step-clickable" data-step="2" onclick="navigateToStep(2)">
         <span class="w-8 h-8 flex items-center justify-center border-2 border-slate-300 rounded-full mr-2">2</span>
         配置场景
       </div>
+
       <div class="w-16 h-0.5 bg-slate-300"></div>
-      <div class="flex items-center text-slate-400 font-medium step-item" data-step="3" id="step3-label">
+
+      <!-- 步骤 3: 结果 -->
+      <div class="flex items-center text-slate-400 font-medium step-item step-clickable" data-step="3" onclick="navigateToStep(3)">
         <span class="w-8 h-8 flex items-center justify-center border-2 border-slate-300 rounded-full mr-2">3</span>
         生成结果
       </div>
     </div>
   </div>
 
-  <!-- 3. 上传区域 -->
+  <!-- 3. 上传区域 (Step 1) -->
   <div id="uploadSection" class="bg-white rounded-2xl shadow-sm border border-slate-200 p-12 text-center transition-all duration-300 hover:shadow-md max-w-2xl mx-auto fade-in-up">
     <div class="mb-6 text-indigo-100 bg-indigo-50 w-24 h-24 rounded-full flex items-center justify-center mx-auto">
       <i class="fas fa-cloud-upload-alt text-4xl text-indigo-600"></i>
@@ -84,19 +102,26 @@
       </div>
     </div>
 
-    <button onclick="uploadFile()" class="mt-8 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl transition shadow-lg shadow-indigo-200 transform active:scale-95">
-      解析文档
-    </button>
+    <!-- 按钮区域 -->
+    <div class="mt-8 flex gap-4 justify-center">
+      <button onclick="uploadFile(false)" class="bg-white border border-slate-300 text-slate-700 hover:border-indigo-500 hover:text-indigo-600 font-bold py-3 px-6 rounded-xl transition shadow-sm transform active:scale-95 flex items-center gap-2">
+        <i class="fas fa-list-ul"></i> 解析并配置
+      </button>
+
+      <button onclick="uploadFile(true)" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-8 rounded-xl transition shadow-lg shadow-indigo-200 transform active:scale-95 flex items-center gap-2">
+        <i class="fas fa-magic"></i> 一键智能生成
+      </button>
+    </div>
   </div>
 
-  <!-- 4. 配置区域 -->
+  <!-- 4. 配置区域 (Step 2) -->
   <div id="configSection" class="hidden fade-in-up space-y-6">
     <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
       <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
         <h3 class="text-lg font-bold text-slate-800 flex items-center gap-2">
           <i class="fas fa-list-ul text-indigo-500"></i> 接口列表
         </h3>
-        <span class="text-xs font-medium bg-amber-100 text-amber-800 px-3 py-1 rounded-full">请勾选需要测试的接口</span>
+        <span class="text-xs font-medium bg-amber-100 text-amber-800 px-3 py-1 rounded-full">数据已解析，你可以手动配置或直接生成</span>
       </div>
 
       <div class="overflow-x-auto">
@@ -121,23 +146,27 @@
     </div>
   </div>
 
-  <!-- 5. 测试用例管理区域 -->
+  <!-- 5. 测试用例管理区域 (Step 3) -->
   <div id="testCaseSection" class="hidden fade-in-up space-y-6">
 
     <!-- 工具栏 -->
     <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex flex-wrap justify-between items-center gap-4 sticky top-20 z-30 shadow-md">
       <div class="flex items-center gap-2 w-full md:w-auto">
         <div class="relative flex-grow md:flex-grow-0 group">
-                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 group-focus-within:text-indigo-500 transition-colors">
-                        <i class="fas fa-project-diagram"></i>
-                    </span>
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400 group-focus-within:text-indigo-500 transition-colors">
+                <i class="fas fa-project-diagram"></i>
+            </span>
           <input type="text" id="scenarioNameInput" value="search_chats_api"
                  class="pl-10 pr-4 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none w-full md:w-72 text-sm transition-shadow shadow-sm" placeholder="场景名称">
         </div>
         <button onclick="updateScenarioName()" class="bg-indigo-50 text-indigo-600 hover:bg-indigo-100 px-3 py-2.5 rounded-lg transition border border-indigo-200 font-medium text-sm">
           <i class="fas fa-sync-alt mr-1"></i> 更新
         </button>
-        <div class="text-xs text-slate-400 ml-2 font-mono" id="savePathPreview">path: case_generated/search_chats_api/</div>
+        <!-- 修改点：更新了这里的提示文本，增加了“保存路径”说明 -->
+        <div class="text-xs text-slate-500 ml-2 font-mono hidden md:flex items-center gap-2 bg-slate-100 px-2 py-1 rounded" id="savePathPreview">
+          <i class="fas fa-folder text-amber-400"></i>
+          <span>保存路径: case_generated/search_chats_api/</span>
+        </div>
       </div>
 
       <div class="flex gap-2">
@@ -152,9 +181,6 @@
         </button>
         <button onclick="batchDeleteTestCases()" class="bg-rose-100 text-rose-600 hover:bg-rose-200 px-4 py-2.5 rounded-lg text-sm font-medium shadow-sm transition">
           <i class="fas fa-trash-alt"></i>
-        </button>
-        <button onclick="backToConfig()" class="bg-slate-100 text-slate-600 hover:bg-slate-200 px-4 py-2.5 rounded-lg text-sm font-medium shadow-sm transition">
-          返回
         </button>
       </div>
     </div>
@@ -258,7 +284,6 @@
               <span class="text-slate-300">断言总数</span>
               <span id="assertionCount" class="font-mono text-xl font-bold text-cyan-300">0</span>
             </div>
-            <div class="hidden" id="coverageScore">0</div>
           </div>
         </div>
         <div class="bg-white/10 rounded-xl p-6 backdrop-blur-sm border border-white/10">
@@ -273,10 +298,9 @@
     </div>
 
   </div>
-
 </div>
 
-<!-- 6. 加载动画 (简洁版) -->
+<!-- 加载动画 -->
 <div id="loading-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden z-50 flex items-center justify-center">
   <div class="bg-white p-8 rounded-2xl shadow-2xl flex flex-col items-center transform scale-100 transition-transform">
     <div class="animate-spin rounded-full h-14 w-14 border-[5px] border-indigo-100 border-t-indigo-600 mb-5"></div>
@@ -285,27 +309,23 @@
   </div>
 </div>
 
-<!-- 7. 消息提示容器 -->
+<!-- 消息提示容器 -->
 <div id="toast-container" class="fixed top-24 right-5 z-50 space-y-3 pointer-events-none"></div>
 
 <!-- ================= 脚本部分 ================= -->
 <script>
-  // 全局变量
+  // --- 全局变量定义 ---
   let allApiData = [];
   let ApiData_text = null;
   let currentTestCases = [];
-  let currentTestCaseId = null;
   let generatedTestData = null;
-  let environment = '';
-  let dependency = '';
   let currentPage = 1;
   const casesPerPage = 6;
-  let selectedTestCaseIndex = null;
   let scenarioName = "search_chats_api";
-  let editingTestCaseIndex = null;
 
-  // ============== 1. 上传文件交互逻辑 ==============
+  // --- 初始化事件 ---
   document.addEventListener('DOMContentLoaded', function() {
+    // 文件输入框美化逻辑
     const fileInput = document.getElementById('fileInput');
     const uploadBox = document.getElementById('uploadBox');
     const uploadFileName = document.getElementById('uploadFileName');
@@ -316,14 +336,11 @@
         uploadBox.classList.remove('border-dashed', 'border-slate-300', 'bg-slate-50');
         uploadBox.classList.add('border-solid', 'border-indigo-500', 'bg-indigo-50/50', 'shadow-inner');
         uploadFileName.innerHTML = `
-                    <div class="flex flex-col items-center animate-pulse">
-                        <i class="fas fa-file-code text-indigo-600 text-3xl mb-2"></i>
-                        <span class="font-bold text-slate-800 text-lg">${file.name}</span>
-                        <span class="text-sm text-slate-500 mt-1 bg-white px-2 py-1 rounded border border-indigo-100 shadow-sm">
-                            ${(file.size / 1024).toFixed(2)} KB
-                        </span>
-                    </div>
-                `;
+            <div class="flex flex-col items-center animate-pulse">
+                <i class="fas fa-file-code text-indigo-600 text-3xl mb-2"></i>
+                <span class="font-bold text-slate-800 text-lg">${file.name}</span>
+                <span class="text-sm text-slate-500 mt-1 bg-white px-2 py-1 rounded border border-indigo-100 shadow-sm">${(file.size / 1024).toFixed(2)} KB</span>
+            </div>`;
       } else {
         uploadBox.classList.add('border-dashed', 'border-slate-300', 'bg-slate-50');
         uploadBox.classList.remove('border-solid', 'border-indigo-500', 'bg-indigo-50/50', 'shadow-inner');
@@ -331,34 +348,34 @@
       }
     });
 
-    // === 新增：页面加载时检查 URL 参数，决定是否恢复状态 ===
+    // 状态恢复逻辑
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('restore') === 'true') {
       restoreAppState();
-      // 清除 URL 参数，防止刷新时重复触发提示
       window.history.replaceState({}, document.title, "/");
     }
   });
 
-  // 辅助函数
-  function generateId() {
-    return 'testcase_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
-  }
+  // ================= 核心导航逻辑 =================
 
-  function showStatusMessage(message, type = 'info') {
-    const container = document.getElementById('toast-container');
-    const toast = document.createElement('div');
-    const styles = { success: 'bg-emerald-500 border-emerald-600', error: 'bg-rose-500 border-rose-600', warning: 'bg-amber-500 border-amber-600', info: 'bg-blue-500 border-blue-600' };
-    const icons = { success: 'fa-check-circle', error: 'fa-times-circle', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
-    toast.className = `${styles[type]} border-l-4 text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 min-w-[300px] transform transition-all duration-300 translate-x-full opacity-0 pointer-events-auto`;
-    toast.innerHTML = `<i class="fas ${icons[type]} text-xl"></i><span class="font-medium">${message}</span>`;
-    container.appendChild(toast);
-    requestAnimationFrame(() => toast.classList.remove('translate-x-full', 'opacity-0'));
-    setTimeout(() => { toast.classList.add('opacity-0', 'translate-x-full'); setTimeout(() => toast.remove(), 300); }, 3500);
-  }
+  // 处理步骤跳转
+  function navigateToStep(targetStep) {
+    if (targetStep === 2 && allApiData.length === 0) {
+      return showStatusMessage("请先在第一步上传并解析文档！", 'warning');
+    }
+    if (targetStep === 3 && currentTestCases.length === 0) {
+      return showStatusMessage("请先生成测试用例！", 'warning');
+    }
 
-  function showLoading(show = true) {
-    document.getElementById('loading-modal').classList.toggle('hidden', !show);
+    document.getElementById('uploadSection').classList.add('hidden');
+    document.getElementById('configSection').classList.add('hidden');
+    document.getElementById('testCaseSection').classList.add('hidden');
+
+    if (targetStep === 1) document.getElementById('uploadSection').classList.remove('hidden');
+    if (targetStep === 2) document.getElementById('configSection').classList.remove('hidden');
+    if (targetStep === 3) document.getElementById('testCaseSection').classList.remove('hidden');
+
+    updateStepUI(targetStep);
   }
 
   function updateStepUI(step) {
@@ -367,7 +384,7 @@
       const itemStep = parseInt(item.dataset.step);
       const circle = item.querySelector('span');
       if (itemStep <= step) {
-        item.className = 'flex items-center text-indigo-600 font-bold step-item';
+        item.className = 'flex items-center text-indigo-600 font-bold step-item step-clickable';
         circle.className = 'w-8 h-8 flex items-center justify-center border-2 border-indigo-600 rounded-full mr-2 bg-indigo-50';
         if(itemStep < step) {
           circle.innerHTML = '<i class="fas fa-check"></i>';
@@ -376,15 +393,16 @@
           circle.innerHTML = itemStep;
         }
       } else {
-        item.className = 'flex items-center text-slate-400 font-medium step-item';
+        item.className = 'flex items-center text-slate-400 font-medium step-item step-clickable';
         circle.className = 'w-8 h-8 flex items-center justify-center border-2 border-slate-300 rounded-full mr-2 bg-white';
         circle.innerHTML = itemStep;
       }
     });
   }
 
-  // ============== 2. 真实业务逻辑 ==============
-  async function uploadFile() {
+  // ================= 业务功能逻辑 =================
+
+  async function uploadFile(isDirectGenerate = false) {
     const fileInput = document.getElementById('fileInput');
     if (!fileInput.files[0]) return showStatusMessage("请先选择文件！", 'error');
 
@@ -393,6 +411,11 @@
 
     try {
       showLoading(true);
+      if(isDirectGenerate) {
+        const toast = document.getElementById('loading-modal').querySelector('p');
+        if(toast) toast.innerText = "正在解析并直接生成用例...";
+      }
+
       const res = await fetch('/api/parse', { method: 'POST', body: formData });
       if (!res.ok) throw new Error("解析请求失败");
 
@@ -403,17 +426,93 @@
       ApiData_text = data[0].info;
 
       renderTable();
-      document.getElementById('uploadSection').classList.add('hidden');
-      document.getElementById('configSection').classList.remove('hidden');
-      updateStepUI(2);
-      showStatusMessage("解析成功，请配置场景", 'success');
+
+      if (isDirectGenerate) {
+        await directGenerate();
+      } else {
+        navigateToStep(2);
+        showStatusMessage("解析成功，请配置场景", 'success');
+        showLoading(false);
+      }
     } catch (e) {
       console.error(e);
-      showStatusMessage("解析失败: " + e.message, 'error');
+      showStatusMessage("操作失败: " + e.message, 'error');
+      showLoading(false);
+    }
+  }
+
+  async function directGenerate() {
+    const payload = allApiData.map(api => ({
+      changjing: `自动生成测试 - ${api.summary || api.path}`,
+      user_info: JSON.stringify({ description: "AI自动生成，请覆盖主要正向和异常路径" }),
+      map_data: ApiData_text
+    }));
+
+    try {
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) throw new Error("生成请求失败");
+      const result = await res.json();
+
+      generatedTestData = result;
+      processGeneratedTestCases(result);
+      saveAppState();
+      navigateToStep(3);
+      showStatusMessage("智能生成完成！", 'success');
+
+    } catch (e) {
+      showStatusMessage("生成失败: " + e.message, 'error');
     } finally {
       showLoading(false);
     }
   }
+
+  async function generateCode() {
+    if (!allApiData || Object.keys(allApiData).length === 0) return showStatusMessage("请先上传文件！", 'warning');
+    const payload = [];
+    document.querySelectorAll('.scenario-box').forEach((box) => {
+      const scenarioParams = {};
+      box.querySelectorAll('.param-input').forEach(input => {
+        const key = input.dataset.key;
+        const value = input.value.trim();
+        if (value) scenarioParams[key] = value;
+      });
+      payload.push({
+        changjing: box.querySelector('.scenario-name').value.trim() || "默认场景",
+        user_info: JSON.stringify(scenarioParams),
+        map_data: ApiData_text
+      });
+    });
+    if (payload.length === 0) return showStatusMessage("请至少添加一个场景！", 'warning');
+
+    try {
+      showLoading(true);
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (!res.ok) throw new Error("生成请求失败");
+      const result = await res.json();
+
+      generatedTestData = result;
+      processGeneratedTestCases(result);
+      saveAppState();
+
+      navigateToStep(3);
+      showStatusMessage("代码生成成功！", 'success');
+    } catch (e) {
+      showStatusMessage("生成失败: " + e.message, 'error');
+    } finally {
+      showLoading(false);
+    }
+  }
+
+  // --- UI 渲染辅助函数 ---
 
   function renderTable() {
     const tbody = document.getElementById('apiTableBody');
@@ -421,7 +520,7 @@
     if(allApiData.length === 0) return tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center text-slate-400">未解析到接口数据</td></tr>';
 
     allApiData.forEach((api, index) => {
-      const methodColors = { 'GET': 'bg-blue-100 text-blue-700 border border-blue-200', 'POST': 'bg-emerald-100 text-emerald-700 border border-emerald-200', 'PUT': 'bg-amber-100 text-amber-700 border border-amber-200', 'DELETE': 'bg-rose-100 text-rose-700 border border-rose-200' };
+      const methodColors = { 'GET': 'bg-blue-100 text-blue-700', 'POST': 'bg-emerald-100 text-emerald-700', 'PUT': 'bg-amber-100 text-amber-700', 'DELETE': 'bg-rose-100 text-rose-700' };
       const badgeClass = methodColors[api.method.toUpperCase()] || 'bg-slate-100 text-slate-700';
 
       const tr = document.createElement('tr');
@@ -477,55 +576,7 @@
     container.insertAdjacentHTML('beforeend', html);
   }
 
-  async function generateCode() {
-    if (!allApiData || Object.keys(allApiData).length === 0) return showStatusMessage("请先上传文件！", 'warning');
-    const payload = [];
-    document.querySelectorAll('.scenario-box').forEach((box) => {
-      // 收集场景中的参数配置
-      const scenarioParams = {};
-      box.querySelectorAll('.param-input').forEach(input => {
-        const key = input.dataset.key;
-        const value = input.value.trim();
-        if (value) {
-          scenarioParams[key] = value;
-        }
-      });
-      
-      payload.push({ 
-        changjing: box.querySelector('.scenario-name').value.trim() || "默认场景", 
-        user_info: JSON.stringify(scenarioParams), 
-        map_data: ApiData_text 
-      });
-    });
-    if (payload.length === 0) return showStatusMessage("请至少添加一个场景！", 'warning');
-
-    try {
-      showLoading(true);
-      const res = await fetch('/api/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      if (!res.ok) throw new Error("生成请求失败");
-      const result = await res.json();
-
-      document.getElementById('configSection').classList.add('hidden');
-      document.getElementById('testCaseSection').classList.remove('hidden');
-      updateStepUI(3);
-      generatedTestData = result;
-      processGeneratedTestCases(result);
-
-      // === 关键新增：保存状态到 SessionStorage ===
-      saveAppState();
-      // ======================================
-
-      showStatusMessage("代码生成成功！", 'success');
-    } catch (e) {
-      showStatusMessage("生成失败: " + e.message, 'error');
-    } finally {
-      showLoading(false);
-    }
-  }
+  // --- 测试用例处理与展示 ---
 
   function processGeneratedTestCases(testData) {
     currentTestCases = [];
@@ -580,6 +631,52 @@
     document.getElementById('statLines').textContent = totalLines;
     document.getElementById('testcaseStats').classList.remove('hidden');
   }
+
+  function createTestCaseBox(testCase, index) {
+    const classNameMatch = testCase.code.match(/public class (\w+)/);
+    const className = classNameMatch ? classNameMatch[1] : `TestClass_${index+1}`;
+    if (!testCase.className) testCase.className = className;
+
+    const isSelected = document.getElementById(`checkbox-${index}`)?.checked || false;
+
+    const div = document.createElement('div');
+    div.className = `testcase-box bg-white rounded-xl border transition-all duration-200 relative group flex flex-col h-[500px] ${isSelected ? 'border-indigo-500 ring-2 ring-indigo-500/20 shadow-lg' : 'border-slate-200 shadow-sm hover:shadow-md'}`;
+    div.dataset.index = index;
+    div.dataset.id = testCase.id;
+
+    div.innerHTML = `
+            <div class="flex items-center justify-between p-4 border-b border-slate-100 bg-slate-50/50 rounded-t-xl">
+                <div class="flex items-center gap-3 overflow-hidden">
+                    <input type="checkbox" id="checkbox-${index}" class="testcase-checkbox w-5 h-5 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500 cursor-pointer" ${isSelected ? 'checked' : ''} onchange="updateSelectedCount(); toggleCardStyle(this)">
+                    <div class="flex flex-col min-w-0">
+                        <span class="font-bold text-slate-700 text-sm truncate flex items-center gap-2" title="${className}"><i class="fab fa-java text-indigo-500 text-lg"></i> ${className}</span>
+                        <span class="text-xs text-slate-400 truncate">场景: ${testCase.sceneKey}</span>
+                    </div>
+                </div>
+                <div class="flex gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
+                    <button class="p-2 text-slate-400 hover:text-indigo-600 hover:bg-white rounded-lg transition" onclick="event.stopPropagation(); editTestCase(${index})" title="编辑"><i class="fas fa-edit"></i></button>
+                    <button class="p-2 text-slate-400 hover:text-green-600 hover:bg-white rounded-lg transition" onclick="event.stopPropagation(); saveSingleTestCase(${index})" title="保存到本地"><i class="fas fa-save"></i></button>
+                    <button class="p-2 text-slate-400 hover:text-emerald-600 hover:bg-white rounded-lg transition" onclick="event.stopPropagation(); executeSingleTestCase(${index})" title="执行"><i class="fas fa-play"></i></button>
+                    <button class="p-2 text-slate-400 hover:text-rose-500 hover:bg-white rounded-lg transition" onclick="event.stopPropagation(); deleteTestCase(${index})" title="删除"><i class="fas fa-trash-alt"></i></button>
+                </div>
+            </div>
+            <div class="relative flex-1 overflow-hidden group/code">
+                <textarea id="editor-${index}" class="hidden w-full h-full p-4 font-mono text-xs outline-none resize-none border-2 border-indigo-100 bg-indigo-50/20 text-slate-700"></textarea>
+                <div class="testcase-content w-full h-full p-4 overflow-auto code-font text-xs text-slate-600 leading-relaxed whitespace-pre bg-white" id="code-view-${index}">${escapeHtml(testCase.code)}</div>
+                <div id="edit-actions-${index}" class="hidden absolute bottom-4 right-4 gap-2">
+                     <button class="bg-indigo-600 text-white px-3 py-1 rounded text-xs hover:bg-indigo-700" onclick="saveTestCaseEdit(${index})">确认修改</button>
+                     <button class="bg-slate-500 text-white px-3 py-1 rounded text-xs hover:bg-slate-600" onclick="cancelTestCaseEdit(${index})">取消</button>
+                </div>
+                <div class="execution-result hidden absolute inset-0 bg-white/95 backdrop-blur-sm p-4 z-10 overflow-auto border-t border-slate-100 flex flex-col"></div>
+            </div>
+            <div class="p-3 border-t border-slate-100 bg-white rounded-b-xl flex justify-between items-center text-xs text-slate-400 font-mono">
+                <div class="flex gap-3"><span><i class="fas fa-list-ol mr-1"></i>${testCase.code.split('\n').length} 行</span><span><i class="fas fa-check-circle mr-1"></i>${(testCase.code.match(/@Test/g) || []).length} 测试</span></div>
+            </div>
+        `;
+    document.getElementById('testcaseGrid').appendChild(div);
+  }
+
+  // --- 操作功能：保存、执行、删除、分析 ---
 
   async function saveSingleTestCase(index) {
     if (index < 0 || index >= currentTestCases.length) return;
@@ -825,48 +922,39 @@
     }
   }
 
-  function createTestCaseBox(testCase, index) {
-    const classNameMatch = testCase.code.match(/public class (\w+)/);
-    const className = classNameMatch ? classNameMatch[1] : `TestClass_${index+1}`;
-    if (!testCase.className) testCase.className = className;
+  // --- 辅助工具函数 ---
 
-    const isSelected = document.getElementById(`checkbox-${index}`)?.checked || false;
+  function backToConfig() { navigateToStep(2); }
 
-    const div = document.createElement('div');
-    div.className = `testcase-box bg-white rounded-xl border transition-all duration-200 relative group flex flex-col h-[500px] ${isSelected ? 'border-indigo-500 ring-2 ring-indigo-500/20 shadow-lg' : 'border-slate-200 shadow-sm hover:shadow-md'}`;
-    div.dataset.index = index;
-    div.dataset.id = testCase.id;
+  function updateScenarioName() {
+    const val = document.getElementById('scenarioNameInput').value.trim();
+    if(!val) return showStatusMessage("场景名不能为空", "error");
+    scenarioName = val;
+    // 修改点：确保更新后的文本也包含“保存路径”前缀
+    document.getElementById('savePathPreview').innerHTML = `<i class="fas fa-folder text-amber-400"></i> <span>保存路径: case_generated/${scenarioName}/</span>`;
+    document.getElementById('scenarioNameDisplay').textContent = scenarioName;
+    showStatusMessage("场景名已更新", "success");
+  }
 
-    div.innerHTML = `
-            <div class="flex items-center justify-between p-4 border-b border-slate-100 bg-slate-50/50 rounded-t-xl">
-                <div class="flex items-center gap-3 overflow-hidden">
-                    <input type="checkbox" id="checkbox-${index}" class="testcase-checkbox w-5 h-5 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500 cursor-pointer" ${isSelected ? 'checked' : ''} onchange="updateSelectedCount(); toggleCardStyle(this)">
-                    <div class="flex flex-col min-w-0">
-                        <span class="font-bold text-slate-700 text-sm truncate flex items-center gap-2" title="${className}"><i class="fab fa-java text-indigo-500 text-lg"></i> ${className}</span>
-                        <span class="text-xs text-slate-400 truncate">场景: ${testCase.sceneKey}</span>
-                    </div>
-                </div>
-                <div class="flex gap-1 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                    <button class="p-2 text-slate-400 hover:text-indigo-600 hover:bg-white rounded-lg transition" onclick="event.stopPropagation(); editTestCase(${index})" title="编辑"><i class="fas fa-edit"></i></button>
-                    <button class="p-2 text-slate-400 hover:text-green-600 hover:bg-white rounded-lg transition" onclick="event.stopPropagation(); saveSingleTestCase(${index})" title="保存到本地"><i class="fas fa-save"></i></button>
-                    <button class="p-2 text-slate-400 hover:text-emerald-600 hover:bg-white rounded-lg transition" onclick="event.stopPropagation(); executeSingleTestCase(${index})" title="执行"><i class="fas fa-play"></i></button>
-                    <button class="p-2 text-slate-400 hover:text-rose-500 hover:bg-white rounded-lg transition" onclick="event.stopPropagation(); deleteTestCase(${index})" title="删除"><i class="fas fa-trash-alt"></i></button>
-                </div>
-            </div>
-            <div class="relative flex-1 overflow-hidden group/code">
-                <textarea id="editor-${index}" class="hidden w-full h-full p-4 font-mono text-xs outline-none resize-none border-2 border-indigo-100 bg-indigo-50/20 text-slate-700"></textarea>
-                <div class="testcase-content w-full h-full p-4 overflow-auto code-font text-xs text-slate-600 leading-relaxed whitespace-pre bg-white" id="code-view-${index}">${escapeHtml(testCase.code)}</div>
-                <div id="edit-actions-${index}" class="hidden absolute bottom-4 right-4 gap-2">
-                     <button class="bg-indigo-600 text-white px-3 py-1 rounded text-xs hover:bg-indigo-700" onclick="saveTestCaseEdit(${index})">确认修改</button>
-                     <button class="bg-slate-500 text-white px-3 py-1 rounded text-xs hover:bg-slate-600" onclick="cancelTestCaseEdit(${index})">取消</button>
-                </div>
-                <div class="execution-result hidden absolute inset-0 bg-white/95 backdrop-blur-sm p-4 z-10 overflow-auto border-t border-slate-100 flex flex-col"></div>
-            </div>
-            <div class="p-3 border-t border-slate-100 bg-white rounded-b-xl flex justify-between items-center text-xs text-slate-400 font-mono">
-                <div class="flex gap-3"><span><i class="fas fa-list-ol mr-1"></i>${testCase.code.split('\n').length} 行</span><span><i class="fas fa-check-circle mr-1"></i>${(testCase.code.match(/@Test/g) || []).length} 测试</span></div>
-            </div>
-        `;
-    document.getElementById('testcaseGrid').appendChild(div);
+  function editTestCase(index) {
+    document.getElementById(`code-view-${index}`).classList.add('hidden');
+    const editor = document.getElementById(`editor-${index}`);
+    editor.classList.remove('hidden');
+    editor.value = currentTestCases[index].code;
+    document.getElementById(`edit-actions-${index}`).classList.remove('hidden');
+    document.getElementById(`edit-actions-${index}`).classList.add('flex');
+  }
+  function saveTestCaseEdit(index) {
+    currentTestCases[index].code = document.getElementById(`editor-${index}`).value;
+    cancelTestCaseEdit(index);
+    updateTestcaseStats(currentTestCases);
+    showPage(currentPage);
+    showStatusMessage("已保存编辑内容 (未同步到服务器)", "info");
+  }
+  function cancelTestCaseEdit(index) {
+    document.getElementById(`code-view-${index}`).classList.remove('hidden');
+    document.getElementById(`editor-${index}`).classList.add('hidden');
+    document.getElementById(`edit-actions-${index}`).classList.add('hidden');
   }
 
   function toggleCardStyle(checkbox) {
@@ -875,6 +963,7 @@
     else { card.classList.remove('border-indigo-500', 'ring-2', 'ring-indigo-500/20', 'shadow-lg'); card.classList.add('border-slate-200', 'shadow-sm'); }
   }
   function escapeHtml(text) { return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;"); }
+
   function setupPagination() {
     const totalPages = Math.ceil(currentTestCases.length / casesPerPage);
     const info = `第 ${currentPage} / ${totalPages} 页`;
@@ -901,40 +990,28 @@
   }
   function updateSelectedCount() { document.getElementById('selectedCount').textContent = `已选中 ${document.querySelectorAll('.testcase-checkbox:checked').length} 个`; }
 
-  function updateScenarioName() {
-    const val = document.getElementById('scenarioNameInput').value.trim();
-    if(!val) return showStatusMessage("场景名不能为空", "error");
-    scenarioName = val;
-    document.getElementById('savePathPreview').textContent = `path: case_generated/${scenarioName}/`;
-    document.getElementById('scenarioNameDisplay').textContent = scenarioName;
-    showStatusMessage("场景名已更新", "success");
-  }
-  function backToConfig() { document.getElementById('testCaseSection').classList.add('hidden'); document.getElementById('configSection').classList.remove('hidden'); updateStepUI(2); }
-
-  function editTestCase(index) {
-    document.getElementById(`code-view-${index}`).classList.add('hidden');
-    const editor = document.getElementById(`editor-${index}`);
-    editor.classList.remove('hidden');
-    editor.value = currentTestCases[index].code;
-    document.getElementById(`edit-actions-${index}`).classList.remove('hidden');
-    document.getElementById(`edit-actions-${index}`).classList.add('flex');
-  }
-  function saveTestCaseEdit(index) {
-    currentTestCases[index].code = document.getElementById(`editor-${index}`).value;
-    cancelTestCaseEdit(index);
-    updateTestcaseStats(currentTestCases);
-    showPage(currentPage);
-    showStatusMessage("已保存编辑内容 (未同步到服务器)", "info");
-  }
-  function cancelTestCaseEdit(index) {
-    document.getElementById(`code-view-${index}`).classList.remove('hidden');
-    document.getElementById(`editor-${index}`).classList.add('hidden');
-    document.getElementById(`edit-actions-${index}`).classList.add('hidden');
+  function generateId() {
+    return 'testcase_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
   }
 
-  // ================= 状态持久化逻辑 (新增) =================
+  function showStatusMessage(message, type = 'info') {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    const styles = { success: 'bg-emerald-500 border-emerald-600', error: 'bg-rose-500 border-rose-600', warning: 'bg-amber-500 border-amber-600', info: 'bg-blue-500 border-blue-600' };
+    const icons = { success: 'fa-check-circle', error: 'fa-times-circle', warning: 'fa-exclamation-triangle', info: 'fa-info-circle' };
+    toast.className = `${styles[type]} border-l-4 text-white px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 min-w-[300px] transform transition-all duration-300 translate-x-full opacity-0 pointer-events-auto`;
+    toast.innerHTML = `<i class="fas ${icons[type]} text-xl"></i><span class="font-medium">${message}</span>`;
+    container.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.remove('translate-x-full', 'opacity-0'));
+    setTimeout(() => { toast.classList.add('opacity-0', 'translate-x-full'); setTimeout(() => toast.remove(), 300); }, 3500);
+  }
 
-  // 1. 保存当前状态
+  function showLoading(show = true) {
+    document.getElementById('loading-modal').classList.toggle('hidden', !show);
+  }
+
+  // --- 状态持久化 ---
+
   function saveAppState() {
     const state = {
       step: 3,
@@ -943,12 +1020,10 @@
       currentTestCases: currentTestCases,
       generatedTestData: generatedTestData,
       scenarioName: scenarioName,
-      // 保存配置区的 HTML 状态（如果需要保留勾选状态，这里简化处理，只保存核心数据）
     };
     sessionStorage.setItem('autoTestState', JSON.stringify(state));
   }
 
-  // 2. 恢复状态
   function restoreAppState() {
     try {
       const savedJson = sessionStorage.getItem('autoTestState');
@@ -956,37 +1031,23 @@
 
       const state = JSON.parse(savedJson);
 
-      // 恢复全局变量
       allApiData = state.allApiData || [];
       ApiData_text = state.ApiData_text;
       currentTestCases = state.currentTestCases || [];
       generatedTestData = state.generatedTestData;
       scenarioName = state.scenarioName || "search_chats_api";
 
-      // 恢复 UI
-      // 1. 恢复表格数据
-      if(allApiData.length > 0) {
-        renderTable();
-      }
+      if(allApiData.length > 0) renderTable();
 
-      // 2. 恢复场景名称输入框
       document.getElementById('scenarioNameInput').value = scenarioName;
 
-      // 3. 核心：恢复生成结果页
       if (state.step === 3 && currentTestCases.length > 0) {
-        document.getElementById('uploadSection').classList.add('hidden');
-        document.getElementById('configSection').classList.add('hidden');
-        document.getElementById('testCaseSection').classList.remove('hidden');
+        navigateToStep(3); // 使用新的导航逻辑
 
-        // 更新步骤条
-        updateStepUI(3);
-
-        // 重新渲染测试用例列表和统计
         updateTestcaseStats(currentTestCases);
         document.getElementById('scenarioInfoPanel').classList.remove('hidden');
         document.getElementById('scenarioNameDisplay').textContent = scenarioName;
 
-        // 简单的统计恢复
         const pos = currentTestCases.filter(tc => !tc.code.includes("Negative")).length;
         document.getElementById('positiveCases').textContent = pos;
         document.getElementById('totalTestCases').textContent = currentTestCases.length;
