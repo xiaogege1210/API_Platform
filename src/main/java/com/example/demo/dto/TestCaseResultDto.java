@@ -11,6 +11,8 @@ public class TestCaseResultDto {
     private String outputText;   // 执行输出文本
     private String failureReason;// 失败原因
     private LocalDateTime executeTime; // 执行时间
+    private String optimizationScript;
+
 
     // Getter + Setter
     public String getTestCaseName() {
@@ -51,5 +53,11 @@ public class TestCaseResultDto {
 
     public void setExecuteTime(LocalDateTime executeTime) {
         this.executeTime = executeTime;
+    }
+    public void setOptimizationScript(String optimizationScript) {
+        this.optimizationScript = optimizationScript;
+    }
+    public String getOptimizationScript() {
+        return optimizationScript;
     }
 }
