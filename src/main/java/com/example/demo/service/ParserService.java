@@ -22,7 +22,20 @@ import java.util.Map;
 public class ParserService {
 
     public List<ApiGroup> parseSwaggerFile(MultipartFile file) throws IOException {
-
+        List<ApiGroup> result = new ArrayList<>();
+        result.add(parseSingleFile(file));
+        return result;
+    }
+    
+    public List<ApiGroup> parseSwaggerFiles(List<MultipartFile> files) throws IOException {
+        List<ApiGroup> result = new ArrayList<>();
+        for (MultipartFile file : files) {
+            result.add(parseSingleFile(file));
+        }
+        return result;
+    }
+    
+    private ApiGroup parseSingleFile(MultipartFile file) throws IOException {
         // 1. 读取文件内容
         String content = new String(file.getBytes(), StandardCharsets.UTF_8);
 
@@ -37,7 +50,6 @@ public class ParserService {
         // 存储解析出的API端点信息
         List<ApiEndpoint> endpoints = new ArrayList<>();
 
-        Map<List<ApiEndpoint>,String> api_content=new HashMap<>();
         // 3. 遍历 Path (URL)
         if (openAPI.getPaths() != null) {
             openAPI.getPaths().forEach((pathUrl, pathItem) -> {
@@ -86,9 +98,8 @@ public class ParserService {
                 });
             });
         }
-        List<ApiGroup> Api_list = new ArrayList<>();
-        Api_list.add(new ApiGroup(endpoints, content));
-        return Api_list;
+        
+        return new ApiGroup(endpoints, content);
     }
 
     // 解析 Body 内的字段

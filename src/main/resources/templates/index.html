@@ -96,7 +96,7 @@
     <p class="text-slate-500 mb-8">请上传 Swagger / OpenAPI 格式的 JSON 文件</p>
 
     <div class="relative group cursor-pointer">
-      <input type="file" id="fileInput" accept=".json" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+      <input type="file" id="fileInput" accept=".json" multiple class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
       <div id="uploadBox" class="border-2 border-dashed border-slate-300 rounded-xl py-10 px-4 group-hover:border-indigo-500 group-hover:bg-indigo-50/50 transition duration-300 flex flex-col items-center justify-center bg-slate-50">
         <p id="uploadFileName" class="text-sm text-slate-600 font-medium">点击此处选择文件 或 拖拽文件到这里</p>
       </div>
@@ -332,15 +332,24 @@
 
     fileInput.addEventListener('change', function(e) {
       if (this.files && this.files.length > 0) {
-        const file = this.files[0];
+        const files = Array.from(this.files);
         uploadBox.classList.remove('border-dashed', 'border-slate-300', 'bg-slate-50');
         uploadBox.classList.add('border-solid', 'border-indigo-500', 'bg-indigo-50/50', 'shadow-inner');
-        uploadFileName.innerHTML = `
-            <div class="flex flex-col items-center animate-pulse">
-                <i class="fas fa-file-code text-indigo-600 text-3xl mb-2"></i>
-                <span class="font-bold text-slate-800 text-lg">${file.name}</span>
-                <span class="text-sm text-slate-500 mt-1 bg-white px-2 py-1 rounded border border-indigo-100 shadow-sm">${(file.size / 1024).toFixed(2)} KB</span>
+        
+        let fileListHtml = '<div class="flex flex-col items-center animate-pulse"><i class="fas fa-file-code text-indigo-600 text-3xl mb-2"></i>';
+        fileListHtml += `<span class="font-bold text-slate-800 text-lg mb-2">已选择 ${files.length} 个文件</span>`;
+        fileListHtml += '<div class="space-y-1 max-h-40 overflow-y-auto w-full px-4">';
+        
+        files.forEach(file => {
+          fileListHtml += `
+            <div class="bg-white px-3 py-2 rounded border border-indigo-100 shadow-sm flex justify-between items-center">
+              <span class="text-sm font-medium text-slate-800 truncate max-w-xs">${file.name}</span>
+              <span class="text-xs text-slate-500">${(file.size / 1024).toFixed(2)} KB</span>
             </div>`;
+        });
+        
+        fileListHtml += '</div></div>';
+        uploadFileName.innerHTML = fileListHtml;
       } else {
         uploadBox.classList.add('border-dashed', 'border-slate-300', 'bg-slate-50');
         uploadBox.classList.remove('border-solid', 'border-indigo-500', 'bg-indigo-50/50', 'shadow-inner');
@@ -404,10 +413,12 @@
 
   async function uploadFile(isDirectGenerate = false) {
     const fileInput = document.getElementById('fileInput');
-    if (!fileInput.files[0]) return showStatusMessage("请先选择文件！", 'error');
+    if (!fileInput.files || fileInput.files.length === 0) return showStatusMessage("请先选择文件！", 'error');
 
     const formData = new FormData();
-    formData.append("file", fileInput.files[0]);
+    Array.from(fileInput.files).forEach(file => {
+      formData.append("files", file);
+    });
 
     try {
       showLoading(true);
@@ -422,8 +433,13 @@
       const data = await res.json();
       if (!Array.isArray(data) || data.length === 0) return showStatusMessage("返回数据为空！", 'error');
 
-      allApiData = data[0].apis;
-      ApiData_text = data[0].info;
+      // 合并所有文件的API数据
+      allApiData = [];
+      ApiData_text = '';
+      data.forEach(apiGroup => {
+        allApiData = allApiData.concat(apiGroup.apis || []);
+        ApiData_text += apiGroup.info || '';
+      });
 
       renderTable();
 

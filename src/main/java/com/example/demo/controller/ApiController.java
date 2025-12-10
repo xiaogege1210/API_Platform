@@ -47,9 +47,20 @@ public class ApiController {
     // ==================== 解析API文档 ====================
     @PostMapping("/parse")
     @ResponseBody
-    public ResponseEntity<?> parseSwaggerFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> parseSwaggerFile(@RequestParam(value = "file", required = false) MultipartFile singleFile,
+                                             @RequestParam(value = "files", required = false) List<MultipartFile> multipleFiles) {
         try {
-            List<ApiGroup> apiGroups = parserService.parseSwaggerFile(file);
+            List<ApiGroup> apiGroups;
+            if (multipleFiles != null && !multipleFiles.isEmpty()) {
+                // 处理多个文件
+                apiGroups = parserService.parseSwaggerFiles(multipleFiles);
+            } else if (singleFile != null) {
+                // 处理单个文件（保持向后兼容）
+                apiGroups = parserService.parseSwaggerFile(singleFile);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(createErrorResponse("请选择要上传的文件"));
+            }
             return ResponseEntity.ok(apiGroups);
         } catch (Exception e) {
             logger.error("解析Swagger文件失败", e);
