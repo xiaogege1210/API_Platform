@@ -1,11 +1,10 @@
-
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * 无包名的测试类示例
  */
-public class mocktest { // 类名与文件名一致（mocktest.java → mocktest）
+public class mocktest {
 
     @Test
     void testBasic() {
@@ -14,10 +13,10 @@ public class mocktest { // 类名与文件名一致（mocktest.java → mocktest
         System.out.println("这是测试一个测试用例");
     }
 
-//    @Test
-//    void testAddition() {
-//        int a = 1;
-//        int b = 2;
-//        assertTrue(a + b == 3, "加法测试用例通过");
-//    }
+    //    @Test
+    //    void testAddition() {
+    //        int a = 1;
+    //        int b = 2;
+    //        assertTrue(a + b == 3, "加法测试用例通过");
+    //    }
 }

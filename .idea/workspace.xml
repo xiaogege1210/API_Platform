@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9a088f82-6ef3-428d-b391-344aaff2b65e" name="更改" comment="更新一键智能生成">
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/dto/TestCaseResultDto.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/TestCaseAnalysisService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestExecutionServiceImpl.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestExecutionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestExecutionServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -196,10 +193,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.coverageAnalysisServiceImpltest" />
         <item itemvalue="JUnit.TestExcutionServiceImplTest.testExecuteTestsMethod" />
         <item itemvalue="JUnit.TestExcutionServiceImplTest.testExecuteTestClass" />
         <item itemvalue="JUnit.TestCaseManagementServiceImplTest.testBasic7" />
+        <item itemvalue="JUnit.coverageAnalysisServiceImpltest" />
+        <item itemvalue="JavaScript 调试.index.html" />
       </list>
     </recent_temporary>
   </component>

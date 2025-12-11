@@ -12,6 +12,7 @@ import org.junit.platform.launcher.listeners.TestExecutionSummary;
 import org.junit.platform.engine.discovery.DiscoverySelectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StreamUtils;
 
@@ -22,6 +23,8 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,6 +46,8 @@ import java.util.stream.Collectors;
 public class TestExecutionServiceImpl implements TestExecutionService {
     // 日志实例（类级静态变量，Java 1.8 兼容）
     private static final Logger logger = LoggerFactory.getLogger(TestExecutionServiceImpl.class);
+    @Autowired
+    private TestCaseAnalysisServiceImpl testCaseAnalysisServiceImpl;
 
     // 路径配置（自动适配 Windows/Linux 系统）
     private static final String PROJECT_ROOT = System.getProperty("user.dir");
@@ -144,13 +149,21 @@ public class TestExecutionServiceImpl implements TestExecutionService {
             File javaFile = readAndValidateMockTestFile(fullFilePath);
             if (javaFile == null) {
                 resultDto.setFailureReason("文件校验失败（不存在、无权限或非Java文件）");
+
                 return resultDto;
             }
 
             // 3. 编译 Java 文件
             boolean compileSuccess = compileJavaFile(javaFile);
             if (!compileSuccess) {
+
                 resultDto.setFailureReason("Java 文件编译失败");
+                String OriginScript=readFileContent(javaFile);
+
+                String optScript=testCaseAnalysisServiceImpl.OptimizedScript(OriginScript,resultDto);
+                System.out.println(optScript);
+                resultDto.setOutputText(optScript);
+
                 return resultDto;
             }
 
@@ -163,6 +176,11 @@ public class TestExecutionServiceImpl implements TestExecutionService {
             List<TestCaseResultDto> methodResults = executeTestClass(testClassName);
             if (methodResults.isEmpty()) {
                 resultDto.setFailureReason("测试类无有效测试方法");
+                String OriginScript=readFileContent(javaFile);
+
+                String optScript=testCaseAnalysisServiceImpl.OptimizedScript(OriginScript,resultDto);
+                System.out.println(optScript);
+                resultDto.setOutputText(optScript);
                 return resultDto;
             }
 
@@ -182,6 +200,11 @@ public class TestExecutionServiceImpl implements TestExecutionService {
                 resultDto.setOutputText(String.format("脚本执行完成，成功 %d 个方法，失败 %d 个方法",
                         methodResults.stream().filter(TestCaseResultDto::isPassed).count(),
                         methodResults.stream().filter(result -> !result.isPassed()).count()));
+                String OriginScript=readFileContent(javaFile);
+
+                String optScript=testCaseAnalysisServiceImpl.OptimizedScript(OriginScript,resultDto);
+                System.out.println(optScript);
+                resultDto.setOutputText(optScript);
             }
 
         } catch (Exception e) {
@@ -191,6 +214,19 @@ public class TestExecutionServiceImpl implements TestExecutionService {
 
         return resultDto;
     }
+    /**
+     * 读取文件内容
+     */
+    private String readFileContent(File file) throws IOException {
+        if (file == null || !file.exists() || !file.canRead()) {
+            return null;
+        }
+
+        // 使用NIO Files读取，支持大文件
+        Path filePath = file.toPath();
+        return new String(Files.readAllBytes(filePath), StandardCharsets.UTF_8);
+    }
+
 
     // ==================== 辅助方法：提取类名（文件名 -> 类名）====================
     /**
