@@ -1,0 +1,19 @@
+<changelist name="在进行签出之前于_2025_12_11_13_04_取消提交了更改_[更改]" date="1765429444503" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/在进行签出之前于_2025_12_11_13_04_取消提交了更改_[更改]/shelved.patch" />
+  <option name="DESCRIPTION" value="在进行签出之前于 2025/12/11 13:04 取消提交了更改 [更改]" />
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/service/TestCaseAnalysisService.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/service/TestCaseAnalysisService.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行签出之前于_2025_12_11_13_04_取消提交了更改_[更改]/TestCaseAnalysisService.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行签出之前于_2025_12_11_13_04_取消提交了更改_[更改]/TestCaseAnalysisServiceImpl.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/dto/TestCaseResultDto.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/dto/TestCaseResultDto.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行签出之前于_2025_12_11_13_04_取消提交了更改_[更改]/TestCaseResultDto.class" />
+  </binary>
+</changelist>
