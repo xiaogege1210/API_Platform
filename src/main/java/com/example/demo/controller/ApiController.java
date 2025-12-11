@@ -27,6 +27,8 @@ public class ApiController {
     private final CoverageAnalysisService coverageAnalysisService;
     private final ParserService parserService;
     private final ExternalTestCaseGeneratorService externalTestCaseGeneratorService;
+    private final TestCaseNameParser testCaseNameParser;
+    private final ReportService reportService;
 
     @Autowired
     public ApiController(
@@ -35,13 +37,17 @@ public class ApiController {
             TestCaseManagementService testCaseManagementService,
             CoverageAnalysisService coverageAnalysisService,
             ParserService parserService,
-            ExternalTestCaseGeneratorService externalTestCaseGeneratorService) {
+            ExternalTestCaseGeneratorService externalTestCaseGeneratorService,
+            TestCaseNameParser testCaseNameParser,
+            ReportService reportService) {
         this.testExecutionService = testExecutionService;
         this.testCaseAnalysisService = testCaseAnalysisService;
         this.testCaseManagementService = testCaseManagementService;
         this.coverageAnalysisService = coverageAnalysisService;
         this.parserService = parserService;
         this.externalTestCaseGeneratorService = externalTestCaseGeneratorService;
+        this.testCaseNameParser = testCaseNameParser;
+        this.reportService = reportService;
     }
 
     // ==================== 解析API文档 ====================
@@ -308,7 +314,8 @@ public class ApiController {
     @ResponseBody
     public ResponseEntity<?> calculateCoverage(
             @RequestParam("apiDoc") String apiDocContent,
-            @RequestParam("testCases") List<String> testCaseNames) {
+            @RequestParam("extraScene") String extraScene,
+            @RequestParam("testCasesFilePath") String filePath) {
 
         try {
             if (apiDocContent == null || apiDocContent.isEmpty()) {
@@ -316,30 +323,16 @@ public class ApiController {
                         .body(createErrorResponse("API文档内容不能为空"));
             }
 
-            if (testCaseNames == null || testCaseNames.isEmpty()) {
+            if (extraScene == null || extraScene.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(createErrorResponse("测试用例列表不能为空"));
+                        .body(createErrorResponse("接口场景描述不能为空"));
             }
 
-            // 读取测试用例内容
-            List<String> testCaseContents = new ArrayList<>();
-            for (String testCaseName : testCaseNames) {
-                String content = testCaseManagementService.readTestCaseContent(testCaseName);
-                if (content != null) {
-                    testCaseContents.add(content);
-                } else {
-                    logger.warn("测试用例不存在: {}", testCaseName);
-                }
-            }
-
-            if (testCaseContents.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(createErrorResponse("未找到有效的测试用例"));
-            }
-
-            CoverageReport report = coverageAnalysisService.generateCoverageReportWithFuzzyMatch(
+            List<String> generatedTestScenarios=testCaseNameParser.extractAllCaseNames(filePath);
+            CoverageReport report = coverageAnalysisService.AiGenerateCoverageReport(
                     apiDocContent,
-                    testCaseContents
+                    extraScene,
+                    generatedTestScenarios
             );
 
             return ResponseEntity.ok(report);
@@ -382,6 +375,24 @@ public class ApiController {
                     .body(createErrorResponse("批量执行失败: " + e.getMessage()));
         }
     }
+
+    @PostMapping("/report")
+    @ResponseBody
+    public ResponseEntity<?> generateRunReport(@RequestBody List<TestCaseResultDto> results) {
+        try {
+            // 调用服务层生成运行报告
+            RunReport report = reportService.generateReport(results);
+
+            // 返回运行报告
+            return ResponseEntity.ok(report);
+
+        } catch (Exception e) {
+            logger.error("生成运行报告失败", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(createErrorResponse("生成运行报告失败: " + e.getMessage()));
+        }
+    }
+
 
     // ==================== 辅助方法 ====================
 

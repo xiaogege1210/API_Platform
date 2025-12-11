@@ -27,14 +27,14 @@ public class ApiSceneAnalyzerServiceImpl implements ApiSceneAnalyzerService {
     private static final Pattern JSON_ARRAY_PATTERN = Pattern.compile("\\[.*?\\]", Pattern.DOTALL);
 
     @Override
-    public List<String> analyze(String apiDoc) {
+    public List<String> analyze(String apiDoc,String extraScene) {
         if (!StringUtils.hasText(apiDoc)) {
             return new ArrayList<>();
         }
 
         try {
             // 构建和你风格完全一致的Prompt
-            String prompt = buildStandardPrompt(apiDoc);
+            String prompt = buildStandardPrompt(apiDoc,extraScene);
             System.out.println(prompt);
             String llmResponse = llmService.getMessage(prompt);
             return parseSceneList(llmResponse);
@@ -48,7 +48,7 @@ public class ApiSceneAnalyzerServiceImpl implements ApiSceneAnalyzerService {
     /**
      * 完全对齐你风格的Prompt构建方法（角色+输入数据+核心任务+输出要求+禁止项）
      */
-    private String buildStandardPrompt(String apiDoc) {
+    private String buildStandardPrompt(String apiDoc,String extraScene) {
         // 1. 基础参数转义（和你代码保持一致的转义逻辑）
         String escapedApi = escapeAndTruncate(apiDoc, 8000);
 
@@ -60,6 +60,7 @@ public class ApiSceneAnalyzerServiceImpl implements ApiSceneAnalyzerService {
                 .append("### 输入数据\n")
                 .append("1. API文档：接口入参/出参规范、请求方式、异常码、边界值、权限认证要求\n")
                 .append("   内容：").append(escapedApi).append("\n\n")
+                .append("2. 接口场景描述：").append(extraScene).append("\n\n")
 // 核心分析任务（和你代码结构一致，分点明确）
                 .append("### 核心分析任务\n")
                 .append("1. 全维度场景提取（无遗漏）：\n")
@@ -145,11 +146,4 @@ public class ApiSceneAnalyzerServiceImpl implements ApiSceneAnalyzerService {
         }
     }
 
-    /**
-     * 快捷方法：获取理论场景数
-     */
-    @Override
-    public int getTheoreticalSceneCount(String apiDoc) {
-        return analyze(apiDoc).size();
-    }
 }
