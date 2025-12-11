@@ -50,8 +50,8 @@ public class SiliconFlowLLMService implements LLMService {
 
         // 3. 构建请求体 Map（结构化，避免拼接错误）
         RequestBodyDTO requestBodyDTO = new RequestBodyDTO();
-        requestBodyDTO.setModel(model.trim()); // 去除首尾空格
-        requestBodyDTO.setMax_tokens(512);
+        requestBodyDTO.setModel(model.trim());// 去除首尾空格
+        requestBodyDTO.setMax_tokens(8192);
         requestBodyDTO.setTemperature(0.7);
         requestBodyDTO.setStream(false);
         MessageDTO messageDTO = new MessageDTO();

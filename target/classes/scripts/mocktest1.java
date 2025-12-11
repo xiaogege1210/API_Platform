@@ -1,6 +1,6 @@
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+
 
 /**
  * 无包名的测试类示例
