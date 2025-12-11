@@ -1,0 +1,25 @@
+Index: src/main/java/com/example/demo/service/TestCaseAnalysisService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.service;\r\nimport com.fasterxml.jackson.core.JsonProcessingException;\r\n\r\n\r\npublic interface TestCaseAnalysisService {\r\n    //拼接提示词，调用ai\r\n    public String generateAnalysisAndSuggestions(String api, String environment, String dependency, String test, String testResult) throws JsonProcessingException;\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/demo/service/TestCaseAnalysisService.java b/src/main/java/com/example/demo/service/TestCaseAnalysisService.java
+--- a/src/main/java/com/example/demo/service/TestCaseAnalysisService.java	(revision a27d6ccfcfedf98905f0fe1f4b8274f1df2f522e)
++++ b/src/main/java/com/example/demo/service/TestCaseAnalysisService.java	(date 1765428158158)
+@@ -1,8 +1,13 @@
+ package com.example.demo.service;
++import com.example.demo.dto.TestCaseResultDto;
+ import com.fasterxml.jackson.core.JsonProcessingException;
+ 
+ 
+ public interface TestCaseAnalysisService {
+     //拼接提示词，调用ai
+     public String generateAnalysisAndSuggestions(String api, String environment, String dependency, String test, String testResult) throws JsonProcessingException;
++
++    public String generateAnalysisAndSuggestions(String api, String test);
++
++    public String OptimizedScript(String test, TestCaseResultDto testResult) throws JsonProcessingException;
+ }
+\ No newline at end of file

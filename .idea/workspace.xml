@@ -246,11 +246,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.coverageAnalysisServiceImpltest" />
-        <item itemvalue="JavaScript 调试.index.html" />
         <item itemvalue="JUnit.TestExcutionServiceImplTest.testExecuteTestsMethod" />
         <item itemvalue="JUnit.TestExcutionServiceImplTest.testExecuteTestClass" />
         <item itemvalue="JUnit.TestCaseManagementServiceImplTest.testBasic7" />
+        <item itemvalue="JUnit.coverageAnalysisServiceImpltest" />
+        <item itemvalue="JavaScript 调试.index.html" />
       </list>
     </recent_temporary>
   </component>

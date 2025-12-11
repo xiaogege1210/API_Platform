@@ -1,0 +1,124 @@
+Index: src/main/java/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.demo.service.impl;\r\n\r\nimport com.example.demo.llm.LLMService;\r\nimport com.example.demo.service.TestCaseAnalysisService;\r\nimport com.example.demo.utils.LLMJsonValidator; // 导入我们创建的工具类\r\nimport com.fasterxml.jackson.core.JsonProcessingException;\r\n\r\nimport org.springframework.beans.factory.annotation.Autowired;\r\nimport org.springframework.stereotype.Service;\r\n\r\n@Service\r\npublic class TestCaseAnalysisServiceImpl implements TestCaseAnalysisService {\r\n\r\n    @Autowired\r\n    private LLMService llmService;\r\n\r\n    @Override\r\n    public String generateAnalysisAndSuggestions(String api, String environment, String dependency, String test, String testResult)\r\n            throws JsonProcessingException {\r\n\r\n        // 1. 构建 Prompt\r\n        String prompt = buildStandardPrompt(api, environment, dependency, test, testResult);\r\n\r\n        // 2. 调用 LLM\r\n        String llmRawOutput = llmService.getMessage(prompt);\r\n\r\n        System.out.println(\"LLM 原始输出：\");\r\n        System.out.println(llmRawOutput);\r\n\r\n        // 3. 使用 JSON 校验与修复工具\r\n        String safeJson = LLMJsonValidator.validateAndFixJson(\r\n                llmRawOutput,\r\n                LLMJsonValidator.getDefaultFallbackJson()\r\n        );\r\n\r\n        System.out.println(\"校验后的安全 JSON：\");\r\n        System.out.println(safeJson);\r\n\r\n        return safeJson;\r\n    }\r\n\r\n    // =====================================\r\n    // 以下为你的原有方法（未改动）\r\n    // =====================================\r\n\r\n    private String buildStandardPrompt(String api, String environment, String dependency, String test, String testResult) {\r\n        String escapedApi = escapeAndTruncate(api, 5000);\r\n        String escapedScenarios = escapeAndTruncate(environment, 2000);\r\n        String escapedDep = escapeAndTruncate(dependency, 2000);\r\n        String escapedTest = escapeAndTruncate(test, 30000);\r\n        String escapedResult = escapeAndTruncate(testResult, 5000);\r\n\r\n        StringBuilder sb = new StringBuilder(200000);\r\n\r\n        sb.append(\r\n                \"### 角色\\n\" +\r\n                        \"你是自动化测试专家，需要基于【给定测试场景】+ API 文档 + 接口依赖，对测试脚本进行分析并输出结构化优化建议。务必输出的是完整的json格式\\n\\n\" +\r\n                        \"### 输入数据\\n\" +\r\n                        \"1. 给定测试场景：\\n\" + escapedScenarios + \"\\n\" +\r\n                        \"2. API 文档：\\n\" + escapedApi + \"\\n\" +\r\n                        \"3. 接口依赖：\\n\" + escapedDep + \"\\n\" +\r\n                        \"4. 测试脚本：\\n\" + escapedTest + \"\\n\" +\r\n                        \"5. 执行结果：\\n\" + escapedResult + \"\\n\\n\" +\r\n                        \"### 核心分析任务\\n\" +\r\n                        \"1. 场景覆盖分析：识别未覆盖场景、冗余场景，并说明原因。\\n\" +\r\n                        \"2. 脚本正确性分析：检查参数、调用方式、依赖顺序、断言完整性。\\n\" +\r\n                        \"3. 执行失败分析：定位失败根因，给出可执行修复方案（含代码）。\\n\\n\" +\r\n                        \"### 输出要求\\n\" +\r\n                        \"- 必须输出 **合法 JSON**，允许换行，但不能输出 JSON 以外内容。\\n\" +\r\n                        \"- JSON 必须以 { 开头，以 } 结束。\\n\" +\r\n                        \"- 建议数量最多 3 条。\\n\" +\r\n                        \"- 严格遵守字段长度限制。\\n\\n\" +\r\n                        \"{\\n\" +\r\n                        \"  \\\"metrics\\\": {\\n\" +\r\n                        \"    \\\"totalLines\\\": 整数,\\n\" +\r\n                        \"    \\\"testMethodCount\\\": 整数,\\n\" +\r\n                        \"    \\\"assertionCount\\\": 整数,\\n\" +\r\n                        \"    \\\"coverageScore\\\": 0-100 的整数\\n\" +\r\n                        \"  },\\n\" +\r\n                        \"  \\\"suggestions\\\": [\\n\" +\r\n                        \"    {\\n\" +\r\n                        \"      \\\"id\\\": \\\"S001\\\",\\n\" +\r\n                        \"      \\\"priority\\\": \\\"high/medium/low\\\",\\n\" +\r\n                        \"      \\\"dimension\\\": \\\"场景覆盖/脚本正确性/执行失败\\\",\\n\" +\r\n                        \"      \\\"problem_desc\\\": \\\"≤40 字\\\",\\n\" +\r\n                        \"      \\\"modify_operation\\\": \\\"≤30 字\\\",\\n\" +\r\n                        \"      \\\"modify_example\\\": \\\"≤100 字\\\",\\n\" +\r\n                        \"      \\\"value\\\": \\\"≤20 字\\\"\\n\" +\r\n                        \"    }\\n\" +\r\n                        \"  ]\\n\" +\r\n                        \"}\\n\"\r\n        );\r\n\r\n        return sb.toString();\r\n\r\n\r\n    }\r\n\r\n    private String escapeAndTruncate(String content, int maxLen) {\r\n        if (content == null || content.isEmpty()) return \"\";\r\n        String escaped = content\r\n                .replace(\"\\\\\", \"\\\\\\\\\")\r\n                .replace(\"\\\"\", \"\\\\\\\"\")\r\n                .replace(\"\\n\", \" \")\r\n                .replace(\"\\r\", \"\")\r\n                .replace(\"\\t\", \" \");\r\n        if (escaped.length() > maxLen) {\r\n            return escaped.substring(0, maxLen - 3) + \"...\";\r\n        }\r\n        return escaped;\r\n    }\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.java b/src/main/java/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.java
+--- a/src/main/java/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.java	(revision a27d6ccfcfedf98905f0fe1f4b8274f1df2f522e)
++++ b/src/main/java/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.java	(date 1765428158163)
+@@ -1,113 +1,0 @@
+-package com.example.demo.service.impl;
+-
+-import com.example.demo.llm.LLMService;
+-import com.example.demo.service.TestCaseAnalysisService;
+-import com.example.demo.utils.LLMJsonValidator; // 导入我们创建的工具类
+-import com.fasterxml.jackson.core.JsonProcessingException;
+-
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.stereotype.Service;
+-
+-@Service
+-public class TestCaseAnalysisServiceImpl implements TestCaseAnalysisService {
+-
+-    @Autowired
+-    private LLMService llmService;
+-
+-    @Override
+-    public String generateAnalysisAndSuggestions(String api, String environment, String dependency, String test, String testResult)
+-            throws JsonProcessingException {
+-
+-        // 1. 构建 Prompt
+-        String prompt = buildStandardPrompt(api, environment, dependency, test, testResult);
+-
+-        // 2. 调用 LLM
+-        String llmRawOutput = llmService.getMessage(prompt);
+-
+-        System.out.println("LLM 原始输出：");
+-        System.out.println(llmRawOutput);
+-
+-        // 3. 使用 JSON 校验与修复工具
+-        String safeJson = LLMJsonValidator.validateAndFixJson(
+-                llmRawOutput,
+-                LLMJsonValidator.getDefaultFallbackJson()
+-        );
+-
+-        System.out.println("校验后的安全 JSON：");
+-        System.out.println(safeJson);
+-
+-        return safeJson;
+-    }
+-
+-    // =====================================
+-    // 以下为你的原有方法（未改动）
+-    // =====================================
+-
+-    private String buildStandardPrompt(String api, String environment, String dependency, String test, String testResult) {
+-        String escapedApi = escapeAndTruncate(api, 5000);
+-        String escapedScenarios = escapeAndTruncate(environment, 2000);
+-        String escapedDep = escapeAndTruncate(dependency, 2000);
+-        String escapedTest = escapeAndTruncate(test, 30000);
+-        String escapedResult = escapeAndTruncate(testResult, 5000);
+-
+-        StringBuilder sb = new StringBuilder(200000);
+-
+-        sb.append(
+-                "### 角色\n" +
+-                        "你是自动化测试专家，需要基于【给定测试场景】+ API 文档 + 接口依赖，对测试脚本进行分析并输出结构化优化建议。务必输出的是完整的json格式\n\n" +
+-                        "### 输入数据\n" +
+-                        "1. 给定测试场景：\n" + escapedScenarios + "\n" +
+-                        "2. API 文档：\n" + escapedApi + "\n" +
+-                        "3. 接口依赖：\n" + escapedDep + "\n" +
+-                        "4. 测试脚本：\n" + escapedTest + "\n" +
+-                        "5. 执行结果：\n" + escapedResult + "\n\n" +
+-                        "### 核心分析任务\n" +
+-                        "1. 场景覆盖分析：识别未覆盖场景、冗余场景，并说明原因。\n" +
+-                        "2. 脚本正确性分析：检查参数、调用方式、依赖顺序、断言完整性。\n" +
+-                        "3. 执行失败分析：定位失败根因，给出可执行修复方案（含代码）。\n\n" +
+-                        "### 输出要求\n" +
+-                        "- 必须输出 **合法 JSON**，允许换行，但不能输出 JSON 以外内容。\n" +
+-                        "- JSON 必须以 { 开头，以 } 结束。\n" +
+-                        "- 建议数量最多 3 条。\n" +
+-                        "- 严格遵守字段长度限制。\n\n" +
+-                        "{\n" +
+-                        "  \"metrics\": {\n" +
+-                        "    \"totalLines\": 整数,\n" +
+-                        "    \"testMethodCount\": 整数,\n" +
+-                        "    \"assertionCount\": 整数,\n" +
+-                        "    \"coverageScore\": 0-100 的整数\n" +
+-                        "  },\n" +
+-                        "  \"suggestions\": [\n" +
+-                        "    {\n" +
+-                        "      \"id\": \"S001\",\n" +
+-                        "      \"priority\": \"high/medium/low\",\n" +
+-                        "      \"dimension\": \"场景覆盖/脚本正确性/执行失败\",\n" +
+-                        "      \"problem_desc\": \"≤40 字\",\n" +
+-                        "      \"modify_operation\": \"≤30 字\",\n" +
+-                        "      \"modify_example\": \"≤100 字\",\n" +
+-                        "      \"value\": \"≤20 字\"\n" +
+-                        "    }\n" +
+-                        "  ]\n" +
+-                        "}\n"
+-        );
+-
+-        return sb.toString();
+-
+-
+-    }
+-
+-    private String escapeAndTruncate(String content, int maxLen) {
+-        if (content == null || content.isEmpty()) return "";
+-        String escaped = content
+-                .replace("\\", "\\\\")
+-                .replace("\"", "\\\"")
+-                .replace("\n", " ")
+-                .replace("\r", "")
+-                .replace("\t", " ");
+-        if (escaped.length() > maxLen) {
+-            return escaped.substring(0, maxLen - 3) + "...";
+-        }
+-        return escaped;
+-    }
+-}
+-
