@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a088f82-6ef3-428d-b391-344aaff2b65e" name="更改" comment="更新一键智能生成">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestExecutionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestExecutionServiceImpl.java" afterDir="false" />
-    </list>
+    <list default="true" id="9a088f82-6ef3-428d-b391-344aaff2b65e" name="更改" comment="自动修复脚本（代码超限待修改" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -350,7 +348,23 @@
       <option name="project" value="LOCAL" />
       <updated>1765340053835</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="自动修复脚本（代码超限待修改">
+      <option name="closed" value="true" />
+      <created>1765429670082</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1765429670082</updated>
+    </task>
+    <task id="LOCAL-00014" summary="自动修复脚本（代码超限待修改">
+      <option name="closed" value="true" />
+      <created>1765429928714</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1765429928714</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -387,7 +401,8 @@
     <MESSAGE value="留档" />
     <MESSAGE value="修改前端ui展示界面" />
     <MESSAGE value="更新一键智能生成" />
-    <option name="LAST_COMMIT_MESSAGE" value="更新一键智能生成" />
+    <MESSAGE value="自动修复脚本（代码超限待修改" />
+    <option name="LAST_COMMIT_MESSAGE" value="自动修复脚本（代码超限待修改" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
