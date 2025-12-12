@@ -4,60 +4,59 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class test_4 {
-    
-    // 测试常量定义
-    private static final String BASE_URL = "https://open.feishu.cn/open-apis/";
-    private static final String TENANT_ACCESS_TOKEN = "tenant_access_token";
-    private static final String RECEIVE_ID = "ou_1234567890abcdef";
-    private static final String MSG_TYPE = "text";
-    private static final String CONTENT = "{\"text\":\"测试消息\"}";
+    // 常量定义
+    private static final String BASE_URL = "https://open.feishu.cn/open-apis/im/v1";
+    private static final String CHAT_ID = "oc_b254fcb0d0bd5cd29d27f104bad6d3a5";
+    private static final String USER_TOKEN = "u-dE9V3H07F4lWrOY.pxaxXWg4hcIR5gghjyGajMw00K2w";
+    private static final String ACCESS_TOKEN = USER_TOKEN;
     
     @Test
-    public void testSendMessageMissingRequiredParameter() {
+    void testGetChatMembersWithExcessivePageSize() {
         // 设置基础URL
         RestAssured.baseURI = BASE_URL;
         
-        // 构建请求体
-        String requestBody = String.format(
-            "{\"receive_id\":\"%s\",\"msg_type\":\"%s\",\"content\":\"%s\"}",
-            RECEIVE_ID, MSG_TYPE, CONTENT
-        );
-        
-        // 发送POST请求
-        Response response = given()
-            .header("Authorization", "Bearer " + TENANT_ACCESS_TOKEN)
+        // 构建请求
+        RequestSpecification request = given()
+            .header("Authorization", "Bearer " + ACCESS_TOKEN)
             .header("Content-Type", "application/json")
-            .body(requestBody)
-            .when()
-            .post("/im/v1/messages")
-            .then()
-            .extract().response();
+            .queryParam("page_size", 150);
+        
+        // 发送GET请求
+        Response response = request.get("/im/v1/chats/" + CHAT_ID + "/members");
         
         // 打印响应内容到控制台
-        System.out.println("响应状态码: " + response.getStatusCode());
-        System.out.println("响应体: " + response.getBody().asString());
-        System.out.println("响应头: " + response.getHeaders());
+        System.out.println("Response Status Code: " + response.getStatusCode());
+        System.out.println("Response Body: " + response.getBody().asString());
+        System.out.println("Response Headers: " + response.getHeaders());
         
         // 验证HTTP状态码为400
         assertEquals(400, response.getStatusCode(), 
-            "状态码应为400，但实际为: " + response.getStatusCode());
+            "HTTP状态码应为400");
         
-        // 验证响应体包含错误码字段
-        String responseBody = response.getBody().asString();
-        assertTrue(responseBody.contains("\"code\"") || responseBody.contains("code"), 
-            "响应体应包含错误码字段");
+        // 验证响应体中的code字段为非0的错误码
+        int code = response.jsonPath().getInt("code");
+        assertNotEquals(0, code, 
+            "响应体code字段应为非0的错误码");
         
-        // 验证错误提示包含相关信息
-        String lowerCaseBody = responseBody.toLowerCase();
-        boolean containsReceiveIdType = lowerCaseBody.contains("receive_id_type");
-        boolean containsMissingParam = lowerCaseBody.contains("缺少必要参数") || 
-                                      lowerCaseBody.contains("missing") || 
-                                      lowerCaseBody.contains("required");
+        // 验证响应体中的msg字段包含参数验证相关的错误描述
+        String msg = response.jsonPath().getString("msg");
+        System.out.println("Error Message: " + msg);
         
-        assertTrue(containsReceiveIdType || containsMissingParam, 
-            "错误提示应包含'receive_id_type'或'缺少必要参数'相关信息。实际响应: " + responseBody);
+        // 检查错误信息是否包含参数验证相关的关键词
+        boolean hasValidationError = msg != null && (
+            msg.toLowerCase().contains("page_size") || 
+            msg.toLowerCase().contains("参数") || 
+            msg.toLowerCase().contains("invalid") || 
+            msg.toLowerCase().contains("validation") ||
+            msg.toLowerCase().contains("范围") ||
+            msg.toLowerCase().contains("exceed")
+        );
+        
+        if (!hasValidationError) {
+            System.out.println("警告：错误信息可能未明确指示参数无效的原因");
+        }
     }
 }

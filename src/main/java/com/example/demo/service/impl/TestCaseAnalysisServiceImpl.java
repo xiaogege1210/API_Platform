@@ -104,7 +104,7 @@ public class TestCaseAnalysisServiceImpl implements TestCaseAnalysisService {
 
         } catch (Exception e) {
             System.err.println("脚本优化失败: " + e.getMessage());
-            return buildDefaultOptimizedScript(test);
+            return "输出错误";
         }
     }
 
@@ -198,108 +198,58 @@ public class TestCaseAnalysisServiceImpl implements TestCaseAnalysisService {
 
         sb.append(
                 "### 角色\n" +
-                        "你是Java自动化测试脚本优化专家，专门优化Selenium/JUnit/TestNG等框架的测试代码。务必输出完整的代码\n\n" +
+                        "你是Java代码修复专家，专注于修复现有代码中的编译错误和优化代码结构。\n\n" +
 
                         "### 输入数据\n" +
-                        "1. 原始测试脚本：\n" + escapedTest + "\n" +
-                        "2. 测试执行结果：\n" + escapedResult + "\n\n" +
+                        "1. 待修复的代码：\n" + escapedTest + "\n" +
+                        "2. 执行结果：\n" + escapedResult + "\n\n" +
 
-                        "### 优化任务\n" +
-                        "请直接优化以下Java测试脚本，只返回优化后的完整代码，不要输出任何JSON格式、解释或额外说明。\n\n" +
+                        "### 核心任务\n" +
+                        "修复以下Java测试代码中的编译错误和明显问题，保持代码结构和功能不变。\n\n" +
 
-                        "### 优化重点（按优先级）\n" +
-                        "1. 【关键】修复测试失败问题（如果测试结果中有失败信息）\n" +
-                        "2. 性能优化：替换Thread.sleep为显式等待，优化定位器性能\n" +
-                        "3. 稳定性优化：添加重试机制，使用更稳定的等待策略\n" +
-                        "4. 可读性优化：改进命名，添加必要注释，简化复杂逻辑\n" +
-                        "5. 可维护性优化：提取公共方法，消除重复代码，改进代码结构\n\n" +
+                        "### 强制限制（必须严格遵守）\n" +
+                        "1. **禁止添加新功能**：不要添加新的测试方法、辅助方法或额外逻辑\n" +
+                        "2. **禁止扩展测试**：保持原有测试用例的验证范围和断言数量\n" +
+                        "3. **禁止改变结构**：保持类名、方法名、主要逻辑流程不变\n" +
+                        "4. **禁止输出额外内容**：只输出代码，不要任何解释\n\n" +
 
-                        "### 具体优化规则\n" +
-                        "1. 将Thread.sleep(毫秒)替换为WebDriverWait和ExpectedConditions\n" +
-                        "2. 将不稳定的XPath定位器优化为CSS选择器或ID定位器\n" +
-                        "3. 为关键操作添加try-catch异常处理\n" +
-                        "4. 提取硬编码的URL、用户名、密码为常量\n" +
-                        "5. 拆分过长的方法（>30行）\n" +
-                        "6. 增强断言信息，使用assertThat等更丰富的断言方法\n" +
-                        "7. 添加必要的JavaDoc注释\n" +
-                        "8. 确保代码可以直接编译运行\n\n" +
+                        "### 允许的修改范围\n" +
+                        "1. **修复编译错误**：添加缺失的import语句，修正语法错误\n" +
+                        "2. **提取常量**：将硬编码的字符串提取为常量\n" +
+                        "3. **代码格式化**：改善代码格式和缩进\n" +
+                        "4. **添加注释**：为复杂逻辑添加简单注释\n" +
+                        "5. **方法拆分**：将过长方法按原逻辑拆分为私有方法\n" +
+                        "6. **异常处理**：为可能失败的操作添加try-catch\n\n" +
 
-                        "### 输出要求（非常重要！）\n" +
-                        "- 只输出优化后的完整Java代码\n" +
-                        "- 不要输出任何解释、分析或JSON格式\n" +
-                        "- 不要输出```java```这样的代码块标记\n" +
-                        "- 确保代码可以直接复制粘贴使用\n\n" +
-                        "现在请优化以下脚本：\n" +
-                        "原始脚本：\n" + escapedTest + "\n\n" +
-                        "优化后的代码："
+                        "### 禁止的修改\n" +
+                        "1. × 添加新的@Test方法\n" +
+                        "2. × 添加新的类或接口\n" +
+                        "3. × 改变测试断言的范围\n" +
+                        "4. × 添加额外的验证逻辑\n" +
+                        "5. × 修改测试的核心业务流程\n" +
+                        "6. × 引入新的测试框架或库\n\n" +
+
+                        "### 输出要求\n" +
+                        "- 只输出修复后的Java代码\n" +
+                        "- 保持相同的包名、类名和方法名\n" +
+                        "- 代码必须可以直接编译\n" +
+                        "- 不要任何格式标记或额外文字\n\n" +
+
+                        "### 修复示例\n" +
+                        "如果原始代码缺少import语句，添加它；如果方法太长，拆分成小方法，但不要改变功能。\n\n" +
+
+                        "现在修复以下代码，只输出修复后的代码：\n" +
+                        "原始代码：\n" + escapedTest + "\n\n" +
+                        "修复后的代码："
         );
 
         return sb.toString();
     }
 
 
-    /**
-     * 处理脚本优化结果
-     */
-    private String processScriptOptimization(String llmRawOutput, String originalTest, TestCaseResultDto testResult) {
-        // 1. 首先尝试JSON验证和修复
-        String safeJson = LLMJsonValidator.validateAndFixJson(
-                llmRawOutput,
-                buildDefaultOptimizationJson(originalTest)
-        );
 
-        try {
-            // 2. 解析JSON
-            Map<String, Object> optimization = objectMapper.readValue(safeJson, Map.class);
 
-            // 3. 如果需要，可以进一步处理优化后的脚本
-            String optimizedScript = (String) ((Map<String, Object>) optimization.get("optimization_summary")).get("optimized_script");
 
-            if (optimizedScript == null || optimizedScript.trim().isEmpty()) {
-                // 如果没有返回优化后的脚本，尝试从其他地方提取或生成
-                optimizedScript = extractScriptFromJson(optimization);
-            }
-
-            // 4. 如果还是为空，使用原始脚本
-            if (optimizedScript == null || optimizedScript.trim().isEmpty()) {
-                System.err.println("警告：LLM未返回优化后的脚本，使用原始脚本");
-                optimizedScript = originalTest;
-                // 更新JSON中的脚本
-                ((Map<String, Object>) optimization.get("optimization_summary")).put("optimized_script", originalTest);
-                ((Map<String, Object>) optimization.get("optimization_summary")).put("original_lines", countLines(originalTest));
-                ((Map<String, Object>) optimization.get("optimization_summary")).put("optimized_lines", countLines(originalTest));
-            }
-
-            // 5. 重新序列化为JSON
-            return objectMapper.writeValueAsString(optimization);
-
-        } catch (Exception e) {
-            System.err.println("解析优化结果失败: " + e.getMessage());
-            return buildDefaultOptimizationJson(originalTest);
-        }
-    }
-
-    /**
-     * 从JSON中提取脚本
-     */
-    private String extractScriptFromJson(Map<String, Object> optimization) {
-        // 尝试从不同字段提取脚本
-        if (optimization.containsKey("optimized_script")) {
-            Object script = optimization.get("optimized_script");
-            if (script instanceof String) {
-                return (String) script;
-            }
-        }
-
-        // 尝试从modification_details中重构
-        if (optimization.containsKey("modification_details")) {
-            // 简化实现：这里应该根据修改细节重构脚本
-            // 实际应用中需要更复杂的逻辑
-            System.out.println("尝试从修改细节中重构脚本...");
-        }
-
-        return null;
-    }
 
     /**
      * 构建默认的多接口分析JSON
@@ -333,54 +283,8 @@ public class TestCaseAnalysisServiceImpl implements TestCaseAnalysisService {
                 "}";
     }
 
-    /**
-     * 构建默认的优化脚本JSON
-     */
-    private String buildDefaultOptimizationJson(String originalTest) {
-        int lines = countLines(originalTest);
 
-        return "{\n" +
-                "  \"optimization_summary\": {\n" +
-                "    \"original_lines\": " + lines + ",\n" +
-                "    \"optimized_lines\": " + lines + ",\n" +
-                "    \"complexity_reduction\": 0,\n" +
-                "    \"estimated_performance_gain\": 0,\n" +
-                "    \"optimized_script\": \"" + escapeJsonString(originalTest) + "\"\n" +
-                "  },\n" +
-                "  \"key_issues_fixed\": [\n" +
-                "    {\n" +
-                "      \"issue_type\": \"stability\",\n" +
-                "      \"description\": \"LLM处理失败，使用原始脚本\",\n" +
-                "      \"severity\": \"medium\"\n" +
-                "    }\n" +
-                "  ],\n" +
-                "  \"modification_details\": [\n" +
-                "    {\n" +
-                "      \"line_numbers\": \"N/A\",\n" +
-                "      \"original_code\": \"N/A\",\n" +
-                "      \"optimized_code\": \"N/A\",\n" +
-                "      \"reason\": \"LLM处理失败\",\n" +
-                "      \"impact\": \"无修改\"\n" +
-                "    }\n" +
-                "  ],\n" +
-                "  \"best_practices_applied\": [\n" +
-                "    \"建议检查测试脚本格式，确保为有效的Java代码\"\n" +
-                "  ]\n" +
-                "}";
-    }
 
-    /**
-     * 构建默认优化脚本（字符串格式）
-     */
-    private String buildDefaultOptimizedScript(String originalTest) {
-        return originalTest + "\n\n" +
-                "// ===== 自动化优化建议 =====\n" +
-                "// 由于LLM处理失败，以下是通用优化建议：\n" +
-                "// 1. 确保使用显式等待而非Thread.sleep\n" +
-                "// 2. 添加适当的异常处理\n" +
-                "// 3. 提取重复代码为工具方法\n" +
-                "// 4. 添加有意义的断言消息";
-    }
 
     /**
      * 计算代码行数
@@ -448,7 +352,6 @@ public class TestCaseAnalysisServiceImpl implements TestCaseAnalysisService {
                         "### 输出要求\n" +
                         "- 必须输出 **合法 JSON**，允许换行，但不能输出 JSON 以外内容。\n" +
                         "- JSON 必须以 { 开头，以 } 结束。\n" +
-                        "- 建议数量最多 3 条。\n" +
                         "- 严格遵守字段长度限制。\n\n" +
                         "{\n" +
                         "  \"metrics\": {\n" +

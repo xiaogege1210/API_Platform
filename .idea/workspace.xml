@@ -4,42 +4,28 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a088f82-6ef3-428d-b391-344aaff2b65e" name="更改" comment="更新一键智能生成">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/_2025_12_11_12_54____.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/_2025_12_11_12_54____.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/_2025_12_11_12_54____1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/_2025_12_11_12_54____1.xml" afterDir="false" />
+    <list default="true" id="9a088f82-6ef3-428d-b391-344aaff2b65e" name="更改" comment="自动修复脚本（代码超限待修改">
       <change beforePath="$PROJECT_DIR$/.idea/shelf/_2025_12_11_12_55____.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/_2025_12_11_12_55____.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/shelf/_2025_12_11_12_57____.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/_2025_12_11_12_57____.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/shelf/_2025_12_11_12_58____.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/_2025_12_11_12_58____.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/_2025_12_11_12_58____1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/_2025_12_11_12_58____1.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/_2025_12_11_12_58____2.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/_2025_12_11_12_58____2.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/controller/ApiController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/controller/ApiController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/llm/impl/SiliconFlowLLMService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/llm/impl/SiliconFlowLLMService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_1.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_3.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_4.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_4.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/dto/TreeNodeDto.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/dto/TreeNodeDto.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/llm/impl/SiliconFlowLLMService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/llm/impl/SiliconFlowLLMService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/AnalysisRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/AnalysisRequest.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiEndpoint.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiEndpoint.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiGroup.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiGroup.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiParameter.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/ApiParameter.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/model/GenerateCodeRequest.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/ParserService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/ParserService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/TenantTokenService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/TenantTokenService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/ApiSceneAnalyzerServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/ApiSceneAnalyzerServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/CoverageAnalysisServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/CoverageAnalysisServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/ExternalTestCaseGeneratorServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/ExternalTestCaseGeneratorServiceImpl.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestCaseManagementServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestCaseManagementServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestExecutionServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestExecutionServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/utils/AIScenarioMatchUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/utils/AIScenarioMatchUtils.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/example/demo/DemoApplicationTests.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/example/demo/DemoApplicationTests.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/example/demo/service/impl/TestCaseManagementServiceImplTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/example/demo/service/impl/TestCaseManagementServiceImplTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/example/demo/service/impl/TestExcutionServiceImplTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/com/example/demo/service/impl/TestExcutionServiceImplTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/example/demo/service/impl/coverageAnalysisServiceImpltest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/example/demo/test$TestExecutor.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/example/demo/test$TestRunResult.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/com/example/demo/test.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/mocktest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_1.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_1.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_2.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/test_1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/test_1.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,6 +62,10 @@
     &quot;accountId&quot;: &quot;1573de78-83d5-48f2-9719-3e0f3f2e98de&quot;
   }
 }</component>
+  <component name="KubernetesApiPersistence">{}</component>
+  <component name="KubernetesApiProvider"><![CDATA[{
+  "isMigrated": true
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -241,8 +231,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
-        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
+        <option value="bundled-jdk-9823dce3aa75-a94e463ab2e7-intellij.indexing.shared.core-IU-243.25659.59" />
+        <option value="bundled-js-predefined-d6986cc7102b-1632447f56bf-JavaScript-IU-243.25659.59" />
       </set>
     </attachedChunks>
   </component>
@@ -291,6 +281,7 @@
       <workItem from="1765332920496" duration="3945000" />
       <workItem from="1765348345582" duration="1239000" />
       <workItem from="1765512750537" duration="382000" />
+      <workItem from="1765514134349" duration="3272000" />
     </task>
     <task id="LOCAL-00001" summary="添加测试用例的补充报告">
       <option name="closed" value="true" />
@@ -405,7 +396,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="xyc" />
+                        <option value="hl" />
                       </list>
                     </value>
                   </entry>

@@ -1,75 +1,66 @@
-import org.junit.jupiter.api.Test;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class test_2 {
     
-    // 测试常量定义
-    private static final String BASE_URL = "https://open.feishu.cn/open-apis/";
-    private static final String TENANT_ACCESS_TOKEN = "tenant_access_token";
-    private static final String CHAT_ID = "oc_1234567890abcdef";
+    // 测试变量常量定义
+    private static final String BASE_URL = "https://open.feishu.cn/open-apis/im/v1";
+    private static final String USER_TOKEN = "u-dE9V3H07F4lWrOY.pxaxXWg4hcIR5gghjyGajMw00K2w";
+    private static final String VALID_CHAT_ID = "oc_b254fcb0d0bd5cd29d27f104bad6d3a5";
+    private static final String INVALID_CHAT_ID = "invalid_chat_id_12345";
+    
+    @BeforeAll
+    public static void setup() {
+        RestAssured.baseURI = BASE_URL;
+    }
     
     @Test
-    void testGetChatInfo() {
-        // 设置基础URL
-        RestAssured.baseURI = BASE_URL;
-        
+    public void testGetChatMembersWithInvalidChatId() {
         // 构建请求
         RequestSpecification request = given()
-            .header("Authorization", "Bearer " + TENANT_ACCESS_TOKEN)
-            .header("Content-Type", "application/json");
+                .header("Authorization", "Bearer " + USER_TOKEN)
+                .header("Content-Type", "application/json")
+                .queryParam("member_id_type", "open_id");
         
-        // 发送GET请求
+        // 发送请求
         Response response = request
-            .pathParam("chat_id", CHAT_ID)
-            .when()
-            .get("/im/v1/chats/{chat_id}");
+                .when()
+                .get("/im/v1/chats/{chat_id}/members", INVALID_CHAT_ID);
         
         // 打印响应内容到控制台
+        System.out.println("=== 测试用例：获取群成员列表（无效群ID） ===");
+        System.out.println("请求URL: " + BASE_URL + "/im/v1/chats/" + INVALID_CHAT_ID + "/members");
+        System.out.println("请求Headers: Authorization=Bearer " + USER_TOKEN + ", Content-Type=application/json");
+        System.out.println("请求QueryParams: member_id_type=open_id");
         System.out.println("响应状态码: " + response.getStatusCode());
         System.out.println("响应体: " + response.getBody().asString());
-        System.out.println("响应头: " + response.getHeaders());
+        System.out.println("=== 响应内容结束 ===\n");
         
         // 验证HTTP状态码
-        assertEquals(200, response.getStatusCode(), "状态码应为200");
+        assertEquals(400, response.getStatusCode(), "HTTP状态码应为400");
         
         // 验证响应体中的关键字段
-        String responseBody = response.getBody().asString();
-        assertTrue(responseBody.contains("\"code\":0") || responseBody.contains("\"success\":true"), 
-                  "响应应包含成功状态码");
+        int code = response.path("code");
+        String msg = response.path("msg");
         
-        // 验证chat_id字段
-        if (response.getStatusCode() == 200) {
-            String chatIdInResponse = response.jsonPath().getString("data.chat_id");
-            if (chatIdInResponse != null) {
-                assertEquals(CHAT_ID, chatIdInResponse, "返回的chat_id应与请求一致");
-            }
-            
-            // 验证群组名称字段
-            String name = response.jsonPath().getString("data.name");
-            assertNotNull(name, "响应体应包含群组名称（name）字段");
-            
-            // 验证群组所有者字段
-            String ownerId = response.jsonPath().getString("data.owner_id");
-            assertNotNull(ownerId, "响应体应包含群组所有者（owner_id）字段");
-            
-            // 验证群组类型字段
-            String type = response.jsonPath().getString("data.type");
-            assertNotNull(type, "响应体应包含群组类型（type）字段");
-            
-            // 打印验证通过的字段值
-            System.out.println("验证通过的字段值:");
-            System.out.println("群组名称: " + name);
-            System.out.println("群组所有者ID: " + ownerId);
-            System.out.println("群组类型: " + type);
+        assertNotEquals(0, code, "响应code字段应为非0的错误码");
+        
+        // 验证错误信息包含相关描述（不区分大小写）
+        String lowerCaseMsg = msg != null ? msg.toLowerCase() : "";
+        if (lowerCaseMsg.contains("chat") || lowerCaseMsg.contains("群") || 
+            lowerCaseMsg.contains("invalid") || lowerCaseMsg.contains("无效")) {
+            // 验证通过 - 错误信息包含相关关键词
+        } else {
+            System.out.println("警告：错误信息可能不包含预期的关键词，实际msg: " + msg);
         }
         
-        // 验证响应数据格式
-        assertNotNull(response.getContentType(), "响应应包含Content-Type头");
-        assertTrue(response.getContentType().contains("application/json"), 
-                  "响应Content-Type应为application/json");
+        // 验证响应体结构
+        response.then().assertThat().body("code", org.hamcrest.Matchers.not(0));
     }
 }
