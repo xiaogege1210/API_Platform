@@ -1,0 +1,129 @@
+<changelist name="在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]" date="1765434877501" recycled="true" deleted="true">
+  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/shelved.patch" />
+  <option name="DESCRIPTION" value="在进行合并之前于 2025/12/11 14:34 取消提交了更改 [更改]" />
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/model/ApiInfo.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/model/ApiInfo.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/ApiInfo.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/TestCaseAnalysisServiceImpl.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/service/impl/TestCaseManagementServiceImpl.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/service/impl/TestCaseManagementServiceImpl.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/TestCaseManagementServiceImpl.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/service/TestCaseManagementService.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/service/TestCaseManagementService.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/TestCaseManagementService.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/service/TestExecutionService.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/service/TestExecutionService.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/TestExecutionService.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/service/TestCaseAnalysisService.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/service/TestCaseAnalysisService.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/TestCaseAnalysisService.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/dto/RequestBodyDTO.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/dto/RequestBodyDTO.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/RequestBodyDTO.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/dto/TestCaseResultDto.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/dto/TestCaseResultDto.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/TestCaseResultDto.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/model/RunReport.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/model/RunReport.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/RunReport.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/llm/impl/SiliconFlowLLMService.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/llm/impl/SiliconFlowLLMService.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/SiliconFlowLLMService.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/model/TestCase.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/model/TestCase.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/TestCase.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/model/ApiDoc.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/model/ApiDoc.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/ApiDoc.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/dto/TreeNodeDto.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/dto/TreeNodeDto.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/TreeNodeDto.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/service/impl/TestExecutionServiceImpl.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/service/impl/TestExecutionServiceImpl.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/TestExecutionServiceImpl.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/model/GenerateCodeRequest.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/model/GenerateCodeRequest.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/GenerateCodeRequest.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/DemoApplication.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/DemoApplication.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/DemoApplication.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/model/ApiEndpoint.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/model/ApiEndpoint.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/ApiEndpoint.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/service/TenantTokenService.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/service/TenantTokenService.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/TenantTokenService.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/model/ApiParameter.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/model/ApiParameter.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/ApiParameter.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/config/RestTemplateConfig.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/config/RestTemplateConfig.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/RestTemplateConfig.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/llm/LLMService.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/llm/LLMService.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/LLMService.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/model/CoverageReport.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/model/CoverageReport.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/CoverageReport.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/dto/MessageDTO.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/dto/MessageDTO.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/MessageDTO.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/model/ExpectedResult.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/model/ExpectedResult.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/ExpectedResult.class" />
+  </binary>
+  <binary>
+    <option name="BEFORE_PATH" value="target/classes/com/example/demo/model/TestRunResult.class" />
+    <option name="AFTER_PATH" value="target/classes/com/example/demo/model/TestRunResult.class" />
+    <option name="SHELVED_PATH" value="$PROJECT_DIR$/.idea/shelf/在进行合并之前于_2025_12_11_14_34_取消提交了更改_[更改]/TestRunResult.class" />
+  </binary>
+</changelist>
