@@ -10,9 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 @Controller
@@ -328,7 +331,30 @@ public class ApiController {
                         .body(createErrorResponse("接口场景描述不能为空"));
             }
 
-            List<String> generatedTestScenarios=testCaseNameParser.extractAllCaseNames(filePath);
+            // 校验filePath非空
+            if (!StringUtils.hasText(filePath)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(createErrorResponse("文件路径不能为空"));
+            }
+
+
+            // 2. 定义基础路径（对应Python中的output_dir）
+            String baseDir = "C:\\test_study_zijie\\API_Platform_2\\src\\main\\resources\\case_generated";
+
+
+            // 3. 拼接完整路径（自动处理分隔符，避免硬编码\\）
+            Path fullFilePath = Paths.get(baseDir, filePath);
+            // 转成字符串形式（可选，根据testCaseNameParser的入参要求）
+            String fullPathStr = fullFilePath.toString();
+
+
+            // 4. （可选）校验路径是否在baseDir范围内，防止路径穿越
+            if (!fullFilePath.normalize().startsWith(Paths.get(baseDir).normalize())) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(createErrorResponse("文件路径不合法"));
+            }
+
+            List<String> generatedTestScenarios=testCaseNameParser.extractAllCaseNames(fullPathStr);
             CoverageReport report = coverageAnalysisService.AiGenerateCoverageReport(
                     apiDocContent,
                     extraScene,
