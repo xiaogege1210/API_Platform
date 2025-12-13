@@ -1,63 +1,59 @@
-import org.junit.jupiter.api.Test;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class test_4 {
     
     // 测试常量定义
-    private static final String BASE_URL = "https://open.feishu.cn/open-apis/";
-    private static final String TENANT_ACCESS_TOKEN = "tenant_access_token";
-    private static final String RECEIVE_ID = "ou_1234567890abcdef";
-    private static final String MSG_TYPE = "text";
-    private static final String CONTENT = "{\"text\":\"测试消息\"}";
+    private static final String BASE_URL = "https://open.feishu.cn/open-apis/im/v1";
+    private static final String CHAT_ID = "oc_a0553eda9014c201e6969b478895c230";
+    private static final String USER_TOKEN = "1";
+    
+    @BeforeAll
+    public static void setup() {
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+    }
     
     @Test
-    public void testSendMessageMissingRequiredParameter() {
-        // 设置基础URL
-        RestAssured.baseURI = BASE_URL;
-        
-        // 构建请求体
-        String requestBody = String.format(
-            "{\"receive_id\":\"%s\",\"msg_type\":\"%s\",\"content\":\"%s\"}",
-            RECEIVE_ID, MSG_TYPE, CONTENT
-        );
-        
-        // 发送POST请求
-        Response response = given()
-            .header("Authorization", "Bearer " + TENANT_ACCESS_TOKEN)
+    public void testGetChatMembersWithExcessivePageSize() {
+        // 构建请求
+        RequestSpecification request = given()
+            .header("Authorization", "Bearer " + USER_TOKEN)
             .header("Content-Type", "application/json")
-            .body(requestBody)
-            .when()
-            .post("/im/v1/messages")
-            .then()
-            .extract().response();
+            .queryParam("page_size", 150);
+        
+        // 发送请求
+        Response response = request.get("/chats/{chat_id}/members", CHAT_ID);
         
         // 打印响应内容到控制台
-        System.out.println("响应状态码: " + response.getStatusCode());
-        System.out.println("响应体: " + response.getBody().asString());
-        System.out.println("响应头: " + response.getHeaders());
+        System.out.println("Response Status: " + response.getStatusCode());
+        System.out.println("Response Body: " + response.getBody().asString());
+        System.out.println("Response Headers: " + response.getHeaders());
         
         // 验证HTTP状态码为400
         assertEquals(400, response.getStatusCode(), 
-            "状态码应为400，但实际为: " + response.getStatusCode());
+            "HTTP状态码应为400，但实际为: " + response.getStatusCode());
         
-        // 验证响应体包含错误码字段
-        String responseBody = response.getBody().asString();
-        assertTrue(responseBody.contains("\"code\"") || responseBody.contains("code"), 
-            "响应体应包含错误码字段");
+        // 验证响应体中的code字段为非0的错误码
+        int code = response.jsonPath().getInt("code");
+        assertNotEquals(0, code, 
+            "响应体code字段应为非0错误码，但实际为: " + code);
         
-        // 验证错误提示包含相关信息
-        String lowerCaseBody = responseBody.toLowerCase();
-        boolean containsReceiveIdType = lowerCaseBody.contains("receive_id_type");
-        boolean containsMissingParam = lowerCaseBody.contains("缺少必要参数") || 
-                                      lowerCaseBody.contains("missing") || 
-                                      lowerCaseBody.contains("required");
+        // 验证响应体中的msg字段不为空（表明参数验证失败）
+        String msg = response.jsonPath().getString("msg");
+        assertNotEquals(null, msg, "响应体msg字段不应为空");
+        assertNotEquals("", msg.trim(), "响应体msg字段不应为空字符串");
         
-        assertTrue(containsReceiveIdType || containsMissingParam, 
-            "错误提示应包含'receive_id_type'或'缺少必要参数'相关信息。实际响应: " + responseBody);
+        // 打印验证结果
+        System.out.println("测试通过：");
+        System.out.println("1. HTTP状态码验证成功：400");
+        System.out.println("2. 响应体code字段验证成功：非0错误码 (" + code + ")");
+        System.out.println("3. 响应体msg字段验证成功：" + msg);
     }
 }

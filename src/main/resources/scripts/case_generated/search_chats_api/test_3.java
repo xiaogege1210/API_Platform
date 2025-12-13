@@ -4,45 +4,60 @@ import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class test_3 {
+    
+    // 测试常量定义
     private static final String BASE_URL = "https://open.feishu.cn/open-apis/im/v1";
-    private static final String CHAT_ID = "oc_b254fcb0d0bd5cd29d27f104bad6d3a5";
-    private static final String USER_TOKEN = "u-dE9V3H07F4lWrOY.pxaxXWg4hcIR5gghjyGajMw00K2w";
-    private static final String CONTENT_TYPE = "application/json";
-    private static final String INVALID_CHAT_ID = "oc_a0553eda9014c201e6969b478895c230";
-
+    private static final String CHAT_ID = "oc_a0553eda9014c201e6969b478895c230";
+    private static final String INVALID_TOKEN = "Bearer invalid_or_missing_token";
+    
     @BeforeAll
     public static void setup() {
         RestAssured.baseURI = BASE_URL;
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     }
-
+    
     @Test
-    public void testGetChatMembersWithoutAuthorization() {
-        String endpoint = "/im/v1/chats/{chat_id}/members";
-        
+    public void testGetChatMembersWithoutValidToken() {
+        // 构建请求
         RequestSpecification request = given()
-                .pathParam("chat_id", INVALID_CHAT_ID)
-                .header("Content-Type", CONTENT_TYPE);
+            .header("Authorization", INVALID_TOKEN)
+            .pathParam("chat_id", CHAT_ID);
         
-        Response response = request.get(endpoint);
+        // 发送请求
+        Response response = request.when()
+            .get("/chats/{chat_id}/members");
         
-        System.out.println("Response Status: " + response.getStatusCode());
-        System.out.println("Response Body: " + response.getBody().asString());
-        System.out.println("Response Headers: " + response.getHeaders());
+        // 打印响应内容到控制台
+        System.out.println("=== 接口响应内容 ===");
+        System.out.println("HTTP状态码: " + response.getStatusCode());
+        System.out.println("响应体: " + response.getBody().asString());
+        System.out.println("=== 响应结束 ===\n");
         
+        // 验证HTTP状态码为401或403
         int statusCode = response.getStatusCode();
-        assertTrue(statusCode == 401 || statusCode == 403, 
-                "Expected HTTP status 401 or 403 but got: " + statusCode);
+        boolean isExpectedStatusCode = statusCode == 401 || statusCode == 403;
+        assertEquals(true, isExpectedStatusCode, 
+            String.format("HTTP状态码应为401或403，实际为: %d", statusCode));
         
-        if (statusCode == 200) {
-            int code = response.path("code");
-            assertNotEquals(0, code, "Expected non-zero error code but got: " + code);
-            
-            String msg = response.path("msg");
-            assertNotNull(msg, "Error message should not be null");
-            assertFalse(msg.isEmpty(), "Error message should not be empty");
-        }
+        // 验证响应体中的code字段为非0的错误码
+        int code = response.jsonPath().getInt("code");
+        assertNotEquals(0, code, "响应体code字段应为非0错误码");
+        
+        // 验证响应体中的msg字段表明身份验证或授权失败
+        String msg = response.jsonPath().getString("msg");
+        boolean isAuthError = msg != null && 
+            (msg.toLowerCase().contains("auth") || 
+             msg.toLowerCase().contains("token") || 
+             msg.toLowerCase().contains("unauthorized") || 
+             msg.toLowerCase().contains("forbidden") ||
+             msg.toLowerCase().contains("权限") ||
+             msg.toLowerCase().contains("认证"));
+        
+        assertEquals(true, isAuthError, 
+            String.format("响应体msg字段应表明身份验证失败，实际为: %s", msg));
     }
 }

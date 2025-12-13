@@ -215,16 +215,7 @@
             <!-- 动态生成的测试结果表格 -->
           </div>
         </div>
-        
-        <!-- 覆盖率分析 -->
-        <div>
-          <h4 class="font-bold text-slate-700 mb-3 flex items-center gap-2">
-            <i class="fas fa-chart-pie text-emerald-500"></i> 覆盖率分析
-          </h4>
-          <div id="coverageAnalysis" class="bg-slate-50 p-4 rounded-lg border border-slate-200">
-            <!-- 动态生成的覆盖率数据 -->
-          </div>
-        </div>
+
         
         <!-- 建议与优化 -->
         <div>
@@ -1008,45 +999,46 @@
     try {
       showStatusMessage(`正在生成运行报告...`, 'info');
       showLoading(true);
-      
+
       // 先执行测试用例获取结果
-      const executeRes = await fetch('/api/execute/batch', {
+      const executeRes = await fetch('/api/execute/batchs', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(fileNames.map(f => ({ testCaseFileName: f })))
       });
-      
+
       if (!executeRes.ok) throw new Error("执行测试用例失败");
-      
+
       const testResults = await executeRes.json();
-      
+
       // 调用运行报告接口
       const reportRes = await fetch('/api/report', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(testResults)
       });
-      
+
       if (!reportRes.ok) throw new Error("生成报告失败");
-      
+
       const reportData = await reportRes.json();
-      
+
+
       // 调用覆盖率评分接口
-      const coverageRes = await fetch('/api/testcase/calculate-coverage', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({
-          apiDoc: ApiData_text ? JSON.stringify(ApiData_text) : '',
-          extraScene: scenarioName,
-          testCasesFilePath: `case_generated/${scenarioName}/`
-        })
-      });
-      
-      if (coverageRes.ok) {
-        const coverageData = await coverageRes.json();
-        reportData.coverage = coverageData;
-      }
-      
+      // const coverageRes = await fetch('/api/testcase/calculate-coverage', {
+      //   method: 'POST',
+      //   headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      //   body: new URLSearchParams({
+      //     apiDoc: ApiData_text ? JSON.stringify(ApiData_text) : '',
+      //     extraScene: scenarioName,
+      //     testCasesFilePath: `case_generated/${scenarioName}/`
+      //   })
+      // });
+      //
+      // if (coverageRes.ok) {
+      //   const coverageData = await coverageRes.json();
+      //   reportData.coverage = coverageData;
+      // }
+
       displayRunReport(reportData);
       showStatusMessage("运行报告生成成功！", 'success');
     } catch (e) {
@@ -1059,20 +1051,20 @@
   function displayRunReport(report) {
     // 显示报告区域
     document.getElementById('runReportSection').classList.remove('hidden');
-    
+
     // 生成统计概览
     const overview = document.getElementById('reportOverview');
     overview.innerHTML = `
       <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center">
-        <span class="text-3xl font-bold text-slate-700">${report.totalTests || 0}</span>
+        <span class="text-3xl font-bold text-slate-700">${report.totalCount || 0}</span>
         <span class="text-xs text-slate-500 uppercase font-bold mt-1 tracking-wider">总测试用例</span>
       </div>
       <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center">
-        <span class="text-3xl font-bold text-emerald-600">${report.passedTests || 0}</span>
+        <span class="text-3xl font-bold text-emerald-600">${report.passedCount || 0}</span>
         <span class="text-xs text-slate-500 uppercase font-bold mt-1 tracking-wider">通过用例</span>
       </div>
       <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center">
-        <span class="text-3xl font-bold text-rose-600">${report.failedTests || 0}</span>
+        <span class="text-3xl font-bold text-rose-600">${report.failedCount || 0}</span>
         <span class="text-xs text-slate-500 uppercase font-bold mt-1 tracking-wider">失败用例</span>
       </div>
       <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center">
@@ -1080,7 +1072,7 @@
         <span class="text-xs text-slate-500 uppercase font-bold mt-1 tracking-wider">通过率</span>
       </div>
     `;
-    
+
     // 生成测试结果详情表格
     const resultsList = document.getElementById('testResultsList');
     let resultsHtml = `<table class="w-full text-left text-sm text-slate-600 border-collapse">
@@ -1093,54 +1085,54 @@
         </tr>
       </thead>
       <tbody>`;
-    
+
     (report.testResults || []).forEach(result => {
       const statusClass = result.passed ? 'text-emerald-600 bg-emerald-50' : 'text-rose-600 bg-rose-50';
       const statusText = result.passed ? '通过' : '失败';
-      
+
       resultsHtml += `
         <tr class="border-b border-slate-100 hover:bg-slate-50">
           <td class="px-6 py-4 font-medium text-slate-700">${result.testCaseName || '未知'}</td>
           <td class="px-6 py-4"><span class="px-2.5 py-1 rounded-full text-xs font-bold ${statusClass}">${statusText}</span></td>
-          <td class="px-6 py-4">${result.executionTime || '-'}</td>
+          <td class="px-6 py-4">${result.executeTime || '-'}</td>
           <td class="px-6 py-4">${result.failureReason || '-'}</td>
         </tr>
       `;
     });
-    
+
     resultsHtml += `</tbody></table>`;
     resultsList.innerHTML = resultsHtml;
-    
+
     // 生成覆盖率分析
-    const coverageAnalysis = document.getElementById('coverageAnalysis');
-    const coverage = report.coverage || {};
-    
-    coverageAnalysis.innerHTML = `
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-        <div>
-          <span class="text-slate-500 text-sm">覆盖率得分</span>
-          <div class="text-2xl font-bold text-emerald-600 mt-1">${coverage.score || 0}</div>
-        </div>
-        <div>
-          <span class="text-slate-500 text-sm">理论场景数</span>
-          <div class="text-2xl font-bold text-indigo-600 mt-1">${coverage.totalTheoreticalScenarios || 0}</div>
-        </div>
-        <div>
-          <span class="text-slate-500 text-sm">已覆盖场景数</span>
-          <div class="text-2xl font-bold text-indigo-600 mt-1">${coverage.coveredScenarios || 0}</div>
-        </div>
-      </div>
-      
-      ${coverage.missingScenarios && coverage.missingScenarios.length > 0 ? `
-        <div class="mt-4">
-          <h5 class="font-bold text-slate-700 mb-2">未覆盖场景</h5>
-          <ul class="list-disc list-inside text-slate-600 space-y-1 text-sm">
-            ${coverage.missingScenarios.map(scenario => `<li>${scenario}</li>`).join('')}
-          </ul>
-        </div>
-      ` : '<div class="text-slate-500 text-sm">所有理论场景已覆盖</div>'}
-    `;
-    
+    // const coverageAnalysis = document.getElementById('coverageAnalysis');
+    // const coverage = report.coverage || {};
+    //
+    // coverageAnalysis.innerHTML = `
+    //   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+    //     <div>
+    //       <span class="text-slate-500 text-sm">覆盖率得分</span>
+    //       <div class="text-2xl font-bold text-emerald-600 mt-1">${coverage.score || 0}</div>
+    //     </div>
+    //     <div>
+    //       <span class="text-slate-500 text-sm">理论场景数</span>
+    //       <div class="text-2xl font-bold text-indigo-600 mt-1">${coverage.totalTheoreticalScenarios || 0}</div>
+    //     </div>
+    //     <div>
+    //       <span class="text-slate-500 text-sm">已覆盖场景数</span>
+    //       <div class="text-2xl font-bold text-indigo-600 mt-1">${coverage.coveredScenarios || 0}</div>
+    //     </div>
+    //   </div>
+    //
+    //   ${coverage.missingScenarios && coverage.missingScenarios.length > 0 ? `
+    //     <div class="mt-4">
+    //       <h5 class="font-bold text-slate-700 mb-2">未覆盖场景</h5>
+    //       <ul class="list-disc list-inside text-slate-600 space-y-1 text-sm">
+    //         ${coverage.missingScenarios.map(scenario => `<li>${scenario}</li>`).join('')}
+    //       </ul>
+    //     </div>
+    //   ` : '<div class="text-slate-500 text-sm">所有理论场景已覆盖</div>'}
+    // `;
+
     // 生成建议与优化
     const suggestions = document.getElementById('reportSuggestions');
     suggestions.innerHTML = `
@@ -1150,7 +1142,7 @@
         </div>
       `).join('') || '<div class="bg-white p-4 rounded-lg border border-slate-200 shadow-sm text-slate-500">暂无建议</div>'}
     `;
-    
+
     // 滚动到报告区域
     document.getElementById('runReportSection').scrollIntoView({behavior: 'smooth'});
   }

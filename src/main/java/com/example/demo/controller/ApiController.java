@@ -314,8 +314,8 @@ public class ApiController {
     @ResponseBody
     public ResponseEntity<?> calculateCoverage(
             @RequestParam("apiDoc") String apiDocContent,
-            @RequestParam("extraScene") String extraScene,
-            @RequestParam("testCasesFilePath") String filePath) {
+            @RequestParam("extraScene") String extraScene)
+             {
 
         try {
             if (apiDocContent == null || apiDocContent.isEmpty()) {
@@ -328,11 +328,11 @@ public class ApiController {
                         .body(createErrorResponse("接口场景描述不能为空"));
             }
 
-            List<String> generatedTestScenarios=testCaseNameParser.extractAllCaseNames(filePath);
+
             CoverageReport report = coverageAnalysisService.AiGenerateCoverageReport(
                     apiDocContent,
-                    extraScene,
-                    generatedTestScenarios
+                    extraScene
+
             );
 
             return ResponseEntity.ok(report);
@@ -375,6 +375,23 @@ public class ApiController {
                     .body(createErrorResponse("批量执行失败: " + e.getMessage()));
         }
     }
+    @PostMapping("/execute/batchs")
+    @ResponseBody
+    public ResponseEntity<?> executeBatchTestCaseswithoutpro(@RequestBody List<ExecuteTestCaseRequest> requests) {
+        try {
+            List<String> fileNames = new ArrayList<>();
+            for (ExecuteTestCaseRequest request : requests) {
+                fileNames.add(request.getTestCaseFileName());
+            }
+
+            List<TestCaseResultDto> results = testExecutionService.testExecutionwithoutpro(fileNames);
+            return ResponseEntity.ok(results);
+        } catch (Exception e) {
+            logger.error("批量执行测试用例失败", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(createErrorResponse("批量执行失败: " + e.getMessage()));
+        }
+    }
 
     @PostMapping("/report")
     @ResponseBody
@@ -382,6 +399,9 @@ public class ApiController {
         try {
             // 调用服务层生成运行报告
             RunReport report = reportService.generateReport(results);
+            report.setTestResults(results);
+
+            System.out.println(report.getTotalCount());
 
             // 返回运行报告
             return ResponseEntity.ok(report);

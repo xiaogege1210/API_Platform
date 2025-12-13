@@ -1,33 +1,43 @@
-import org.junit.jupiter.api.Test;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class test_1 {
     
     // 测试常量定义
-    private static final String BASE_URL = "https://open.feishu.cn/open-apis/";
-    private static final String CHAT_ID = "oc_b254fcb0d0bd5cd29d27f104bad6d3a5";
-    private static final String USER_TOKEN = "u-ckhDS3pad2nazErBeihDw1glgtOl5gqrpwaaYQs02x1K";
-    private static final String ACCESS_TOKEN = USER_TOKEN;
+    private static final String BASE_URL = "https://open.feishu.cn/open-apis/im/v1";
+    private static final String CHAT_ID = "oc_a0553eda9014c201e6969b478895c230";
+    private static final String VALID_ACCESS_TOKEN = "1"; // 实际使用时需要替换为有效的token
+    private static final String MEMBER_ID_TYPE = "open_id";
+    private static final int PAGE_SIZE = 20;
+    
+    @BeforeAll
+    public static void setup() {
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+    }
     
     @Test
-    public void testGetChatMembersWithDefaultParameters() {
-        // 设置基础URL
-        RestAssured.baseURI = BASE_URL;
-        
+    @DisplayName("正向用例 - 使用默认参数成功获取群成员列表")
+    public void testGetChatMembersSuccessfully() {
         // 构建请求
         RequestSpecification request = given()
-            .header("Authorization", "Bearer " + ACCESS_TOKEN)
-            .header("Content-Type", "application/json")
-            .pathParam("chat_id", CHAT_ID)
-            .queryParam("member_id_type", "open_id")
-            .queryParam("page_size", 20);
+            .header("Authorization", "Bearer " + VALID_ACCESS_TOKEN)
+            .queryParam("member_id_type", MEMBER_ID_TYPE)
+            .queryParam("page_size", PAGE_SIZE)
+            .pathParam("chat_id", CHAT_ID);
         
-        // 发送GET请求
-        Response response = request.get("/chats/{chat_id}/members");
+        // 发送请求并获取响应
+        Response response = request
+            .when()
+            .get("/chats/{chat_id}/members");
         
         // 打印响应内容到控制台
         System.out.println("=== 响应状态码 ===");
@@ -35,71 +45,72 @@ public class test_1 {
         System.out.println("\n=== 响应头 ===");
         System.out.println(response.getHeaders());
         System.out.println("\n=== 响应体 ===");
-        String responseBody = response.getBody().asString();
-        System.out.println(responseBody);
+        System.out.println(response.getBody().asString());
         System.out.println("========================================\n");
         
         // 验证HTTP状态码
-        assertEquals(200, response.getStatusCode(), "响应状态码应为200");
+        assertEquals(200, response.getStatusCode(), "HTTP状态码应为200");
         
-        // 验证响应体中的关键字段
-        assertNotNull(responseBody, "响应体不应为空");
-        
-        // 验证code字段为0
-        int code = response.path("code");
-        assertEquals(0, code, "响应体code字段应为0");
-        
-        // 验证msg字段为'success'
-        String msg = response.path("msg");
-        assertEquals("success", msg, "响应体msg字段应为'success'");
+        // 使用RestAssured断言验证响应体
+        response.then()
+            .statusCode(200)
+            .body("code", equalTo(0))
+            .body("msg", equalTo("success"))
+            .body("data", notNullValue())
+            .body("data.items", notNullValue())
+            .body("data.items", instanceOf(java.util.List.class))
+            .body("data.has_more", instanceOf(Boolean.class))
+            .body("data.member_total", instanceOf(Integer.class));
         
         // 验证data字段存在且为对象
-        Object data = response.path("data");
-        assertNotNull(data, "data字段不应为空");
+        assertNotNull(response.path("data"), "data字段不应为null");
         
-        // 验证data.items字段存在且为数组
+        // 验证items数组存在
         Object items = response.path("data.items");
-        assertNotNull(items, "data.items字段不应为空");
+        assertNotNull(items, "data.items字段不应为null");
+        assertTrue(items instanceof java.util.List, "data.items应为数组类型");
         
-        // 验证data.has_more字段为布尔类型
+        // 验证has_more字段为布尔类型
         Object hasMore = response.path("data.has_more");
-        assertNotNull(hasMore, "data.has_more字段不应为空");
-        assertTrue(hasMore instanceof Boolean, "data.has_more字段应为布尔类型");
+        assertNotNull(hasMore, "data.has_more字段不应为null");
+        assertTrue(hasMore instanceof Boolean, "data.has_more应为布尔类型");
         
-        // 验证data.member_total字段为整数类型
+        // 如果has_more为true，验证page_token字段存在且为字符串
+        if (Boolean.TRUE.equals(hasMore)) {
+            Object pageToken = response.path("data.page_token");
+            assertNotNull(pageToken, "当data.has_more为true时，data.page_token字段不应为null");
+            assertTrue(pageToken instanceof String, "data.page_token应为字符串类型");
+            assertFalse(((String) pageToken).isEmpty(), "data.page_token不应为空字符串");
+        }
+        
+        // 验证member_total字段为整数类型
         Object memberTotal = response.path("data.member_total");
-        assertNotNull(memberTotal, "data.member_total字段不应为空");
-        assertTrue(memberTotal instanceof Integer, "data.member_total字段应为整数类型");
+        assertNotNull(memberTotal, "data.member_total字段不应为null");
+        assertTrue(memberTotal instanceof Integer, "data.member_total应为整数类型");
         
-        // 验证items数组中每个对象都包含必需字段
-        int itemCount = response.path("data.items.size()");
-        if (itemCount > 0) {
-            for (int i = 0; i < itemCount; i++) {
-                String memberIdType = response.path("data.items[" + i + "].member_id_type");
-                String memberId = response.path("data.items[" + i + "].member_id");
-                String name = response.path("data.items[" + i + "].name");
-                String tenantKey = response.path("data.items[" + i + "].tenant_key");
+        // 验证items数组中的每个对象都包含必要的字段
+        java.util.List<java.util.Map<String, Object>> itemsList = response.path("data.items");
+        if (itemsList != null && !itemsList.isEmpty()) {
+            for (java.util.Map<String, Object> item : itemsList) {
+                assertTrue(item.containsKey("member_id_type"), "items中的对象应包含member_id_type字段");
+                assertTrue(item.containsKey("member_id"), "items中的对象应包含member_id字段");
+                assertTrue(item.containsKey("name"), "items中的对象应包含name字段");
+                assertTrue(item.containsKey("tenant_key"), "items中的对象应包含tenant_key字段");
                 
-                assertNotNull(memberIdType, "items[" + i + "].member_id_type字段不应为空");
-                assertNotNull(memberId, "items[" + i + "].member_id字段不应为空");
-                assertNotNull(name, "items[" + i + "].name字段不应为空");
-                assertNotNull(tenantKey, "items[" + i + "].tenant_key字段不应为空");
-                
-                System.out.println("验证通过 - 成员 " + (i + 1) + ":");
-                System.out.println("  member_id_type: " + memberIdType);
-                System.out.println("  member_id: " + memberId);
-                System.out.println("  name: " + name);
-                System.out.println("  tenant_key: " + tenantKey);
+                // 验证字段类型
+                assertTrue(item.get("member_id_type") instanceof String, "member_id_type应为字符串类型");
+                assertTrue(item.get("member_id") instanceof String, "member_id应为字符串类型");
+                assertTrue(item.get("tenant_key") instanceof String, "tenant_key应为字符串类型");
             }
         }
         
-        // 打印测试结果摘要
-        System.out.println("\n=== 测试结果摘要 ===");
-        System.out.println("测试用例: 获取群成员列表-正向用例-默认参数");
-        System.out.println("测试状态: PASS");
-        System.out.println("获取成员数量: " + itemCount);
-        System.out.println("是否有更多数据: " + hasMore);
-        System.out.println("成员总数: " + memberTotal);
-        System.out.println("========================================\n");
+        // 验证业务预期结果
+        assertTrue(itemsList != null, "应成功获取到成员列表");
+        assertTrue(itemsList.size() > 0 || (Integer) memberTotal == 0, 
+            "如果群组有成员，items应不为空；如果群组无成员，member_total应为0");
+        
+        System.out.println("测试通过：成功获取到指定群组的成员列表");
+        System.out.println("返回的成员信息格式正确，包含预期的字段");
+        System.out.println("分页信息（has_more, page_token）正确指示了数据状态");
     }
 }

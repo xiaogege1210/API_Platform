@@ -127,6 +127,38 @@ public class TestExecutionServiceImpl implements TestExecutionService {
                 totalResults.stream().filter(result -> !result.isPassed()).count());
         return totalResults;
     }
+    // ==================== 核心执行方法（批量执行）====================
+    /**
+     * 批量执行 Java 脚本（输入脚本文件名列表，如 ["Test1.java", "Test2.java"]）
+     */
+    @Override
+    public List<TestCaseResultDto> testExecutionwithoutpro(List<String> scriptNames) {
+        logger.info("\n==================== 开始批量执行脚本 ====================");
+        logger.info("待执行脚本数量：{}", scriptNames == null ? 0 : scriptNames.size());
+
+        List<TestCaseResultDto> totalResults = new ArrayList<>();
+        if (scriptNames == null || scriptNames.isEmpty()) {
+            logger.warn("⚠️ 待执行脚本列表为空，直接返回空结果");
+            return totalResults;
+        }
+
+        // 遍历每个脚本，执行并收集结果
+        for (String scriptName : scriptNames) {
+            logger.info("\n--------------------------------------------------");
+            logger.info("开始执行脚本：{}", scriptName);
+            // 执行单个脚本，将结果加入总列表
+            TestCaseResultDto singleResult = testExecutionwithoutpro(scriptName);
+            totalResults.add(singleResult);
+            logger.info("脚本执行结束：{}（状态：{}）", scriptName, singleResult.isPassed() ? "成功" : "失败");
+        }
+
+        logger.info("\n==================== 批量执行完成 ====================");
+        logger.info("总执行脚本数：{}，成功数：{}，失败数：{}",
+                totalResults.size(),
+                totalResults.stream().filter(TestCaseResultDto::isPassed).count(),
+                totalResults.stream().filter(result -> !result.isPassed()).count());
+        return totalResults;
+    }
 
     // ==================== 核心执行方法（单个执行）====================
     /**
@@ -214,6 +246,81 @@ public class TestExecutionServiceImpl implements TestExecutionService {
 
         return resultDto;
     }
+    /**
+     * 单个执行 Java 脚本（输入脚本文件名，如 "Test1.java"）
+     */
+    @Override
+    public TestCaseResultDto testExecutionwithoutpro(String scriptName) {
+        // 初始化结果对象（默认失败，后续成功再修改）
+        TestCaseResultDto resultDto = new TestCaseResultDto();
+        resultDto.setTestCaseName(scriptName);
+        resultDto.setPassed(false);
+        resultDto.setExecuteTime(LocalDateTime.now()); // 记录执行时间
+
+        try {
+            // 1. 拼接完整文件路径
+            String fullFilePath = SCRIPT_BASE_PATH + File.separator + scriptName;
+            logger.info("脚本完整路径：{}", fullFilePath);
+
+            // 2. 读取并校验文件
+            File javaFile = readAndValidateMockTestFile(fullFilePath);
+            if (javaFile == null) {
+                resultDto.setFailureReason("文件校验失败（不存在、无权限或非Java文件）");
+
+                return resultDto;
+            }
+
+            // 3. 编译 Java 文件
+            boolean compileSuccess = compileJavaFile(javaFile);
+            if (!compileSuccess) {
+
+                resultDto.setFailureReason("Java 文件编译失败");
+
+
+                return resultDto;
+            }
+
+            // 4. 提取测试类名（文件名 = 类名，无包名场景）
+            String testClassName = extractClassName(scriptName);
+            logger.info("提取测试类名：{}", testClassName);
+            //感觉不需要提取
+
+            // 5. 执行测试类（获取方法级结果）
+            List<TestCaseResultDto> methodResults = executeTestClass(testClassName);
+            if (methodResults.isEmpty()) {
+                resultDto.setFailureReason("测试类无有效测试方法");
+
+                return resultDto;
+            }
+
+            // 6. 汇总脚本级结果（只要有一个方法失败，脚本整体标记为失败）
+            boolean allPassed = methodResults.stream().allMatch(TestCaseResultDto::isPassed);
+            resultDto.setPassed(allPassed);
+            if (allPassed) {
+                resultDto.setFailureReason("");
+                resultDto.setOutputText(String.format("脚本执行成功，共 %d 个测试方法全部通过", methodResults.size()));
+            } else {
+                // 收集所有失败方法的原因
+                String failureReason = methodResults.stream()
+                        .filter(result -> !result.isPassed())
+                        .map(r -> r.getTestCaseName() + "：" + r.getFailureReason())
+                        .collect(Collectors.joining("；"));
+                resultDto.setFailureReason("部分方法执行失败：" + failureReason);
+                resultDto.setOutputText(String.format("脚本执行完成，成功 %d 个方法，失败 %d 个方法",
+                        methodResults.stream().filter(TestCaseResultDto::isPassed).count(),
+                        methodResults.stream().filter(result -> !result.isPassed()).count()));
+
+
+            }
+
+        } catch (Exception e) {
+            logger.error("脚本执行异常：{}", e.getMessage(), e);
+            resultDto.setFailureReason("脚本执行异常：" + e.getMessage());
+        }
+
+        return resultDto;
+    }
+
     /**
      * 读取文件内容
      */

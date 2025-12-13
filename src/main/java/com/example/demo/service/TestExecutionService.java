@@ -12,6 +12,10 @@ public interface TestExecutionService {
     // 批量执行脚本（方法名首字母小写，符合 Java 命名规范）
     List<TestCaseResultDto> testExecution(List<String> scriptNames);
 
+    List<TestCaseResultDto> testExecutionwithoutpro(List<String> scriptNames);
+
     // 单个执行脚本（方法名首字母小写，参数为 String，返回 TestCaseResultDto）
     TestCaseResultDto testExecution(String scriptName);
+
+    TestCaseResultDto testExecutionwithoutpro(String scriptName);
 }

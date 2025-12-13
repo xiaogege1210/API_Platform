@@ -1,64 +1,63 @@
-import org.junit.jupiter.api.Test;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 public class test_3 {
     
     // 测试常量定义
-    private static final String BASE_URL = "https://open.feishu.cn/open-apis/";
-    private static final String TENANT_ACCESS_TOKEN = "tenant_access_token";
-    private static final String RECEIVE_ID = "ou_1234567890abcdef";
-    private static final String INVALID_RECEIVE_ID_TYPE = "invalid_type";
-    private static final String MSG_TYPE = "text";
-    private static final String CONTENT_TEXT = "测试消息";
+    private static final String BASE_URL = "https://open.feishu.cn/open-apis/im/v1";
+    private static final String CHAT_ID = "oc_a0553eda9014c201e6969b478895c230";
+    private static final String INVALID_TOKEN = "Bearer invalid_or_missing_token";
+    
+    @BeforeAll
+    public static void setup() {
+        RestAssured.baseURI = BASE_URL;
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+    }
     
     @Test
-    public void testSendMessageWithInvalidReceiveIdType() {
-        // 设置基础URL
-        RestAssured.baseURI = BASE_URL;
-        
-        // 构建请求体JSON
-        String requestBody = String.format(
-            "{\"receive_id\":\"%s\",\"msg_type\":\"%s\",\"content\":\"{\\\"text\\\":\\\"%s\\\"}\"}",
-            RECEIVE_ID, MSG_TYPE, CONTENT_TEXT
-        );
-        
-        // 发送POST请求
+    public void testGetChatMembersWithoutValidToken() {
+        // 构建请求
         RequestSpecification request = given()
-            .header("Authorization", "Bearer " + TENANT_ACCESS_TOKEN)
-            .header("Content-Type", "application/json")
-            .queryParam("receive_id_type", INVALID_RECEIVE_ID_TYPE)
-            .body(requestBody);
+            .header("Authorization", INVALID_TOKEN)
+            .pathParam("chat_id", CHAT_ID);
         
-        Response response = request.post("/im/v1/messages");
+        // 发送请求
+        Response response = request.when()
+            .get("/chats/{chat_id}/members");
         
         // 打印响应内容到控制台
-        System.out.println("=== 接口响应 ===");
-        System.out.println("状态码: " + response.getStatusCode());
+        System.out.println("=== 接口响应内容 ===");
+        System.out.println("HTTP状态码: " + response.getStatusCode());
         System.out.println("响应体: " + response.getBody().asString());
-        System.out.println("响应头: " + response.getHeaders());
         System.out.println("=== 响应结束 ===\n");
         
-        // 验证HTTP状态码为400
-        assertEquals(400, response.getStatusCode(), 
-            "HTTP状态码应为400");
+        // 验证HTTP状态码为401或403
+        int statusCode = response.getStatusCode();
+        boolean isExpectedStatusCode = statusCode == 401 || statusCode == 403;
+        assertEquals(true, isExpectedStatusCode, 
+            String.format("HTTP状态码应为401或403，实际为: %d", statusCode));
         
-        // 验证响应体包含错误码字段
-        String responseBody = response.getBody().asString();
-        assertTrue(responseBody.contains("\"code\""), 
-            "响应体应包含错误码字段");
+        // 验证响应体中的code字段为非0的错误码
+        int code = response.jsonPath().getInt("code");
+        assertNotEquals(0, code, "响应体code字段应为非0错误码");
         
-        // 验证错误提示包含相关关键词
-        assertTrue(responseBody.toLowerCase().contains("receive_id_type") || 
-                  responseBody.contains("参数错误") ||
-                  responseBody.toLowerCase().contains("invalid parameter"),
-            "错误提示应包含'receive_id_type'或'参数错误'相关信息");
+        // 验证响应体中的msg字段表明身份验证或授权失败
+        String msg = response.jsonPath().getString("msg");
+        boolean isAuthError = msg != null && 
+            (msg.toLowerCase().contains("auth") || 
+             msg.toLowerCase().contains("token") || 
+             msg.toLowerCase().contains("unauthorized") || 
+             msg.toLowerCase().contains("forbidden") ||
+             msg.toLowerCase().contains("权限") ||
+             msg.toLowerCase().contains("认证"));
         
-        // 验证响应体是有效的JSON
-        assertNotNull(response.jsonPath().get("code"), 
-            "响应体应包含有效的错误码");
+        assertEquals(true, isAuthError, 
+            String.format("响应体msg字段应表明身份验证失败，实际为: %s", msg));
     }
 }

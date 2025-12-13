@@ -5,15 +5,16 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class test_2 {
     
-    // 测试变量常量定义
+    // 测试常量定义
     private static final String BASE_URL = "https://open.feishu.cn/open-apis/im/v1";
-    private static final String USER_TOKEN = "u-dE9V3H07F4lWrOY.pxaxXWg4hcIR5gghjyGajMw00K2w";
-    private static final String VALID_CHAT_ID = "oc_b254fcb0d0bd5cd29d27f104bad6d3a5";
-    private static final String INVALID_CHAT_ID = "invalid_chat_id_12345";
+    private static final String CHAT_ID = "1";
+    private static final String USER_TOKEN = "1";
+    private static final String INVALID_CHAT_ID = "invalid_chat_id_123";
+    private static final String VALID_ACCESS_TOKEN = USER_TOKEN;
     
     @BeforeAll
     public static void setup() {
@@ -24,43 +25,43 @@ public class test_2 {
     public void testGetChatMembersWithInvalidChatId() {
         // 构建请求
         RequestSpecification request = given()
-                .header("Authorization", "Bearer " + USER_TOKEN)
-                .header("Content-Type", "application/json")
-                .queryParam("member_id_type", "open_id");
+            .header("Authorization", "Bearer " + VALID_ACCESS_TOKEN)
+            .header("Content-Type", "application/json")
+            .pathParam("chat_id", INVALID_CHAT_ID)
+            .queryParam("member_id_type", "open_id")
+            .queryParam("page_size", 20);
         
-        // 发送请求
-        Response response = request
-                .when()
-                .get("/im/v1/chats/{chat_id}/members", INVALID_CHAT_ID);
+        // 发送GET请求
+        Response response = request.get("/chats/{chat_id}/members");
         
         // 打印响应内容到控制台
-        System.out.println("=== 测试用例：获取群成员列表（无效群ID） ===");
-        System.out.println("请求URL: " + BASE_URL + "/im/v1/chats/" + INVALID_CHAT_ID + "/members");
-        System.out.println("请求Headers: Authorization=Bearer " + USER_TOKEN + ", Content-Type=application/json");
-        System.out.println("请求QueryParams: member_id_type=open_id");
-        System.out.println("响应状态码: " + response.getStatusCode());
-        System.out.println("响应体: " + response.getBody().asString());
-        System.out.println("=== 响应内容结束 ===\n");
+        System.out.println("Response Status Code: " + response.getStatusCode());
+        System.out.println("Response Body: " + response.getBody().asString());
+        System.out.println("Response Headers: " + response.getHeaders());
         
-        // 验证HTTP状态码
-        assertEquals(400, response.getStatusCode(), "HTTP状态码应为400");
+        // 验证HTTP状态码为400
+        assertEquals(400, response.getStatusCode(), 
+            "响应状态码应为400");
         
-        // 验证响应体中的关键字段
-        int code = response.path("code");
-        String msg = response.path("msg");
+        // 验证响应体包含code字段
+        String responseBody = response.getBody().asString();
+        assertNotNull(responseBody, "响应体不应为空");
         
-        assertNotEquals(0, code, "响应code字段应为非0的错误码");
+        // 验证响应体code字段为非0的错误码
+        int code = response.jsonPath().getInt("code");
+        assertEquals(232006, code, 
+            "响应体code字段应为错误码232006");
         
-        // 验证错误信息包含相关描述（不区分大小写）
-        String lowerCaseMsg = msg != null ? msg.toLowerCase() : "";
-        if (lowerCaseMsg.contains("chat") || lowerCaseMsg.contains("群") || 
-            lowerCaseMsg.contains("invalid") || lowerCaseMsg.contains("无效")) {
-            // 验证通过 - 错误信息包含相关关键词
-        } else {
-            System.out.println("警告：错误信息可能不包含预期的关键词，实际msg: " + msg);
-        }
+        // 验证响应体msg字段包含错误描述信息
+        String msg = response.jsonPath().getString("msg");
+        assertNotNull(msg, "响应体msg字段不应为空");
         
-        // 验证响应体结构
-        response.then().assertThat().body("code", org.hamcrest.Matchers.not(0));
+        // 验证错误信息应明确指示chat_id无效
+        String errorMessage = response.jsonPath().getString("msg").toLowerCase();
+        boolean containsChatIdError = errorMessage.contains("chat") || 
+                                     errorMessage.contains("群") || 
+                                     errorMessage.contains("invalid");
+        assertEquals(true, containsChatIdError, 
+            "错误信息应明确指示chat_id无效");
     }
 }

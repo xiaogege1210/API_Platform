@@ -17,6 +17,7 @@ public class RunReport {
     private int passedCount;
     private int failedCount;
     private double passRate;
+    private List<TestCaseResultDto> testResults;
 
     private CoverageReport coverage; // key=接口名称, value=覆盖度%
     private List<TestCaseResultDto> failedDetails; // 失败详情
@@ -37,6 +38,9 @@ public class RunReport {
         this.coverage = apiCoverage;
         this.failedDetails = failedDetails;
         this.suggestions = suggestions;
+    }
+    public void setTestResults(List<TestCaseResultDto> testResults) {
+        this.testResults = testResults;
     }
 
     public void setTotalCount(int totalCount) {
