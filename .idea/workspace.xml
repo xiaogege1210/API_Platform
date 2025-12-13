@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a088f82-6ef3-428d-b391-344aaff2b65e" name="更改" comment="运行报告（去除覆盖率版）" />
+    <list default="true" id="9a088f82-6ef3-428d-b391-344aaff2b65e" name="更改" comment="运行报告（去除覆盖率版）">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/ApiSceneAnalyzerServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/ApiSceneAnalyzerServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_1.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_1.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_2.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/index.html" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -20,9 +27,22 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <favorite-branches>
+      <branch-storage>
+        <map>
+          <entry type="LOCAL">
+            <value>
+              <list>
+                <branch-info repo="$PROJECT_DIR$" source="wugeqi" />
+              </list>
+            </value>
+          </entry>
+        </map>
+      </branch-storage>
+    </favorite-branches>
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="main" />
+        <entry key="$PROJECT_DIR$" value="1" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -53,47 +73,47 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
-    &quot;JUnit.DemoApplicationTests.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TestCaseManagementServiceImplTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TestCaseManagementServiceImplTest.testBasic2.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TestCaseManagementServiceImplTest.testBasic3.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TestCaseManagementServiceImplTest.testBasic4.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TestCaseManagementServiceImplTest.testBasic5.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TestCaseManagementServiceImplTest.testBasic6.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TestCaseManagementServiceImplTest.testBasic7.executor&quot;: &quot;Debug&quot;,
-    &quot;JUnit.TestExcutionServiceImplTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TestExcutionServiceImplTest.testExecuteTestClass.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TestExcutionServiceImplTest.testExecuteTestsMethod.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.coverageAnalysisServiceImpltest.executor&quot;: &quot;Run&quot;,
-    &quot;JavaScript 调试.1.html.executor&quot;: &quot;Run&quot;,
-    &quot;JavaScript 调试.case.html.executor&quot;: &quot;Run&quot;,
-    &quot;JavaScript 调试.index.html.executor&quot;: &quot;Run&quot;,
-    &quot;JavaScript 调试.index1.html.executor&quot;: &quot;Run&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;Spring Boot.DemoApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;hl&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/IDEA2024/project/API_Platform_2&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;项目&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
-    &quot;应用程序.DemoApplication.executor&quot;: &quot;Run&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "JUnit.DemoApplicationTests.executor": "Run",
+    "JUnit.TestCaseManagementServiceImplTest.executor": "Run",
+    "JUnit.TestCaseManagementServiceImplTest.testBasic2.executor": "Run",
+    "JUnit.TestCaseManagementServiceImplTest.testBasic3.executor": "Run",
+    "JUnit.TestCaseManagementServiceImplTest.testBasic4.executor": "Run",
+    "JUnit.TestCaseManagementServiceImplTest.testBasic5.executor": "Run",
+    "JUnit.TestCaseManagementServiceImplTest.testBasic6.executor": "Run",
+    "JUnit.TestCaseManagementServiceImplTest.testBasic7.executor": "Debug",
+    "JUnit.TestExcutionServiceImplTest.executor": "Run",
+    "JUnit.TestExcutionServiceImplTest.testExecuteTestClass.executor": "Run",
+    "JUnit.TestExcutionServiceImplTest.testExecuteTestsMethod.executor": "Run",
+    "JUnit.coverageAnalysisServiceImpltest.executor": "Run",
+    "JavaScript 调试.1.html.executor": "Run",
+    "JavaScript 调试.case.html.executor": "Run",
+    "JavaScript 调试.index.html.executor": "Run",
+    "JavaScript 调试.index1.html.executor": "Run",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.DemoApplication.executor": "Run",
+    "git-widget-placeholder": "wugeqi 上的 #2",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/IDEA2024/project/API_Platform_2",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "项目",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0",
+    "vue.rearranger.settings.migration": "true",
+    "应用程序.DemoApplication.executor": "Run"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="com.example.demo.service" />
@@ -203,6 +223,7 @@
         <item itemvalue="JUnit.TestExcutionServiceImplTest.testExecuteTestClass" />
         <item itemvalue="JUnit.TestCaseManagementServiceImplTest.testBasic7" />
         <item itemvalue="JUnit.coverageAnalysisServiceImpltest" />
+        <item itemvalue="JavaScript 调试.index.html" />
       </list>
     </recent_temporary>
   </component>
@@ -215,6 +236,9 @@
     </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="应用程序级" UseSingleDictionary="true" transferred="true" />
+  <component name="StructureViewState">
+    <option name="selectedTab" value="逻辑" />
+  </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="默认任务">
       <changelist id="9a088f82-6ef3-428d-b391-344aaff2b65e" name="更改" comment="" />
@@ -262,6 +286,8 @@
       <workItem from="1765514134349" duration="4367000" />
       <workItem from="1765527596297" duration="339000" />
       <workItem from="1765616532065" duration="19257000" />
+      <workItem from="1765638440596" duration="180000" />
+      <workItem from="1765638631846" duration="686000" />
     </task>
     <task id="LOCAL-00001" summary="添加测试用例的补充报告">
       <option name="closed" value="true" />
@@ -424,7 +450,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="hl" />
+                        <option value="1" />
                       </list>
                     </value>
                   </entry>
