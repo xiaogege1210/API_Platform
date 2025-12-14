@@ -38,6 +38,11 @@ public class CoverageAnalysisServiceImpl implements CoverageAnalysisService {
     public CoverageReport AiGenerateCoverageReport(String apiDoc, String extraScene, List<String> generatedTestScenarios) {
         CoverageReport report = new CoverageReport();
         List<String> totalTheoreticalScenarios = apiSceneAnalyzerService.analyze(apiDoc,extraScene);
+
+        for(String scene: totalTheoreticalScenarios){
+            System.out.println(scene);
+        }
+
         int totalCases = totalTheoreticalScenarios.size();
         report.setTotalCases(totalCases);
 
@@ -48,26 +53,25 @@ public class CoverageAnalysisServiceImpl implements CoverageAnalysisService {
                 .filter(scene -> !scene.isEmpty())
                 .collect(Collectors.toList());
 
-        // 核心：使用AI匹配计算覆盖数（失败时自动降级为手动规则）
-        for (String scene : validGeneratedScenarios) {
-            System.out.println(scene);
-        }
+        // 3. 核心优化：仅调用一次大模型，获取匹配结果数组
+        List<Integer> matchResultArray = aiScenarioMatchUtils.getMatchResultArray(totalTheoreticalScenarios, validGeneratedScenarios);
 
-        int coveredCount = aiScenarioMatchUtils.countMatchedScenariosByAI(totalTheoreticalScenarios, validGeneratedScenarios);
+        // 4. 基于同一数组计算覆盖数和遗漏场景（无DTO，直接计算）
+        int coveredCount = aiScenarioMatchUtils.calculateCoveredCount(matchResultArray);
+        List<String> missingScenarios = aiScenarioMatchUtils.calculateMissingScenarios(matchResultArray, totalTheoreticalScenarios);
 
-       report.setTestedCases(coveredCount);
-       System.out.println("coveredCount: " + coveredCount);
-
-        // 计算覆盖度（保留2位小数）
-        double coverageRate = totalTheoreticalScenarios.size() == 0 ? 0 : (double) coveredCount / totalTheoreticalScenarios.size()*100;
+        // 5. 计算覆盖度（修复数值转换错误）
+        double coverageRate = totalCases == 0 ? 0 : (double) coveredCount / totalCases*100;
         report.setCoverageScore(coverageRate);
 
-        // 获取未覆盖场景（AI匹配失败时降级）
-        List<String> missingScenarios = aiScenarioMatchUtils.getMissingScenariosByAI(totalTheoreticalScenarios, validGeneratedScenarios);
+        // 6. 填充结果
+        report.setTestedCases(coveredCount);
         report.setMissingScenarios(missingScenarios);
-//        for(String scene : missingScenarios) {
-//            System.out.println(scene);
-//        }
+        System.out.println("**********");
+        for(String scene: missingScenarios){
+            System.out.println(scene);
+        }
+        report.setMissingScenarios(missingScenarios);
 
         return report;
     }

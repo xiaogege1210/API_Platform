@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 public class test_1 {
     private static final String BASE_URL = "https://open.feishu.cn/open-apis/im/v1";
@@ -15,13 +14,10 @@ public class test_1 {
     @BeforeAll
     public static void setup() {
         RestAssured.baseURI = BASE_URL;
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     }
     
     @Test
-    public void testGetChatMembersWithDefaultParameters() {
-        System.out.println("=== 开始测试：获取群成员列表（默认参数） ===");
-        
+    public void testGetChatMembersDefaultParams() {
         RequestSpecification request = given()
             .header("Authorization", "Bearer " + USER_TOKEN)
             .header("Content-Type", "application/json")
@@ -29,17 +25,11 @@ public class test_1 {
             .queryParam("member_id_type", "open_id")
             .queryParam("page_size", 20);
         
-        System.out.println("请求URL: " + BASE_URL + "/chats/" + CHAT_ID + "/members");
-        System.out.println("请求头: Authorization=Bearer " + USER_TOKEN);
-        System.out.println("查询参数: member_id_type=open_id, page_size=20");
-        
-        Response response = request.when().get("/chats/{chat_id}/members");
+        Response response = request.when()
+            .get("/chats/{chat_id}/members");
         
         String responseBody = response.getBody().asString();
-        System.out.println("=== 响应内容 ===");
-        System.out.println("状态码: " + response.getStatusCode());
-        System.out.println("响应体: " + responseBody);
-        System.out.println("=== 响应结束 ===");
+        System.out.println("Response Body: " + responseBody);
         
         response.then()
             .statusCode(200)
@@ -51,12 +41,10 @@ public class test_1 {
         
         if (response.jsonPath().getList("data.items").size() > 0) {
             response.then()
-                .body("data.items[0].member_id_type", notNullValue())
-                .body("data.items[0].member_id", notNullValue())
-                .body("data.items[0].name", notNullValue())
-                .body("data.items[0].tenant_key", notNullValue());
+                .body("data.items[0]", hasKey("member_id_type"))
+                .body("data.items[0]", hasKey("member_id"))
+                .body("data.items[0]", hasKey("name"))
+                .body("data.items[0]", hasKey("tenant_key"));
         }
-        
-        System.out.println("=== 测试通过：成功获取群成员列表 ===");
     }
 }
