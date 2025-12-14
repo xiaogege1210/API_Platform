@@ -1131,16 +1131,16 @@
     coverageAnalysis.innerHTML = `
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         <div>
-          <span class="text-slate-500 text-sm">覆盖率得分</span>
-          <div class="text-2xl font-bold text-emerald-600 mt-1">${coverage.score || 0}</div>
+          <span class="text-slate-500 text-sm">覆盖率</span>
+          <div class="text-2xl font-bold text-emerald-600 mt-1">${coverage.coverageScore || 0}</div>
         </div>
         <div>
           <span class="text-slate-500 text-sm">理论场景数</span>
-          <div class="text-2xl font-bold text-indigo-600 mt-1">${coverage.totalTheoreticalScenarios || 0}</div>
+          <div class="text-2xl font-bold text-indigo-600 mt-1">${coverage.totalCases || 0}</div>
         </div>
         <div>
           <span class="text-slate-500 text-sm">已覆盖场景数</span>
-          <div class="text-2xl font-bold text-indigo-600 mt-1">${coverage.coveredScenarios || 0}</div>
+          <div class="text-2xl font-bold text-indigo-600 mt-1">${coverage.testedCases || 0}</div>
         </div>
       </div>
 
