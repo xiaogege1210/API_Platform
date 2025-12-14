@@ -927,6 +927,8 @@
     showStatusMessage("正在进行 AI 分析...", "info");
     const allCode = selectedTestCases.map(tc => tc.code).join('\n\n');
 
+
+
     try {
       showLoading(true);
       const res = await fetch('/api/testcase/analyze', {
@@ -934,9 +936,9 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           testCode: allCode,
-          testText: scenarioName,
+
           apiDoc: ApiData_text ? JSON.stringify(ApiData_text) : '',
-          environment: '', dependency: ''
+
         })
       });
       const data = await res.json();
@@ -1033,16 +1035,23 @@
 
 
       // 调用覆盖率评分接口
+      let sceneValue = '新场景'; // 默认值兜底
       const sceneElement = document.querySelector('.testcase-box .text-slate-400');
-      const sceneText = sceneElement.textContent.trim();
-      const sceneValue = sceneText.replace('场景:', '').trim();
 
+      if (sceneElement) { // 先判断元素是否存在
+        const sceneText = sceneElement.textContent.trim();
+        // 用正则匹配更鲁棒：匹配“场景:”后任意字符，忽略前后空格
+        const sceneMatch = sceneText.match(/场景:\s*(.+)/);
+        // 若匹配成功则取结果，否则保留默认值
+        sceneValue = sceneMatch ? sceneMatch[1].trim() : '-';
+      }
       const coverageRes = await fetch('/api/testcase/calculate-coverage', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({
           apiDoc: ApiData_text ? JSON.stringify(ApiData_text) : '',
           extraScene: sceneValue
+
         })
       });
 
@@ -1123,15 +1132,15 @@
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         <div>
           <span class="text-slate-500 text-sm">覆盖率得分</span>
-          <div class="text-2xl font-bold text-emerald-600 mt-1">${coverage.coverageScore || 0}</div>
+          <div class="text-2xl font-bold text-emerald-600 mt-1">${coverage.score || 0}</div>
         </div>
         <div>
           <span class="text-slate-500 text-sm">理论场景数</span>
-          <div class="text-2xl font-bold text-indigo-600 mt-1">${coverage.totalCases || 0}</div>
+          <div class="text-2xl font-bold text-indigo-600 mt-1">${coverage.totalTheoreticalScenarios || 0}</div>
         </div>
         <div>
           <span class="text-slate-500 text-sm">已覆盖场景数</span>
-          <div class="text-2xl font-bold text-indigo-600 mt-1">${coverage.testedCases || 0}</div>
+          <div class="text-2xl font-bold text-indigo-600 mt-1">${coverage.coveredScenarios || 0}</div>
         </div>
       </div>
 
