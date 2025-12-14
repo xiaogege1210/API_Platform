@@ -291,10 +291,9 @@ public class ApiController {
 
             String analysis = testCaseAnalysisService.generateAnalysisAndSuggestions(
                     request.getApiDoc(),
-                    request.getEnvironment(),
-                    request.getDependency(),
-                    request.getTestCode(),
-                    request.getTestText()
+
+                    request.getTestCode()
+
             );
 
             Map<String, Object> result = new HashMap<>();
@@ -330,7 +329,7 @@ public class ApiController {
             }
 
             // 2. 定义基础路径（对应Python中的output_dir）
-            String baseDir = "C:\\test_study_zijie\\API_Platform_2\\src\\main\\resources\\case_generated";
+            String baseDir = "D:\\IDEA2024\\project\\API_Platform\\src\\main\\resources\\case_generated";
             System.out.println(extraScene);
             // 3. 拼接完整路径：baseDir + extraScene + ".json"
             // 自动处理路径分隔符，避免硬编码\\，同时防止extraScene含非法字符（如/、\）

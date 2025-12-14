@@ -49,18 +49,25 @@ public class CoverageAnalysisServiceImpl implements CoverageAnalysisService {
                 .collect(Collectors.toList());
 
         // 核心：使用AI匹配计算覆盖数（失败时自动降级为手动规则）
+        for (String scene : validGeneratedScenarios) {
+            System.out.println(scene);
+        }
 
         int coveredCount = aiScenarioMatchUtils.countMatchedScenariosByAI(totalTheoreticalScenarios, validGeneratedScenarios);
 
-//        report.setCoveredCases(coveredCount);
+       report.setTestedCases(coveredCount);
+       System.out.println("coveredCount: " + coveredCount);
 
         // 计算覆盖度（保留2位小数）
-        double coverageRate = totalTheoreticalScenarios.size() == 0 ? 0 : (double) coveredCount / totalTheoreticalScenarios.size();
+        double coverageRate = totalTheoreticalScenarios.size() == 0 ? 0 : (double) coveredCount / totalTheoreticalScenarios.size()*100;
         report.setCoverageScore(coverageRate);
 
         // 获取未覆盖场景（AI匹配失败时降级）
         List<String> missingScenarios = aiScenarioMatchUtils.getMissingScenariosByAI(totalTheoreticalScenarios, validGeneratedScenarios);
         report.setMissingScenarios(missingScenarios);
+//        for(String scene : missingScenarios) {
+//            System.out.println(scene);
+//        }
 
         return report;
     }

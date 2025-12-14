@@ -4,28 +4,43 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a088f82-6ef3-428d-b391-344aaff2b65e" name="更改" comment="运行报告（去除覆盖率版）">
+    <list default="true" id="9a088f82-6ef3-428d-b391-344aaff2b65e" name="更改" comment="修改">
+      <change afterPath="$PROJECT_DIR$/src/main/resources/case_generated/新场景.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/controller/ApiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/controller/ApiController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/CoverageAnalysisService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/CoverageAnalysisService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/TestCaseAnalysisService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/TestCaseAnalysisService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/CoverageAnalysisServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/CoverageAnalysisServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/ReportServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/ReportServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestExecutionServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestExecutionServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_1.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_3.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_4.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_4.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_5.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_5.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_6.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_6.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_7.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_7.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/controller/ApiController$BatchUpdateRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/controller/ApiController$BatchUpdateRequest.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/controller/ApiController$ExecuteTestCaseRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/controller/ApiController$ExecuteTestCaseRequest.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/controller/ApiController$SaveTestCaseRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/controller/ApiController$SaveTestCaseRequest.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/controller/ApiController$UpdateTestCaseRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/controller/ApiController$UpdateTestCaseRequest.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/controller/ApiController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/controller/ApiController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/TestCaseAnalysisService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/TestCaseAnalysisService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/CoverageAnalysisServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/CoverageAnalysisServiceImpl.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/ReportServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/ReportServiceImpl.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestExecutionServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestExecutionServiceImpl.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_1.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_1.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_2.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_3.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_3.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_4.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_4.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_5.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_5.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_6.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_6.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_7.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_7.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/test-classes/test_1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/test_1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/test-classes/test_2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/test_2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/test_3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/test_3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/test_4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/test_4.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/test_5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/test_5.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/test-classes/test_6.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/test_6.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -116,7 +131,7 @@
     &quot;Spring Boot.DemoApplication.executor&quot;: &quot;Run&quot;,
     &quot;git-widget-placeholder&quot;: &quot;wugeqi 上的 #2&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/IDEA2024/project/API_Platform_2&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/IDEA2024/project/API_Platform/src/main/resources/case_generated&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -134,6 +149,7 @@
       <recent name="com.example.demo.service" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\IDEA2024\project\API_Platform\src\main\resources\case_generated" />
       <recent name="D:\IDEA2024\project\API_Platform\src\main\java\com\example\demo" />
       <recent name="D:\IDEA2024\project\API_Platform\src\main\java\com\example\demo\service" />
       <recent name="D:\IDEA2024\project\API_Platform\src\main\java\com\example\demo\service\impl" />
@@ -303,7 +319,8 @@
       <workItem from="1765616532065" duration="19257000" />
       <workItem from="1765638440596" duration="180000" />
       <workItem from="1765638631846" duration="2569000" />
-      <workItem from="1765686654747" duration="1891000" />
+      <workItem from="1765686654747" duration="4020000" />
+      <workItem from="1765695956698" duration="5785000" />
     </task>
     <task id="LOCAL-00001" summary="添加测试用例的补充报告">
       <option name="closed" value="true" />
@@ -457,7 +474,47 @@
       <option name="project" value="LOCAL" />
       <updated>1765639442897</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="运行报告完整版">
+      <option name="closed" value="true" />
+      <created>1765688838075</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1765688838076</updated>
+    </task>
+    <task id="LOCAL-00021" summary="运行报告完整版">
+      <option name="closed" value="true" />
+      <created>1765688851140</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1765688851140</updated>
+    </task>
+    <task id="LOCAL-00022" summary="修改">
+      <option name="closed" value="true" />
+      <created>1765700687746</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1765700687746</updated>
+    </task>
+    <task id="LOCAL-00023" summary="修改">
+      <option name="closed" value="true" />
+      <created>1765701135846</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1765701135846</updated>
+    </task>
+    <task id="LOCAL-00024" summary="修改">
+      <option name="closed" value="true" />
+      <created>1765701577209</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1765701577209</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -494,9 +551,10 @@
     <MESSAGE value="留档" />
     <MESSAGE value="修改前端ui展示界面" />
     <MESSAGE value="更新一键智能生成" />
-    <MESSAGE value="修改" />
     <MESSAGE value="运行报告（去除覆盖率版）" />
-    <option name="LAST_COMMIT_MESSAGE" value="运行报告（去除覆盖率版）" />
+    <MESSAGE value="运行报告完整版" />
+    <MESSAGE value="修改" />
+    <option name="LAST_COMMIT_MESSAGE" value="修改" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

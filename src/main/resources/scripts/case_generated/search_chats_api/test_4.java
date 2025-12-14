@@ -3,57 +3,54 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
 import static io.restassured.RestAssured.given;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class test_4 {
-    
-    // 测试常量定义
     private static final String BASE_URL = "https://open.feishu.cn/open-apis/im/v1";
-    private static final String CHAT_ID = "oc_a0553eda9014c201e6969b478895c230";
     private static final String USER_TOKEN = "1";
+    private static final String CHAT_ID = "1";
+    private static final String INVALID_CHAT_ID = "invalid_chat_id_123";
     
     @BeforeAll
     public static void setup() {
         RestAssured.baseURI = BASE_URL;
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     }
     
     @Test
-    public void testGetChatMembersWithExcessivePageSize() {
-        // 构建请求
+    @DisplayName("异常用例-无效的群ID")
+    public void testGetChatMembersWithInvalidChatId() {
+        System.out.println("=== 开始测试：获取群成员列表（无效群ID） ===");
+        
         RequestSpecification request = given()
             .header("Authorization", "Bearer " + USER_TOKEN)
             .header("Content-Type", "application/json")
-            .queryParam("page_size", 150);
+            .queryParam("member_id_type", "open_id");
         
-        // 发送请求
-        Response response = request.get("/chats/{chat_id}/members", CHAT_ID);
+        System.out.println("请求URL: " + BASE_URL + "/chats/" + INVALID_CHAT_ID + "/members");
+        System.out.println("请求Headers: Authorization=Bearer " + USER_TOKEN);
+        System.out.println("请求Query参数: member_id_type=open_id");
         
-        // 打印响应内容到控制台
-        System.out.println("Response Status: " + response.getStatusCode());
-        System.out.println("Response Body: " + response.getBody().asString());
-        System.out.println("Response Headers: " + response.getHeaders());
+        Response response = request.when()
+            .get("/chats/{chat_id}/members", INVALID_CHAT_ID);
         
-        // 验证HTTP状态码为400
-        assertEquals(400, response.getStatusCode(), 
-            "HTTP状态码应为400，但实际为: " + response.getStatusCode());
+        String responseBody = response.getBody().asString();
+        System.out.println("=== 响应状态码: " + response.getStatusCode() + " ===");
+        System.out.println("=== 响应内容: ===");
+        System.out.println(responseBody);
+        System.out.println("=== 响应结束 ===");
         
-        // 验证响应体中的code字段为非0的错误码
-        int code = response.jsonPath().getInt("code");
-        assertNotEquals(0, code, 
-            "响应体code字段应为非0错误码，但实际为: " + code);
+        response.then()
+            .statusCode(400)
+            .body("code", notNullValue())
+            .body("code", equalTo(232006))
+            .body("msg", notNullValue());
         
-        // 验证响应体中的msg字段不为空（表明参数验证失败）
-        String msg = response.jsonPath().getString("msg");
-        assertNotEquals(null, msg, "响应体msg字段不应为空");
-        assertNotEquals("", msg.trim(), "响应体msg字段不应为空字符串");
-        
-        // 打印验证结果
-        System.out.println("测试通过：");
-        System.out.println("1. HTTP状态码验证成功：400");
-        System.out.println("2. 响应体code字段验证成功：非0错误码 (" + code + ")");
-        System.out.println("3. 响应体msg字段验证成功：" + msg);
+        System.out.println("断言验证通过：");
+        System.out.println("1. 状态码为400 ✓");
+        System.out.println("2. 响应体code字段为非0的错误码(232006) ✓");
+        System.out.println("3. 响应体msg字段包含错误提示信息 ✓");
     }
 }

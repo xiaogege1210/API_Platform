@@ -30,7 +30,7 @@ public class ReportServiceImpl implements ReportService {
 
         report.setPassedCount((int) passed);
         report.setFailedCount((int) failed);
-        report.setPassRate(results.size() == 0 ? 0 : passed * 1.0 / results.size());
+        report.setPassRate(results.size() == 0 ? 0 : passed * 1.0 / results.size()*100);
 
         // 失败详情
         List<TestCaseResultDto> failedDetails = results.stream()
