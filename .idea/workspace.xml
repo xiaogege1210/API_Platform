@@ -4,30 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9a088f82-6ef3-428d-b391-344aaff2b65e" name="更改" comment="修改">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/case_generated/新场景.json" afterDir="false" />
+    <list default="true" id="9a088f82-6ef3-428d-b391-344aaff2b65e" name="更改" comment="覆盖率待修复">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/controller/ApiController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/controller/ApiController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/TestCaseAnalysisService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/TestCaseAnalysisService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/CoverageAnalysisServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/CoverageAnalysisServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/ReportServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/ReportServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/demo/utils/AIScenarioMatchUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/demo/utils/AIScenarioMatchUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/case_generated/新场景.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/case_generated/新场景.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_1.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_3.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_4.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_4.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_5.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_5.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_6.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_6.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_7.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/scripts/case_generated/search_chats_api/test_7.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/controller/ApiController$BatchUpdateRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/controller/ApiController$BatchUpdateRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/controller/ApiController$ExecuteTestCaseRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/controller/ApiController$ExecuteTestCaseRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/controller/ApiController$SaveTestCaseRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/controller/ApiController$SaveTestCaseRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/controller/ApiController$UpdateTestCaseRequest.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/controller/ApiController$UpdateTestCaseRequest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/controller/ApiController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/controller/ApiController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/TestCaseAnalysisService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/TestCaseAnalysisService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/CoverageAnalysisServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/CoverageAnalysisServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/ReportServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/ReportServiceImpl.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/example/demo/service/impl/TestCaseAnalysisServiceImpl.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_1.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_1.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_2.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_2.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_3.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_3.java" afterDir="false" />
@@ -37,10 +21,6 @@
       <change beforePath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_7.java" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/scripts/case_generated/search_chats_api/test_7.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/test-classes/test_1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/test_1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/test-classes/test_2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/test_2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/test_3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/test_3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/test_4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/test_4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/test_5.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/test_5.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/test-classes/test_6.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/test-classes/test_6.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -320,7 +300,7 @@
       <workItem from="1765638440596" duration="180000" />
       <workItem from="1765638631846" duration="2569000" />
       <workItem from="1765686654747" duration="4020000" />
-      <workItem from="1765695956698" duration="5785000" />
+      <workItem from="1765695956698" duration="6677000" />
     </task>
     <task id="LOCAL-00001" summary="添加测试用例的补充报告">
       <option name="closed" value="true" />
@@ -514,7 +494,31 @@
       <option name="project" value="LOCAL" />
       <updated>1765701577209</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="修改">
+      <option name="closed" value="true" />
+      <created>1765701901409</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1765701901409</updated>
+    </task>
+    <task id="LOCAL-00026" summary="修改">
+      <option name="closed" value="true" />
+      <created>1765702000073</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1765702000073</updated>
+    </task>
+    <task id="LOCAL-00027" summary="覆盖率待修复">
+      <option name="closed" value="true" />
+      <created>1765702023127</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1765702023127</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -554,7 +558,8 @@
     <MESSAGE value="运行报告（去除覆盖率版）" />
     <MESSAGE value="运行报告完整版" />
     <MESSAGE value="修改" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改" />
+    <MESSAGE value="覆盖率待修复" />
+    <option name="LAST_COMMIT_MESSAGE" value="覆盖率待修复" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
