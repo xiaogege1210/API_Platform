@@ -3,80 +3,77 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.DisplayName;
-
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class test_1 {
-    
     // 常量定义
     private static final String BASE_URL = "https://open.feishu.cn/open-apis/im/v1";
     private static final String CHAT_ID = "oc_a0553eda9014c201e6969b478895c230";
-    private static final String VALID_ACCESS_TOKEN = "1";
-    private static final String MEMBER_ID_TYPE = "open_id";
-    private static final int PAGE_SIZE = 20;
-    
+    private static final String USER_TOKEN = "1";
+    private static final String ACCESS_TOKEN = "1"; // 根据实际情况替换为有效的token
+
     @BeforeAll
     public static void setup() {
         RestAssured.baseURI = BASE_URL;
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     }
-    
+
     @Test
-    @DisplayName("正向用例-获取群成员列表-基础查询")
-    public void testGetChatMembers() {
+    public void testGetChatMembersWithDefaultParams() {
         // 构建请求
         RequestSpecification request = given()
-            .header("Authorization", "Bearer " + VALID_ACCESS_TOKEN)
-            .header("Content-Type", "application/json")
-            .pathParam("chat_id", CHAT_ID)
-            .queryParam("member_id_type", MEMBER_ID_TYPE)
-            .queryParam("page_size", PAGE_SIZE);
-        
-        // 发送请求并获取响应
-        Response response = request.when()
-            .get("/chats/{chat_id}/members");
+                .header("Authorization", "Bearer " + ACCESS_TOKEN)
+                .header("Content-Type", "application/json")
+                .queryParam("member_id_type", "open_id")
+                .queryParam("page_size", 20);
+
+        // 发送请求
+        Response response = request.get("/chats/{chat_id}/members", CHAT_ID);
         
         // 打印响应内容到控制台
-        System.out.println("响应状态码: " + response.getStatusCode());
-        System.out.println("响应内容: ");
-        response.prettyPrint();
+        System.out.println("Response Body:");
+        System.out.println(response.getBody().asString());
+        System.out.println("Status Code: " + response.getStatusCode());
         
         // 验证HTTP状态码
-        response.then().statusCode(200);
+        assertEquals(200, response.getStatusCode(), "HTTP状态码应为200");
         
         // 验证响应体中的关键字段
-        response.then()
-            .body("code", equalTo(0))
-            .body("msg", equalTo("success"))
-            .body("data", notNullValue())
-            .body("data.items", notNullValue())
-            .body("data.has_more", instanceOf(Boolean.class))
-            .body("data.member_total", instanceOf(Integer.class));
+        int code = response.path("code");
+        String msg = response.path("msg");
+        Object data = response.path("data");
+        Object items = response.path("data.items");
         
-        // 验证data.items数组中的元素结构
-        if (response.path("data.items") != null) {
-            response.then()
-                .body("data.items[0].member_id_type", notNullValue())
-                .body("data.items[0].member_id", notNullValue())
-                .body("data.items[0].name", notNullValue())
-                .body("data.items[0].tenant_key", notNullValue());
+        assertEquals(0, code, "响应体code字段应为0");
+        assertEquals("success", msg, "响应体msg字段应为'success'");
+        assertNotNull(data, "响应体data字段应存在");
+        assertNotNull(items, "响应体data.items数组应存在");
+        
+        // 验证items数组中的对象结构
+        if (items instanceof java.util.List) {
+            java.util.List<?> itemsList = (java.util.List<?>) items;
+            if (!itemsList.isEmpty()) {
+                Object firstItem = itemsList.get(0);
+                assertNotNull(response.path("data.items[0].member_id_type"), 
+                    "items数组中对象应包含member_id_type字段");
+                assertNotNull(response.path("data.items[0].member_id"), 
+                    "items数组中对象应包含member_id字段");
+                assertNotNull(response.path("data.items[0].name"), 
+                    "items数组中对象应包含name字段");
+                assertNotNull(response.path("data.items[0].tenant_key"), 
+                    "items数组中对象应包含tenant_key字段");
+            }
         }
         
-        // 使用JUnit断言进行额外验证
-        assertEquals(200, response.getStatusCode(), "HTTP状态码应为200");
-        assertEquals(0, response.path("code"), "code字段应为0");
-        assertEquals("success", response.path("msg"), "msg字段应为'success'");
+        // 验证分页相关字段
+        assertNotNull(response.path("data.page_token"), 
+            "data字段应包含page_token字段");
+        assertNotNull(response.path("data.has_more"), 
+            "data字段应包含has_more字段");
+        assertNotNull(response.path("data.member_total"), 
+            "data字段应包含member_total字段");
         
-        // 验证响应时间（可选，这里设置5秒超时）
-        assertTrue(response.getTime() < 5000, "接口响应时间应小于5秒");
-        
-        // 打印数据映射信息
-        System.out.println("\n数据映射信息:");
-        System.out.println("此接口返回的data.items数组中的member_id字段（用户ID）和member_id_type字段（ID类型），");
-        System.out.println("可以被业务链路中的其他接口（如发送消息接口、@用户等）作为输入参数使用。");
-        System.out.println("例如，发送消息时可以使用这些member_id来指定消息接收者。");
+        System.out.println("测试通过：成功获取群成员列表，返回格式正确，分页参数正常");
     }
 }

@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 @Controller
@@ -314,26 +316,51 @@ public class ApiController {
     @ResponseBody
     public ResponseEntity<?> calculateCoverage(
             @RequestParam("apiDoc") String apiDocContent,
-            @RequestParam("extraScene") String extraScene)
-             {
+            @RequestParam("extraScene") String extraScene) { // 移除filePath参数
 
         try {
+            // 1. 入参校验（保留核心校验，移除filePath相关）
             if (apiDocContent == null || apiDocContent.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(createErrorResponse("API文档内容不能为空"));
             }
-
             if (extraScene == null || extraScene.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(createErrorResponse("接口场景描述不能为空"));
             }
 
+            // 2. 定义基础路径（对应Python中的output_dir）
+            String baseDir = "C:\\test_study_zijie\\API_Platform_2\\src\\main\\resources\\case_generated";
+            System.out.println(extraScene);
+            // 3. 拼接完整路径：baseDir + extraScene + ".json"
+            // 自动处理路径分隔符，避免硬编码\\，同时防止extraScene含非法字符（如/、\）
+            String jsonFileName = extraScene.replaceAll("[\\\\/:*?\"<>|]", "") + ".json"; // 过滤非法文件名字符
+//            Path fullFilePath = Paths.get(baseDir);
+            Path fullFilePath = Paths.get(baseDir, jsonFileName);
+            String fullPathStr = fullFilePath.toString();
+            System.out.println(fullPathStr);
 
+            // 4. 路径合法性校验（防止路径穿越，如extraScene传入../xxx）
+            Path normalizedBaseDir = Paths.get(baseDir).normalize();
+            Path normalizedFullPath = fullFilePath.normalize();
+            if (!normalizedFullPath.startsWith(normalizedBaseDir)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(createErrorResponse("文件路径不合法，禁止访问基础目录外的文件"));
+            }
+
+            // 5. 读取并解析JSON文件中的测试用例名称
+            List<String> generatedTestScenarios = testCaseNameParser.extractAllCaseNames(fullPathStr);
+
+            // 6. 生成覆盖度报告
             CoverageReport report = coverageAnalysisService.AiGenerateCoverageReport(
                     apiDocContent,
-                    extraScene
-
+                    extraScene,
+                    generatedTestScenarios
             );
+            System.out.println(report.getCoverageScore());
+            System.out.println(report.getMissingScenarios());
+            System.out.println(report.getTotalCases());
+
 
             return ResponseEntity.ok(report);
         } catch (Exception e) {
@@ -350,6 +377,11 @@ public class ApiController {
     public ResponseEntity<?> executeSingleTestCase(@RequestBody ExecuteTestCaseRequest request) {
         try {
             TestCaseResultDto result = testExecutionService.testExecution(request.getTestCaseFileName());
+            System.out.println("测试执行输出");
+            System.out.println(result.getFailureReason());
+            System.out.println(result.getOutputText());
+            System.out.println("------------------------");
+
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             logger.error("执行单个测试用例失败: {}", request.getTestCaseFileName(), e);
@@ -363,6 +395,7 @@ public class ApiController {
     public ResponseEntity<?> executeBatchTestCases(@RequestBody List<ExecuteTestCaseRequest> requests) {
         try {
             List<String> fileNames = new ArrayList<>();
+
             for (ExecuteTestCaseRequest request : requests) {
                 fileNames.add(request.getTestCaseFileName());
             }

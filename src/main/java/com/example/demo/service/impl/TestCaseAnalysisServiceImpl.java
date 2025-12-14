@@ -212,33 +212,49 @@ public class TestCaseAnalysisServiceImpl implements TestCaseAnalysisService {
                         "2. 执行结果：\n" + escapedResult + "\n\n" +
 
                         "### 问题分类标准\n" +
-                        "【需要修复代码的情况】\n" +
-                        "✓ 编译错误：语法错误、类型不匹配、缺少导入语句\n" +
-                        "✓ 运行时异常：NullPointerException、ClassCastException、AssertionError(断言语法错误)\n" +
-                        "✓ 类型安全问题：Object与基本类型直接比较、未判空就类型转换\n" +
-                        "✓ 代码逻辑错误：明显的逻辑缺陷导致的测试失败\n\n" +
+                        "【必须修复代码的情况】\n" +
+                        "✓ 编译错误（语法错误）：包含 '错误:'、'cannot find symbol'、'expected'、'; expected'、'不兼容的类型'、'不匹配的类型'、'找不到符号'、'illegal start'、'not a statement'、'missing return statement'、'method does not override' 等关键词\n" +
+                        "✓ 类型不匹配错误：包含 '操作数类型错误'、'bad operand types'、'incompatible types'、'type mismatch' 等，如 Object 与基本类型直接比较\n" +
+                        "✓ 运行时异常：NullPointerException、ClassCastException、IndexOutOfBoundsException、AssertionError(断言语法错误)\n" +
+                        "✓ 未处理的异常：方法未声明抛出异常但实际抛出\n" +
+                        "✓ 导入缺失：缺少必要的 import 语句\n" +
+                        "✓ 方法签名错误：参数类型不匹配、返回类型错误\n" +
+                        "✓ 变量未定义或未初始化\n\n" +
 
-                        "【需要返回建议的情况】\n" +
+                        "【必须返回建议的情况】\n" +
                         "✓ 业务错误：接口返回非200状态码（400/401/403/404/500等）\n" +
                         "✓ 数据问题：参数错误、ID不存在、数据过期、权限不足\n" +
                         "✓ 环境问题：网络超时、服务不可用、配置缺失\n" +
-                        "✓ 预期不匹配：实际返回值与预期不同但代码逻辑正确\n" +
-                        "✓ 断言失败但代码正确：测试数据失效导致的断言失败\n\n" +
+                        "✓ 断言失败但代码正确：测试数据失效导致的断言失败\n" +
+                        "✓ 逻辑正确但测试数据问题：代码逻辑无错误，但测试数据不符合预期\n\n" +
 
                         "### 关键判断点\n" +
                         "1. 如果错误信息包含以下关键词之一，返回建议：\n" +
                         "   - HTTP状态码: 400, 401, 403, 404, 500\n" +
-                        "   - 业务错误描述: \"token无效\", \"权限不足\", \"不存在\", \"参数错误\"\n" +
-                        "   - 数据问题: \"id not exist\", \"invalid parameter\"\n" +
-                        "2. 如果错误是代码语法或类型问题，修复代码\n" +
-                        "3. 如果是NullPointerException等运行时异常，修复代码\n\n" +
+                        "   - 业务错误描述: \"token无效\", \"权限不足\", \"不存在\", \"参数错误\", \"invalid\", \"unauthorized\", \"forbidden\", \"not found\"\n" +
+                        "   - 数据问题: \"id not exist\", \"invalid parameter\", \"data not found\"\n" +
+                        "   - 环境问题: \"timeout\", \"connection\", \"服务不可用\", \"网络\"\n" +
+                        "   - 断言失败但无代码错误: \"expected: <...> but was: <...>\" 且代码逻辑正确\n" +
+                        "\n" +
+                        "2. 如果错误信息包含以下关键词之一，必须修复代码：\n" +
+                        "   - 编译错误关键词: \"错误:\", \"cannot find symbol\", \"expected\", \"; expected\", \".class expected\"\n" +
+                        "   - 类型不匹配: \"不兼容的类型\", \"incompatible types\", \"类型不匹配\", \"type mismatch\", \"bad operand types\"\n" +
+                        "   - 操作数类型错误: \"操作数类型错误\", \"operator ... cannot be applied to\"\n" +
+                        "   - 运行时异常: \"NullPointerException\", \"ClassCastException\", \"ArrayIndexOutOfBoundsException\"\n" +
+                        "   - 语法错误: \"illegal start\", \"not a statement\", \"missing return\", \"void method cannot return\"\n" +
+                        "\n" +
+                        "3. 特别重要的判断规则：\n" +
+                        "   - 如果错误信息显示编译失败（退出码：1）并且包含具体行号和错误描述，这是编译错误，必须修复代码\n" +
+                        "   - 如果错误信息同时包含编译错误和业务错误，优先按编译错误处理，修复代码\n" +
+                        "   - 类型安全问题（如Object与基本类型直接比较）是代码错误，必须修复\n\n" +
 
                         "### 输出规则\n" +
                         "【情况一：需要修复代码】\n" +
                         "- 输出完整的修复后Java代码\n" +
                         "- 不要任何解释、注释、额外文字\n" +
                         "- 保持原有包名、类名、方法名\n" +
-                        "- 修复后代码必须可编译运行\n\n" +
+                        "- 修复后代码必须可编译运行\n" +
+                        "- 格式：以完整的Java代码开始和结束，不要包含其他内容\n\n" +
 
                         "【情况二：需要返回建议】\n" +
                         "- 输出格式：`// 建议：<简要问题描述>`\n" +
@@ -248,21 +264,31 @@ public class TestCaseAnalysisServiceImpl implements TestCaseAnalysisService {
 
                         "### 修复原则（仅当修复代码时适用）\n" +
                         "1. 保持原功能不变\n" +
-                        "2. 优先使用类型安全方法：response.jsonPath().getInt()等\n" +
+                        "2. 优先使用类型安全方法：response.jsonPath().getInt()、response.jsonPath().getString()等\n" +
                         "3. 添加必要的空值检查\n" +
                         "4. 不添加新功能、新方法\n" +
-                        "5. 不改变测试断言的核心逻辑\n\n" +
+                        "5. 不改变测试断言的核心逻辑\n" +
+                        "6. 修复编译错误时，确保修复后的代码可以正常编译\n" +
+                        "7. 对于类型不匹配问题，使用正确的类型转换或类型安全方法\n\n" +
 
                         "### 示例\n" +
                         "【错误信息包含400状态码】\n" +
                         "输入：HTTP状态码应为200 ==> expected: <200> but was: <400>\n" +
                         "输出：// 建议：接口返回400错误，参数无效，请检查请求参数\n\n" +
 
-                        "【错误信息包含编译错误】\n" +
-                        "输入：cannot find symbol\n" +
-                        "输出：修复后的完整代码\n\n" +
+                        "【错误信息包含编译错误：类型不匹配】\n" +
+                        "输入：test.java:10: 错误: 不兼容的类型: Object无法转换为int\n" +
+                        "输出：修复后的完整Java代码\n\n" +
 
-                        "请根据以上规则处理："
+                        "【错误信息包含编译错误：操作数类型错误】\n" +
+                        "输入：test.java:5: 错误: 操作数类型错误: Object > int\n" +
+                        "输出：修复后的完整Java代码\n\n" +
+
+                        "【错误信息包含NullPointerException】\n" +
+                        "输入：java.lang.NullPointerException: Cannot invoke \"String.length()\"\n" +
+                        "输出：修复后的完整Java代码\n\n" +
+
+                        "请根据以上规则严格处理，特别注意：编译错误和类型不匹配错误必须修复代码，不要返回建议。"
         );
         return sb.toString();
     }
