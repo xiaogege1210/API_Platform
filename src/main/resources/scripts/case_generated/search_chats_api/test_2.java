@@ -3,67 +3,62 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.everyItem;
+import static org.hamcrest.Matchers.hasKey;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.matchesPattern;
 
 public class test_2 {
     private static final String BASE_URL = "https://open.feishu.cn/open-apis/im/v1";
-    private static final String CHAT_ID = "invalid_chat_id_123";
-    private static final String USER_TOKEN = "1";
+    private static final String USER_TOKEN = "u-fefjDWAaB9AHtrtQlz_7QsghjsGNlgMpgM0Gix400HEA";
+    private static final String CHAT_ID = "oc_b254fcb0d0bd5cd29d27f104bad6d3a5";
     
     @BeforeAll
     public static void setup() {
         RestAssured.baseURI = BASE_URL;
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     }
     
     @Test
-    public void testGetChatMembersWithInvalidChatId() {
-        System.out.println("=== 测试开始：异常用例-无效的群ID ===");
-        System.out.println("测试场景：新场景-获取群成员列表");
-        System.out.println("前置条件：");
-        System.out.println("1. 应用已开启机器人能力");
-        System.out.println("2. 操作者（机器人或用户）必须在被查询的群组内");
-        System.out.println("3. 已获取有效的访问令牌（tenant_access_token 或 user_access_token）");
-        System.out.println();
-        
-        System.out.println("请求参数：");
-        System.out.println("chat_id: " + CHAT_ID);
-        System.out.println("member_id_type: open_id");
-        System.out.println("Authorization: Bearer " + USER_TOKEN);
-        System.out.println();
+    @DisplayName("正向用例_获取群成员列表_指定user_id类型")
+    public void testGetChatMembersWithUserIdType() {
+        String testChatId = "oc_a0553eda9014c201e6969b478895c230";
+        String memberIdType = "user_id";
+        int pageSize = 50;
         
         RequestSpecification request = given()
             .header("Authorization", "Bearer " + USER_TOKEN)
-            .pathParam("chat_id", CHAT_ID)
-            .queryParam("member_id_type", "open_id");
+            .header("Content-Type", "application/json")
+            .queryParam("member_id_type", memberIdType)
+            .queryParam("page_size", pageSize);
         
-        System.out.println("发送GET请求到: /chats/" + CHAT_ID + "/members");
-        Response response = request.get("/chats/{chat_id}/members");
+        Response response = request
+            .when()
+            .get("/chats/{chat_id}/members", testChatId);
         
-        System.out.println("=== 响应内容 ===");
         String responseBody = response.getBody().asString();
-        System.out.println("状态码: " + response.getStatusCode());
-        System.out.println("响应体: " + responseBody);
-        System.out.println("=== 响应结束 ===");
-        System.out.println();
+        System.out.println("Response Body: " + responseBody);
+        System.out.println("Status Code: " + response.getStatusCode());
+        System.out.println("Response Headers: " + response.getHeaders());
         
-        System.out.println("=== 断言验证 ===");
         response.then()
-            .statusCode(400)
-            .body("code", not(equalTo(0)))
-            .body("msg", containsStringIgnoringCase("chat_id"));
+            .statusCode(200)
+            .body("code", equalTo(0))
+            .body("msg", equalTo("success"))
+            .body("data", hasKey("items"))
+            .body("data.items", notNullValue())
+            .body("data.items.every { it.containsKey('member_id_type') }", equalTo(true))
+            .body("data.items.member_id_type", everyItem(equalTo("user_id")))
+            .body("data.items.member_id", everyItem(matchesPattern("^[0-9a-zA-Z]+$")));
         
-        System.out.println("断言结果：");
-        System.out.println("1. 状态码为400 - 验证通过");
-        System.out.println("2. 响应体code字段为非0的错误码 - 验证通过");
-        System.out.println("3. 响应体msg字段包含错误提示关键字 - 验证通过");
-        System.out.println();
-        
-        System.out.println("=== 预期结果验证 ===");
-        System.out.println("1. 接口返回明确的参数错误 - 验证通过");
-        System.out.println("2. 错误信息能指导调用方修正chat_id参数 - 验证通过");
-        System.out.println();
-        
-        System.out.println("=== 测试结束：异常用例-无效的群ID ===");
+        if (response.path("data.items") != null) {
+            int actualItemCount = response.path("data.items.size()");
+            System.out.println("Actual returned items count: " + actualItemCount);
+            System.out.println("Note: page_size parameter may be affected by filtering rules as documented.");
+        }
     }
 }

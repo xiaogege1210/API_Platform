@@ -3,14 +3,19 @@ import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.everyItem;
+import static org.hamcrest.Matchers.hasKey;
+import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.matchesPattern;
 
 public class test_2 {
     private static final String BASE_URL = "https://open.feishu.cn/open-apis/im/v1";
-    private static final String CHAT_ID = "oc_a0553eda9014c201e6969b478895c230";
-    private static final String USER_TOKEN = "1";
+    private static final String USER_TOKEN = "u-fefjDWAaB9AHtrtQlz_7QsghjsGNlgMpgM0Gix400HEA";
+    private static final String CHAT_ID = "oc_b254fcb0d0bd5cd29d27f104bad6d3a5";
     
     @BeforeAll
     public static void setup() {
@@ -19,47 +24,41 @@ public class test_2 {
     }
     
     @Test
+    @DisplayName("正向用例_获取群成员列表_指定user_id类型")
     public void testGetChatMembersWithUserIdType() {
+        String testChatId = "oc_a0553eda9014c201e6969b478895c230";
+        String memberIdType = "user_id";
+        int pageSize = 50;
+        
         RequestSpecification request = given()
             .header("Authorization", "Bearer " + USER_TOKEN)
             .header("Content-Type", "application/json")
-            .queryParam("member_id_type", "user_id")
-            .queryParam("page_size", 50)
-            .pathParam("chat_id", CHAT_ID);
+            .queryParam("member_id_type", memberIdType)
+            .queryParam("page_size", pageSize);
         
-        Response response = request.when()
-            .get("/chats/{chat_id}/members");
+        Response response = request
+            .when()
+            .get("/chats/{chat_id}/members", testChatId);
         
         String responseBody = response.getBody().asString();
         System.out.println("Response Body: " + responseBody);
+        System.out.println("Status Code: " + response.getStatusCode());
+        System.out.println("Response Headers: " + response.getHeaders());
         
         response.then()
-            .statusCode(200);
+            .statusCode(200)
+            .body("code", equalTo(0))
+            .body("msg", equalTo("success"))
+            .body("data", hasKey("items"))
+            .body("data.items", notNullValue())
+            .body("data.items.every { it.containsKey('member_id_type') }", equalTo(true))
+            .body("data.items.member_id_type", everyItem(equalTo("user_id")))
+            .body("data.items.member_id", everyItem(matchesPattern("^[0-9a-zA-Z]+$")));
         
-        int code = response.jsonPath().getInt("code");
-        String msg = response.jsonPath().getString("msg");
-        Object items = response.jsonPath().get("data.items");
-        Boolean hasMore = response.jsonPath().getBoolean("data.has_more");
-        Integer memberTotal = response.jsonPath().getInt("data.member_total");
-        
-        Assertions.assertEquals(0, code, "响应code应为0");
-        Assertions.assertEquals("success", msg, "响应msg应为'success'");
-        Assertions.assertNotNull(items, "data.items不应为null");
-        Assertions.assertTrue(items instanceof java.util.List, "data.items应为数组类型");
-        
-        if (items instanceof java.util.List && ((java.util.List<?>) items).size() > 0) {
-            String memberIdType = response.jsonPath().getString("data.items[0].member_id_type");
-            Assertions.assertEquals("user_id", memberIdType, "items元素的member_id_type字段值应为'user_id'");
+        if (response.path("data.items") != null) {
+            int actualItemCount = response.path("data.items.size()");
+            System.out.println("Actual returned items count: " + actualItemCount);
+            System.out.println("Note: page_size parameter may be affected by filtering rules as documented.");
         }
-        
-        Assertions.assertNotNull(hasMore, "data.has_more不应为null");
-        Assertions.assertTrue(hasMore instanceof Boolean, "data.has_more应为布尔类型");
-        
-        Assertions.assertNotNull(memberTotal, "data.member_total不应为null");
-        Assertions.assertTrue(memberTotal instanceof Integer, "data.member_total应为整数类型");
-        
-        System.out.println("测试通过：成功获取到user_id类型的群成员列表");
-        System.out.println("返回的member_id_type字段值为user_id");
-        System.out.println("分页参数生效，page_size=50");
     }
 }

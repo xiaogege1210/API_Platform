@@ -1,28 +1,29 @@
 {
-    "ScenarioName": "新场景-获取群成员列表",
+    "ScenarioName": "新场景",
     "Prerequisites": [
         "应用已开启机器人能力",
         "操作者（机器人或用户）必须在被查询的群组内",
-        "已获取有效的访问令牌（tenant_access_token 或 user_access_token）"
+        "已获取有效的访问令牌（tenant_access_token 或 user_access_token）",
+        "群组ID（chat_id）有效且存在"
     ],
     "PositiveCases": [
         {
-            "CaseName": "正向用例-获取群成员列表（默认参数）",
+            "CaseName": "正向用例_获取群成员列表_默认参数",
             "Steps": [
                 {
                     "StepID": 1,
-                    "Description": "调用获取群成员列表接口，使用默认参数",
+                    "Description": "使用默认参数获取群成员列表",
                     "Method": "GET",
                     "Path": "/chats/{chat_id}/members",
                     "Input": {
-                        "path": {
+                        "PathParams": {
                             "chat_id": "oc_a0553eda9014c201e6969b478895c230"
                         },
-                        "query": {
+                        "QueryParams": {
                             "member_id_type": "open_id",
                             "page_size": 20
                         },
-                        "headers": {
+                        "Headers": {
                             "Authorization": "Bearer <valid_access_token>"
                         }
                     },
@@ -30,39 +31,38 @@
                         "状态码为200",
                         "响应体code字段为0",
                         "响应体msg字段为'success'",
-                        "响应体data.items为数组类型",
-                        "每个items元素包含member_id_type、member_id、name、tenant_key字段",
-                        "data.has_more为布尔类型",
-                        "data.member_total为整数类型"
+                        "响应体data.items为数组",
+                        "响应体data.items数组中的每个对象包含member_id_type、member_id、name、tenant_key字段",
+                        "响应体data.has_more为布尔值",
+                        "响应体data.member_total为整数"
                     ],
                     "DataMapping": {
-                        "description": "接口返回的成员列表数据（items）可用于后续业务场景，例如：1. 群成员分析：统计群内活跃用户、成员构成等。2. 消息定向发送：基于member_id向特定成员发送消息。3. 权限校验：校验某个用户是否为群成员。4. 分页处理：如果has_more为true，可使用返回的page_token作为下一次请求的参数，继续获取剩余成员。"
+                        "说明": "此接口返回的成员列表（data.items）可用于后续业务操作，例如：1. 根据member_id向特定成员发送消息。2. 根据member_id_type和member_id进行用户信息查询或权限校验。3. 根据tenant_key进行跨租户业务逻辑判断（如仅处理同租户成员）。"
                     }
                 }
             ],
             "ExpectedResults": [
-                "成功获取到群成员列表信息",
-                "返回数据符合ChatMember对象结构",
-                "分页信息正确"
+                "成功获取到群成员列表，返回数据符合预期结构",
+                "分页信息正确，可根据has_more和page_token进行后续分页查询"
             ]
         },
         {
-            "CaseName": "正向用例-获取群成员列表（指定user_id类型）",
+            "CaseName": "正向用例_获取群成员列表_指定user_id类型",
             "Steps": [
                 {
                     "StepID": 1,
-                    "Description": "调用获取群成员列表接口，指定member_id_type为user_id",
+                    "Description": "指定member_id_type为user_id获取群成员列表",
                     "Method": "GET",
                     "Path": "/chats/{chat_id}/members",
                     "Input": {
-                        "path": {
+                        "PathParams": {
                             "chat_id": "oc_a0553eda9014c201e6969b478895c230"
                         },
-                        "query": {
+                        "QueryParams": {
                             "member_id_type": "user_id",
                             "page_size": 50
                         },
-                        "headers": {
+                        "Headers": {
                             "Authorization": "Bearer <valid_access_token>"
                         }
                     },
@@ -70,187 +70,179 @@
                         "状态码为200",
                         "响应体code字段为0",
                         "响应体msg字段为'success'",
-                        "响应体data.items为数组类型",
-                        "每个items元素的member_id_type字段值为'user_id'",
-                        "data.has_more为布尔类型",
-                        "data.member_total为整数类型"
+                        "响应体data.items数组中的每个对象的member_id_type字段为'user_id'",
+                        "响应体data.items数组中的每个对象的member_id字段格式符合user_id预期",
+                        "page_size参数生效，返回条目数可能受文档说明的过滤规则影响"
                     ],
                     "DataMapping": {
-                        "description": "返回的user_id类型成员信息可用于需要员工ID的业务场景，例如：1. 与HR系统对接，关联员工信息。2. 权限管理：基于user_id进行更精确的权限控制。3. 内部系统集成：企业内其他系统通常使用user_id作为用户标识。"
+                        "说明": "当指定member_id_type为user_id时，返回的member_id可直接用于需要user_id格式的飞书内部系统集成，例如与人事系统、审批流系统进行数据关联。"
                     }
                 }
             ],
             "ExpectedResults": [
-                "成功获取到user_id类型的群成员列表",
-                "返回的member_id_type字段值为user_id",
-                "分页参数生效"
+                "成功获取群成员列表，且成员ID类型为指定的user_id",
+                "返回数据可用于需要user_id格式的下游业务处理"
             ]
         },
         {
-            "CaseName": "正向用例-获取群成员列表（使用page_token分页）",
+            "CaseName": "正向用例_获取群成员列表_使用分页令牌",
             "Steps": [
                 {
                     "StepID": 1,
-                    "Description": "调用获取群成员列表接口，使用page_token进行分页查询",
+                    "Description": "使用有效的page_token获取群成员列表的下一页",
                     "Method": "GET",
                     "Path": "/chats/{chat_id}/members",
                     "Input": {
-                        "path": {
+                        "PathParams": {
                             "chat_id": "oc_a0553eda9014c201e6969b478895c230"
                         },
-                        "query": {
+                        "QueryParams": {
                             "member_id_type": "open_id",
                             "page_size": 10,
                             "page_token": "WWxHTStrOEs5WHZpNktGbU94bUcvMWlxdDUzTWt1OXNrRmlLaGRNVG0yaz0="
                         },
-                        "headers": {
+                        "Headers": {
                             "Authorization": "Bearer <valid_access_token>"
                         }
                     },
                     "Expectations": [
                         "状态码为200",
                         "响应体code字段为0",
-                        "响应体msg字段为'success'",
-                        "响应体data.items为数组类型",
-                        "data.page_token字段存在（可能为null或新token）",
-                        "data.has_more为布尔类型"
+                        "响应体data.items为数组，且内容与上一页不同（模拟验证）",
+                        "响应体data.page_token字段存在（当has_more为true时）或为null（当has_more为false时）"
                     ],
                     "DataMapping": {
-                        "description": "分页查询返回的数据可用于：1. 大数据量场景下的分批处理，避免单次请求数据量过大。2. 增量同步：基于page_token实现群成员的增量获取。3. 性能优化：控制单次请求的数据量，提升响应速度。"
+                        "说明": "分页查询返回的成员数据，可以与第一页的数据合并，形成完整的群成员视图，用于批量操作或数据分析，例如统计群内活跃成员分布。"
                     }
                 }
             ],
             "ExpectedResults": [
-                "成功使用page_token进行分页查询",
-                "返回正确的分页数据",
-                "分页机制正常工作"
+                "成功获取到指定分页的群成员列表",
+                "分页机制工作正常，支持遍历所有成员"
             ]
         }
     ],
     "NegativeCases": [
         {
-            "CaseName": "异常用例-无效的群ID",
+            "CaseName": "异常用例_无效的群ID",
             "Steps": [
                 {
                     "StepID": 1,
-                    "Description": "调用获取群成员列表接口，使用无效的chat_id",
+                    "Description": "使用无效或不存在的chat_id获取群成员列表",
                     "Method": "GET",
                     "Path": "/chats/{chat_id}/members",
                     "Input": {
-                        "path": {
+                        "PathParams": {
                             "chat_id": "invalid_chat_id_123"
                         },
-                        "query": {
+                        "QueryParams": {
                             "member_id_type": "open_id"
                         },
-                        "headers": {
+                        "Headers": {
                             "Authorization": "Bearer <valid_access_token>"
                         }
                     },
                     "Expectations": [
                         "状态码为400",
-                        "响应体code字段为非0的错误码（例如参考文档中的232006）",
-                        "响应体msg字段包含错误提示关键字，如'chat_id which is invalid'或'无效的群ID'"
+                        "响应体code字段为非0错误码（例如参考文档中的232006）",
+                        "响应体msg字段包含错误描述，且应提及chat_id无效（例如包含'chat_id which is invalid'或类似关键字）"
                     ]
                 }
             ],
             "ExpectedResults": [
-                "接口返回明确的参数错误",
-                "错误信息能指导调用方修正chat_id参数"
+                "接口返回明确的业务错误，提示群ID无效",
+                "错误码和错误信息符合飞书API规范"
             ]
         },
         {
-            "CaseName": "异常用例-超过最大page_size限制",
+            "CaseName": "异常用例_缺失访问令牌",
             "Steps": [
                 {
                     "StepID": 1,
-                    "Description": "调用获取群成员列表接口，page_size超过最大值100",
+                    "Description": "请求头中不携带Authorization字段获取群成员列表",
                     "Method": "GET",
                     "Path": "/chats/{chat_id}/members",
                     "Input": {
-                        "path": {
+                        "PathParams": {
                             "chat_id": "oc_a0553eda9014c201e6969b478895c230"
                         },
-                        "query": {
-                            "member_id_type": "open_id",
-                            "page_size": 150
-                        },
-                        "headers": {
-                            "Authorization": "Bearer <valid_access_token>"
-                        }
-                    },
-                    "Expectations": [
-                        "状态码为400",
-                        "响应体code字段为非0的错误码",
-                        "响应体msg字段包含错误提示关键字，如'page_size'、'maximum'、'100'或'超出限制'"
-                    ]
-                }
-            ],
-            "ExpectedResults": [
-                "接口返回参数验证错误",
-                "错误信息明确提示page_size超出允许范围"
-            ]
-        },
-        {
-            "CaseName": "异常用例-无效的访问令牌",
-            "Steps": [
-                {
-                    "StepID": 1,
-                    "Description": "调用获取群成员列表接口，使用无效或过期的访问令牌",
-                    "Method": "GET",
-                    "Path": "/chats/{chat_id}/members",
-                    "Input": {
-                        "path": {
-                            "chat_id": "oc_a0553eda9014c201e6969b478895c230"
-                        },
-                        "query": {
+                        "QueryParams": {
                             "member_id_type": "open_id"
                         },
-                        "headers": {
-                            "Authorization": "Bearer <invalid_or_expired_token>"
-                        }
+                        "Headers": {}
                     },
                     "Expectations": [
                         "状态码为401",
-                        "响应体code字段为非0的错误码",
-                        "响应体msg字段包含错误提示关键字，如'Unauthorized'、'token'、'invalid'或'认证失败'"
+                        "响应体应包含未授权或令牌无效相关的错误信息"
                     ]
                 }
             ],
             "ExpectedResults": [
-                "接口返回认证失败错误",
-                "错误信息提示访问令牌无效或已过期"
+                "接口因缺失认证信息而拒绝请求",
+                "返回标准的未授权错误"
             ]
         },
         {
-            "CaseName": "异常用例-操作者不在群组内",
+            "CaseName": "异常用例_超出最大page_size限制",
             "Steps": [
                 {
                     "StepID": 1,
-                    "Description": "调用获取群成员列表接口，但操作者（机器人或用户）不在指定的群组内",
+                    "Description": "使用超过最大限制值（100）的page_size参数",
                     "Method": "GET",
                     "Path": "/chats/{chat_id}/members",
                     "Input": {
-                        "path": {
+                        "PathParams": {
                             "chat_id": "oc_a0553eda9014c201e6969b478895c230"
                         },
-                        "query": {
-                            "member_id_type": "open_id"
+                        "QueryParams": {
+                            "member_id_type": "open_id",
+                            "page_size": 150
                         },
-                        "headers": {
+                        "Headers": {
                             "Authorization": "Bearer <valid_access_token>"
                         }
                     },
                     "Expectations": [
-                        "状态码为403",
-                        "响应体code字段为非0的错误码",
-                        "响应体msg字段包含错误提示关键字，如'Forbidden'、'not in chat'、'无权限'或'不在群内'"
+                        "状态码为400",
+                        "响应体code字段为非0错误码",
+                        "响应体msg字段包含参数验证失败相关的错误描述（例如提及'page_size'超出范围）"
                     ]
                 }
             ],
             "ExpectedResults": [
-                "接口返回权限不足错误",
-                "错误信息提示操作者不在群组内或无访问权限"
+                "接口对输入参数进行了有效性校验，并返回参数错误",
+                "阻止了非法的分页大小请求"
+            ]
+        },
+        {
+            "CaseName": "异常用例_操作者不在群内",
+            "Steps": [
+                {
+                    "StepID": 1,
+                    "Description": "使用有效令牌和群ID，但操作者（令牌对应的身份）不在该群内",
+                    "Method": "GET",
+                    "Path": "/chats/{chat_id}/members",
+                    "Input": {
+                        "PathParams": {
+                            "chat_id": "oc_a0553eda9014c201e6969b478895c230"
+                        },
+                        "QueryParams": {
+                            "member_id_type": "open_id"
+                        },
+                        "Headers": {
+                            "Authorization": "Bearer <valid_access_token_for_non_member>"
+                        }
+                    },
+                    "Expectations": [
+                        "状态码为403或400",
+                        "响应体code字段为非0错误码",
+                        "响应体msg字段包含权限不足、不在群内或无法访问群组相关的错误描述"
+                    ]
+                }
+            ],
+            "ExpectedResults": [
+                "接口根据业务规则（操作者须在群内）进行了权限校验并拒绝请求",
+                "返回了与群组访问权限相关的业务错误"
             ]
         }
     ]

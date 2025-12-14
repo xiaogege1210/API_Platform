@@ -8,8 +8,8 @@ import static org.hamcrest.Matchers.*;
 
 public class test_5 {
     private static final String BASE_URL = "https://open.feishu.cn/open-apis/im/v1";
-    private static final String CHAT_ID = "1";
-    private static final String USER_TOKEN = "1";
+    private static final String USER_TOKEN = "u-fefjDWAaB9AHtrtQlz_7QsghjsGNlgMpgM0Gix400HEA";
+    private static final String CHAT_ID = "oc_b254fcb0d0bd5cd29d27f104bad6d3a5";
     
     @BeforeAll
     public static void setup() {
@@ -17,29 +17,24 @@ public class test_5 {
     }
     
     @Test
-    public void testGetChatMembersWithExceededPageSize() {
-        String endpoint = "/chats/{chat_id}/members";
+    public void testMissingAuthorizationToken() {
+        String testChatId = "oc_a0553eda9014c201e6969b478895c230";
         
         RequestSpecification request = given()
-            .header("Authorization", "Bearer " + USER_TOKEN)
-            .pathParam("chat_id", CHAT_ID)
-            .queryParam("member_id_type", "open_id")
-            .queryParam("page_size", 150);
+            .header("Content-Type", "application/json")
+            .queryParam("member_id_type", "open_id");
         
-        Response response = request.get(endpoint);
+        Response response = request
+            .when()
+            .get("/chats/{chat_id}/members", testChatId);
         
-        String responseBody = response.getBody().asString();
-        System.out.println("Response Body: " + responseBody);
-        System.out.println("Status Code: " + response.getStatusCode());
+        System.out.println("Response Status: " + response.getStatusCode());
+        System.out.println("Response Body: " + response.getBody().asString());
+        System.out.println("Response Headers: " + response.getHeaders());
         
         response.then()
-            .statusCode(400)
-            .body("code", not(equalTo(0)))
-            .body("msg", anyOf(
-                containsString("page_size"),
-                containsString("maximum"),
-                containsString("100"),
-                containsString("超出限制")
-            ));
+            .statusCode(401)
+            .body("code", notNullValue())
+            .body("msg", notNullValue());
     }
 }

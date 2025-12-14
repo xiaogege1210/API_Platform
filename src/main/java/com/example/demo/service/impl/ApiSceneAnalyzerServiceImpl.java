@@ -88,7 +88,7 @@ public class ApiSceneAnalyzerServiceImpl implements ApiSceneAnalyzerService {
                 .append("- 禁止输出JSON以外的任何内容（包括说明、注释、缩进、换行、示例解释）\n")
                 .append("- 禁止遗漏API文档中的核心场景（如边界值、错误码、权限认证）\n")
                 .append("- 禁止场景描述模糊（如必须明确参数名，不用\"参数错误\"等笼统表述）\n")
-                .append("- 禁止重复场景（如同一语义，但不同表达方式的场景）\n")
+                .append("- 禁止重复场景（如同一语义，但不同表达方式的场景，如同一参数的为空和缺失属于重复场景）\n")
                 .append("- 禁止添加测试环境、执行步骤等无关内容到场景描述中");
 
         // 最终长度校验（和你代码保持一致的逻辑）
