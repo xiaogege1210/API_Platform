@@ -927,6 +927,8 @@
     showStatusMessage("正在进行 AI 分析...", "info");
     const allCode = selectedTestCases.map(tc => tc.code).join('\n\n');
 
+
+
     try {
       showLoading(true);
       const res = await fetch('/api/testcase/analyze', {
@@ -934,9 +936,9 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           testCode: allCode,
-          testText: scenarioName,
+
           apiDoc: ApiData_text ? JSON.stringify(ApiData_text) : '',
-          environment: '', dependency: ''
+
         })
       });
       const data = await res.json();
@@ -1033,6 +1035,16 @@
 
 
       // 调用覆盖率评分接口
+      let sceneValue = '新场景'; // 默认值兜底
+      const sceneElement = document.querySelector('.testcase-box .text-slate-400');
+
+      if (sceneElement) { // 先判断元素是否存在
+        const sceneText = sceneElement.textContent.trim();
+        // 用正则匹配更鲁棒：匹配“场景:”后任意字符，忽略前后空格
+        const sceneMatch = sceneText.match(/场景:\s*(.+)/);
+        // 若匹配成功则取结果，否则保留默认值
+        sceneValue = sceneMatch ? sceneMatch[1].trim() : '-';
+      }
       const coverageRes = await fetch('/api/testcase/calculate-coverage', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
